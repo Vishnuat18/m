@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import GALLERY_CATEGORIES from './gallery_categories.json';
 import './MobileBirthdayPhone.css';
 
 /* =====================================================================
@@ -18,40 +19,36 @@ const MUSIC_TRACKS = [
 ];
 
 /* =====================================================================
-   DATA: GALLERY CATEGORIES (Reference Image 2 style)
+   DATA: SCRAPBOOK PAGES (All 33 pages in numerical order)
    ===================================================================== */
-const GALLERY_CATEGORIES = [{"title": "Tonight \u2014 Birthday Eve", "layout": "featured", "images": ["/assets/gallery/IMG_20260403_125101_529.jpg"]}, {"title": "Favorite Evenings", "layout": "two-col", "images": ["/assets/gallery/IMG_20260403_125129_058.jpg", "/assets/gallery/IMG_20260403_125132_672.jpg"]}, {"title": "Cherished Smiles", "layout": "two-col", "images": ["/assets/gallery/IMG_20260403_125200_516.jpg", "/assets/gallery/IMG_20260403_125203_175.jpg", "/assets/gallery/IMG_20260403_125205_141.jpg", "/assets/gallery/IMG_20260403_125206_657.jpg"]}, {"title": "Special Portraits", "layout": "two-col", "images": ["/assets/gallery/IMG_20260403_125216_226.jpg", "/assets/gallery/IMG_20260403_125218_416.jpg", "/assets/gallery/IMG_20260403_125311_177.jpg", "/assets/gallery/IMG_20260403_125324_918.jpg"]}, {"title": "All Memories (M-ui Collection)", "layout": "grid", "images": ["/assets/gallery/IMG_20260403_125101_529.jpg", "/assets/gallery/IMG_20260403_125129_058.jpg", "/assets/gallery/IMG_20260403_125132_672.jpg", "/assets/gallery/IMG_20260403_125200_516.jpg", "/assets/gallery/IMG_20260403_125203_175.jpg", "/assets/gallery/IMG_20260403_125205_141.jpg", "/assets/gallery/IMG_20260403_125206_657.jpg", "/assets/gallery/IMG_20260403_125216_226.jpg", "/assets/gallery/IMG_20260403_125218_416.jpg", "/assets/gallery/IMG_20260403_125311_177.jpg", "/assets/gallery/IMG_20260403_125324_918.jpg", "/assets/gallery/IMG_20260403_125332_179.jpg", "/assets/gallery/IMG_20260403_125340_096.jpg", "/assets/gallery/IMG_20260403_125342_681.jpg", "/assets/gallery/IMG_20260403_125348_968.jpg", "/assets/gallery/IMG_20260403_125554_895.jpg", "/assets/gallery/IMG_20260403_125600_453.jpg", "/assets/gallery/IMG_20260403_125610_897.jpg", "/assets/gallery/IMG_20260403_125613_647.jpg", "/assets/gallery/IMG_20260403_125615_034.jpg", "/assets/gallery/IMG_20260403_125616_604.jpg", "/assets/gallery/IMG_20260403_125617_709.jpg", "/assets/gallery/IMG_20260403_125641_083.jpg", "/assets/gallery/IMG_20260403_125647_861.jpg", "/assets/gallery/IMG_20260403_125708_144.jpg", "/assets/gallery/IMG_20260403_125722_161.jpg", "/assets/gallery/IMG_20260403_125729_328.jpg", "/assets/gallery/IMG_20260403_125817_754.jpg", "/assets/gallery/IMG_20260403_125916_224.jpg", "/assets/gallery/IMG_20260403_125919_478.jpg", "/assets/gallery/IMG_20260403_125927_605.jpg", "/assets/gallery/IMG_20260403_125929_002.jpg", "/assets/gallery/IMG_20260403_125934_016.jpg", "/assets/gallery/IMG_20260403_125941_314.jpg", "/assets/gallery/IMG_20260403_125942_755.jpg", "/assets/gallery/IMG_20260403_125946_534.jpg", "/assets/gallery/IMG_20260403_125954_860.jpg", "/assets/gallery/IMG_20260403_130000_889.jpg", "/assets/gallery/IMG_20260403_130004_048.jpg", "/assets/gallery/IMG_20260403_130006_650.jpg", "/assets/gallery/IMG_20260403_130030_172.jpg", "/assets/gallery/IMG_20260403_130040_970.jpg", "/assets/gallery/IMG_20260403_130045_723.jpg", "/assets/gallery/IMG_20260403_130109_414.jpg", "/assets/gallery/IMG_20260403_130112_482.jpg", "/assets/gallery/IMG_20260403_130115_458.jpg", "/assets/gallery/IMG_20260403_130119_948.jpg", "/assets/gallery/IMG_20260403_130153_630.jpg", "/assets/gallery/IMG_20260403_130155_146.jpg", "/assets/gallery/IMG_20260403_130207_646.jpg", "/assets/gallery/IMG_20260403_130211_239.jpg", "/assets/gallery/IMG_20260403_130215_655.jpg", "/assets/gallery/IMG_20260403_155001.JPG", "/assets/gallery/IMG_20260404_012119.JPG", "/assets/gallery/IMG_20260405_172340_291.jpg", "/assets/gallery/IMG_20260405_172341_874.jpg", "/assets/gallery/IMG_20260405_172502_691.jpg", "/assets/gallery/IMG_20260405_172507_866.jpg", "/assets/gallery/IMG_20260405_172514_242.jpg", "/assets/gallery/IMG_20260405_172528_231.jpg", "/assets/gallery/IMG_20260405_172548_409.jpg", "/assets/gallery/IMG_20260405_172607_451.jpg", "/assets/gallery/IMG_20260405_172609_216.jpg", "/assets/gallery/IMG_20260405_172641_382.jpg", "/assets/gallery/IMG_20260405_172644_925.jpg", "/assets/gallery/IMG_20260405_172646_951.jpg", "/assets/gallery/IMG_20260405_172649_349.jpg", "/assets/gallery/IMG_20260405_172651_187.jpg", "/assets/gallery/IMG_20260405_172653_024.jpg", "/assets/gallery/IMG_20260405_172702_323.jpg", "/assets/gallery/IMG_20260405_172707_047.jpg", "/assets/gallery/IMG_20260405_172714_621.jpg", "/assets/gallery/IMG_20260405_172730_426.jpg", "/assets/gallery/IMG_20260405_172731_719.jpg", "/assets/gallery/IMG_20260405_172733_331.jpg", "/assets/gallery/IMG_20260405_172734_662.jpg", "/assets/gallery/IMG_20260405_172801_300.jpg", "/assets/gallery/IMG_20260405_172803_699.jpg", "/assets/gallery/IMG_20260405_172828_163.jpg", "/assets/gallery/IMG_20260405_172838_323.jpg", "/assets/gallery/IMG_20260405_172842_822.jpg", "/assets/gallery/IMG_20260405_172900_610.jpg", "/assets/gallery/IMG_20260405_172907_563.jpg", "/assets/gallery/IMG_20260405_172916_016.jpg", "/assets/gallery/IMG_20260405_172917_722.jpg", "/assets/gallery/IMG_20260405_172928_462.jpg", "/assets/gallery/IMG_20260405_172931_721.jpg", "/assets/gallery/IMG_20260405_172933_896.jpg", "/assets/gallery/IMG_20260405_172942_443.jpg", "/assets/gallery/IMG_20260405_172945_572.jpg", "/assets/gallery/IMG_20260405_172947_408.jpg", "/assets/gallery/IMG_20260405_172948_945.jpg", "/assets/gallery/IMG_20260405_172950_669.jpg", "/assets/gallery/IMG_20260405_173052_656.jpg", "/assets/gallery/IMG_20260405_173100_318.jpg", "/assets/gallery/IMG_20260405_173248_858.jpg", "/assets/gallery/IMG_20260405_173300_743.jpg", "/assets/gallery/IMG_20260405_173303_014.jpg", "/assets/gallery/IMG_20260405_173306_238.jpg", "/assets/gallery/IMG_20260405_173317_634.jpg", "/assets/gallery/IMG_20260405_173337_786.jpg", "/assets/gallery/IMG_20260405_173343_073.jpg", "/assets/gallery/IMG_20260405_173403_994.jpg", "/assets/gallery/IMG_20260405_173410_126.jpg", "/assets/gallery/IMG_20260407_231902.JPG", "/assets/gallery/photo_6257769115963559422_y.jpg", "/assets/gallery/photo_6257769115963559423_y.jpg", "/assets/gallery/splmem.jpg"]}];
+const SCRAPBOOK_PAGES = Array.from({ length: 33 }, (_, i) => `/assets/scrapbook/slot-${i + 1}.jpg`);
 
 /* =====================================================================
-   DATA: SCRAPBOOK IMAGES (All 33 photos from M-ui/spl)
+   DATA: SECRET VAULT EXCLUSIVE IMAGES
    ===================================================================== */
-const SCRAPBOOK_PAGES = ["/assets/scrapbook/slot-1.jpg", "/assets/scrapbook/slot-10.jpg", "/assets/scrapbook/slot-11.jpg", "/assets/scrapbook/slot-12.jpg", "/assets/scrapbook/slot-13.jpg", "/assets/scrapbook/slot-14.jpg", "/assets/scrapbook/slot-15.jpg", "/assets/scrapbook/slot-16.jpg", "/assets/scrapbook/slot-17.jpg", "/assets/scrapbook/slot-18.jpg", "/assets/scrapbook/slot-19.jpg", "/assets/scrapbook/slot-2.jpg", "/assets/scrapbook/slot-20.jpg", "/assets/scrapbook/slot-21.jpg", "/assets/scrapbook/slot-22.jpg", "/assets/scrapbook/slot-23.jpg", "/assets/scrapbook/slot-24.jpg", "/assets/scrapbook/slot-25.jpg", "/assets/scrapbook/slot-26.jpg", "/assets/scrapbook/slot-27.jpg", "/assets/scrapbook/slot-28.jpg", "/assets/scrapbook/slot-29.jpg", "/assets/scrapbook/slot-3.jpg", "/assets/scrapbook/slot-30.jpg", "/assets/scrapbook/slot-31.jpg", "/assets/scrapbook/slot-32.jpg", "/assets/scrapbook/slot-33.jpg", "/assets/scrapbook/slot-4.jpg", "/assets/scrapbook/slot-5.jpg", "/assets/scrapbook/slot-6.jpg", "/assets/scrapbook/slot-7.jpg", "/assets/scrapbook/slot-8.jpg", "/assets/scrapbook/slot-9.jpg"];
+const VAULT_IMAGES = [
+  '/assets/gallery/splmem.jpg',
+  '/assets/gallery/photo_6257769115963559422_y.jpg',
+  '/assets/gallery/photo_6257769115963559423_y.jpg',
+  '/assets/gallery/IMG_20260407_231902.JPG',
+  '/assets/gallery/IMG_20260404_012119.JPG',
+  '/assets/gallery/IMG_20260403_155001.JPG',
+];
 
 /* =====================================================================
    DATA: CLEAR THE BOARD ARROW PUZZLES (Reference Image 3 style)
-   Board: 6x8 dot plane.
-   Each arrow has an id, an SVG path string, arrowhead point, exit direction,
-   and dependencies (which arrows block it from flying off).
    ===================================================================== */
 const ARROW_PUZZLE_LEVELS = [
   {
     level: 1,
     arrows: [
-      // Top-left: L shape pointing Left
       { id: 'a1', d: 'M 100 40 L 70 40 L 70 20 L 40 20', head: [40, 20], angle: 180, blocks: [], blockedBy: [] },
-      // Top-center: Z shape pointing Up
       { id: 'a2', d: 'M 120 100 L 120 70 L 150 70 L 150 20', head: [150, 20], angle: -90, blocks: [], blockedBy: [] },
-      // Top-right: L shape pointing Right
       { id: 'a3', d: 'M 180 100 L 180 60 L 240 60', head: [240, 60], angle: 0, blocks: [], blockedBy: [] },
-      // Middle-left: Straight down
       { id: 'a4', d: 'M 40 80 L 40 180', head: [40, 180], angle: 90, blocks: [], blockedBy: [] },
-      // Long U loop on left pointing Down
       { id: 'a5', d: 'M 100 170 L 100 110 L 70 110 L 70 240', head: [70, 240], angle: 90, blocks: [], blockedBy: ['a4'] },
-      // Middle-right L shape pointing Down
       { id: 'a6', d: 'M 210 130 L 240 130 L 240 190', head: [240, 190], angle: 90, blocks: [], blockedBy: [] },
-      // Bottom S shape pointing Left
       { id: 'a7', d: 'M 160 190 L 160 230 L 130 230 L 130 260 L 90 260', head: [90, 260], angle: 180, blocks: [], blockedBy: ['a5'] },
-      // Bottom hook pointing Right
       { id: 'a8', d: 'M 160 140 L 210 140 L 210 240 L 180 240 L 180 260 L 210 260', head: [210, 260], angle: 0, blocks: [], blockedBy: ['a6'] },
     ]
   },
@@ -68,7 +65,7 @@ const ARROW_PUZZLE_LEVELS = [
   }
 ];
 
-/* Audio tone helper */
+/* Web Audio Tone Helper */
 const playTone = (type = 'click') => {
   try {
     const AC = window.AudioContext || window.webkitAudioContext;
@@ -115,13 +112,13 @@ const playTone = (type = 'click') => {
 const triggerConfetti = () => {
   if (typeof window !== 'undefined' && window.confetti) {
     try {
-      window.confetti({ particleCount: 80, spread: 65, origin: { y: 0.6 }, colors: ['#ff9ffc', '#e5a93c', '#38bdf8', '#c084fc', '#ffffff'] });
+      window.confetti({ particleCount: 85, spread: 65, origin: { y: 0.6 }, colors: ['#ff9ffc', '#e5a93c', '#38bdf8', '#c084fc', '#ffffff'] });
     } catch (e) {}
   }
 };
 
 /* =====================================================================
-   MAIN COMPONENT
+   MAIN COMPONENT: MobileBirthdayPhone
    ===================================================================== */
 const MobileBirthdayPhone = ({ onSelectSection }) => {
   const [activeModal, setActiveModal] = useState(null);
@@ -155,12 +152,128 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
   };
 
   /* =========================================================================
-     1. SCRAPBOOK FULL PHOTO VIEWER STATE
+     1. SCRAPBOOK STATE (Portrait cover first, tells full screen, neat slideshow)
      ========================================================================= */
+  const [scrapbookMode, setScrapbookMode] = useState('cover'); // 'cover' | 'slideshow'
   const [scrapbookIndex, setScrapbookIndex] = useState(0);
+  const [scrapbookAutoPlay, setScrapbookAutoPlay] = useState(false);
+  const touchStartXRef = useRef(null);
+
+  // Auto-play slideshow every 3.5s when active
+  useEffect(() => {
+    let timer = null;
+    if (activeModal === 'scrapbook' && scrapbookMode === 'slideshow' && scrapbookAutoPlay) {
+      timer = setInterval(() => {
+        setScrapbookIndex((prev) => (prev + 1) % SCRAPBOOK_PAGES.length);
+      }, 3500);
+    }
+    return () => clearInterval(timer);
+  }, [activeModal, scrapbookMode, scrapbookAutoPlay]);
+
+  const handleNextScrapbookPage = useCallback(() => {
+    playTone('click');
+    setScrapbookIndex((prev) => (prev + 1) % SCRAPBOOK_PAGES.length);
+  }, []);
+
+  const handlePrevScrapbookPage = useCallback(() => {
+    playTone('click');
+    setScrapbookIndex((prev) => (prev - 1 + SCRAPBOOK_PAGES.length) % SCRAPBOOK_PAGES.length);
+  }, []);
+
+  const handleTouchStart = (e) => {
+    if (e.touches && e.touches[0]) {
+      touchStartXRef.current = e.touches[0].clientX;
+    }
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartXRef.current === null || !e.changedTouches || !e.changedTouches[0]) return;
+    const diff = e.changedTouches[0].clientX - touchStartXRef.current;
+    touchStartXRef.current = null;
+    if (diff > 50) {
+      handlePrevScrapbookPage();
+    } else if (diff < -50) {
+      handleNextScrapbookPage();
+    }
+  };
 
   /* =========================================================================
-     2. MUSIC PLAYER STATE (REAL AUDIO PLAYER)
+     2. GALLERY & SECRET VAULT STATE (28 Categories + Passcode 2211 Vault)
+     ========================================================================= */
+  const [galleryLightboxImg, setGalleryLightboxImg] = useState(null);
+  const [galleryLightboxIdx, setGalleryLightboxIdx] = useState(0);
+  const [galleryActiveCategoryImgs, setGalleryActiveCategoryImgs] = useState([]);
+  const [vaultUnlocked, setVaultUnlocked] = useState(false);
+  const [showVaultKeypad, setShowVaultKeypad] = useState(false);
+  const [vaultPinInput, setVaultPinInput] = useState('');
+  const [vaultError, setVaultError] = useState(false);
+
+  const openGalleryPhoto = (imgSrc, imgList, idx) => {
+    playTone('click');
+    setGalleryActiveCategoryImgs(imgList || [imgSrc]);
+    setGalleryLightboxIdx(idx || 0);
+    setGalleryLightboxImg(imgSrc);
+  };
+
+  const closeGalleryLightbox = () => {
+    playTone('click');
+    setGalleryLightboxImg(null);
+  };
+
+  const handleNextGalleryPhoto = () => {
+    if (!galleryActiveCategoryImgs.length) return;
+    const next = (galleryLightboxIdx + 1) % galleryActiveCategoryImgs.length;
+    setGalleryLightboxIdx(next);
+    setGalleryLightboxImg(galleryActiveCategoryImgs[next]);
+  };
+
+  const handlePrevGalleryPhoto = () => {
+    if (!galleryActiveCategoryImgs.length) return;
+    const prev = (galleryLightboxIdx - 1 + galleryActiveCategoryImgs.length) % galleryActiveCategoryImgs.length;
+    setGalleryLightboxIdx(prev);
+    setGalleryLightboxImg(galleryActiveCategoryImgs[prev]);
+  };
+
+  const handleVaultKeypadPress = (val) => {
+    playTone('click');
+    setVaultError(false);
+    if (val === 'C') {
+      setVaultPinInput('');
+      return;
+    }
+    if (val === 'OK') {
+      if (vaultPinInput === '2211' || vaultPinInput === '1204') {
+        playTone('success');
+        triggerConfetti();
+        setVaultUnlocked(true);
+        setShowVaultKeypad(false);
+        setVaultPinInput('');
+      } else {
+        playTone('bump');
+        setVaultError(true);
+      }
+      return;
+    }
+    if (vaultPinInput.length < 4) {
+      const nextPin = vaultPinInput + String(val);
+      setVaultPinInput(nextPin);
+      if (nextPin.length === 4) {
+        if (nextPin === '2211' || nextPin === '1204') {
+          playTone('success');
+          triggerConfetti();
+          setVaultUnlocked(true);
+          setShowVaultKeypad(false);
+          setVaultPinInput('');
+        } else {
+          playTone('bump');
+          setVaultError(true);
+        }
+      }
+    }
+  };
+
+  /* =========================================================================
+     3. MUSIC PLAYER STATE (REAL AUDIO PLAYER)
      ========================================================================= */
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -186,76 +299,57 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
     playTone('click');
     const nextIdx = (currentTrackIndex + 1) % MUSIC_TRACKS.length;
     setCurrentTrackIndex(nextIdx);
-    setIsPlaying(true);
+    setAudioProgress(0);
   };
 
   const handlePrevTrack = () => {
     playTone('click');
     const prevIdx = (currentTrackIndex - 1 + MUSIC_TRACKS.length) % MUSIC_TRACKS.length;
     setCurrentTrackIndex(prevIdx);
-    setIsPlaying(true);
+    setAudioProgress(0);
   };
 
   const handleSelectTrack = (idx) => {
     playTone('click');
     setCurrentTrackIndex(idx);
-    setIsPlaying(true);
+    setAudioProgress(0);
   };
 
   useEffect(() => {
-    if (audioRef.current && isPlaying) {
+    if (audioRef.current) {
       audioRef.current.src = currentTrack.src;
-      audioRef.current.play().catch(() => {});
+      if (isPlaying) {
+        audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
+      }
     }
-  }, [currentTrackIndex]);
+  }, [currentTrackIndex, currentTrack.src, isPlaying]);
+
+  const formatTime = (secs) => {
+    if (isNaN(secs)) return '0:00';
+    const m = Math.floor(secs / 60);
+    const s = Math.floor(secs % 60);
+    return `${m}:${String(s).padStart(2, '0')}`;
+  };
 
   const handleTimeUpdate = () => {
     if (!audioRef.current) return;
     const cur = audioRef.current.currentTime;
-    const dur = audioRef.current.duration || 1;
-    setAudioProgress((cur / dur) * 100);
-
-    const m = Math.floor(cur / 60);
-    const s = Math.floor(cur % 60);
-    setAudioCurrentTime(`${m}:${s < 10 ? '0' : ''}${s}`);
-
+    const dur = audioRef.current.duration;
     if (dur && !isNaN(dur)) {
-      const dm = Math.floor(dur / 60);
-      const ds = Math.floor(dur % 60);
-      setAudioDuration(`${dm}:${ds < 10 ? '0' : ''}${ds}`);
+      setAudioProgress((cur / dur) * 100);
+      setAudioDuration(formatTime(dur));
     }
+    setAudioCurrentTime(formatTime(cur));
   };
 
   const handleSeek = (e) => {
-    if (!audioRef.current || !audioRef.current.duration) return;
-    const seekPercent = parseFloat(e.target.value);
-    audioRef.current.currentTime = (seekPercent / 100) * audioRef.current.duration;
-    setAudioProgress(seekPercent);
-  };
-
-  /* =========================================================================
-     3. GALLERY STATE (LIGHTBOX & CATEGORIES)
-     ========================================================================= */
-  const [galleryLightboxImg, setGalleryLightboxImg] = useState(null);
-  const [galleryLightboxIdx, setGalleryLightboxIdx] = useState(0);
-
-  const openGalleryLightbox = (imgSrc) => {
-    playTone('click');
-    const idx = gallery_imgs.indexOf(imgSrc);
-    setGalleryLightboxIdx(idx >= 0 ? idx : 0);
-    setGalleryLightboxImg(imgSrc);
-  };
-
-  const handleNextGalleryPhoto = () => {
-    const next = (galleryLightboxIdx + 1) % gallery_imgs.length;
-    setGalleryLightboxIdx(next);
-    setGalleryLightboxImg(gallery_imgs[next]);
-  };
-
-  const handlePrevGalleryPhoto = () => {
-    const prev = (galleryLightboxIdx - 1 + gallery_imgs.length) % gallery_imgs.length;
-    setGalleryLightboxIdx(prev);
-    setGalleryLightboxImg(gallery_imgs[prev]);
+    if (!audioRef.current) return;
+    const val = Number(e.target.value);
+    setAudioProgress(val);
+    const dur = audioRef.current.duration;
+    if (dur && !isNaN(dur)) {
+      audioRef.current.currentTime = (val / 100) * dur;
+    }
   };
 
   /* =========================================================================
@@ -280,10 +374,7 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
 
   const handleTapArrow = (arrow) => {
     if (boardCleared || arrowLives <= 0 || clearedArrowIds.includes(arrow.id)) return;
-
-    // Check if blocked by any uncleared arrow
     const isBlocked = arrow.blockedBy.some((depId) => !clearedArrowIds.includes(depId));
-
     if (isBlocked) {
       playTone('bump');
       setBumpedArrowId(arrow.id);
@@ -294,7 +385,6 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
       const nextCleared = [...clearedArrowIds, arrow.id];
       setClearedArrowIds(nextCleared);
       setHintArrowId(null);
-
       if (nextCleared.length === activeLevel.arrows.length) {
         setBoardCleared(true);
         playTone('success');
@@ -306,7 +396,6 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
   const handleUseHint = () => {
     if (hintCount <= 0 || boardCleared) return;
     playTone('click');
-    // Find an arrow that is currently unblocked and not yet cleared
     const unblocked = activeLevel.arrows.find(
       (a) => !clearedArrowIds.includes(a.id) && a.blockedBy.every((depId) => clearedArrowIds.includes(depId))
     );
@@ -390,7 +479,7 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
   };
 
   /* =========================================================================
-     8. INGRAM (INSTAGRAM) STATE
+     8. PIXABOWL (INSTAGRAM) STATE
      ========================================================================= */
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(22110);
@@ -408,48 +497,74 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
   };
 
   /* =========================================================================
-     APP GRID CONFIGURATION (12 Apps in a single unified grid, No bottom dock)
+     APP GRID CONFIGURATION (Exact Reference Image 1 & 12 Apps)
      ========================================================================= */
   const apps = [
+    { id: 'messages', label: 'Messages', bg: 'tile-messages', icon: 'messages', badge: '2' },
+    { id: 'phone', label: 'Phone', bg: 'tile-phone', icon: 'phone' },
+    { id: 'mail', label: 'Mail', bg: 'tile-mail', icon: 'mail', badge: '3' },
+    { id: 'gallery', label: 'Gallery', bg: 'tile-gallery', icon: 'gallery' },
+    { id: 'pixabowl', label: 'Pixabowl', bg: 'tile-pixabowl', icon: 'pixabowl' },
+    { id: 'diary', label: 'Diary', bg: 'tile-diary', icon: 'diary', badge: '4', badgeColor: 'badge-amber' },
+    { id: 'symmetry', label: 'Symmetry', bg: 'tile-symmetry', icon: 'symmetry', isBordered: true },
+    { id: 'settings', label: 'Settings', bg: 'tile-settings', icon: 'settings', isBordered: true },
     { id: 'scrapbook', label: 'Scrapbook', isScrapbookCover: true },
-    { id: 'diary', label: 'Diary(Notes)', bg: 'bg-diary', icon: 'diary' },
-    { id: 'gallery', label: 'Gallery', bg: 'bg-gallery', icon: 'gallery' },
-    { id: 'ingram', label: 'Ingram', bg: 'bg-ingram', icon: 'ingram' },
-    { id: 'music', label: 'Music', bg: 'bg-music', icon: 'music' },
-    { id: 'arrowGame', label: 'Arrow Game', bg: 'bg-arrow', icon: 'arrow' },
-    { id: 'calculator', label: 'Calculator', bg: 'bg-calc', icon: 'calc' },
-    { id: 'gift', label: 'Special Gift', bg: 'bg-gift', icon: 'gift' },
-    { id: 'messages', label: 'Messages', bg: 'bg-messages', icon: 'messages' },
-    { id: 'phone', label: 'Phone', bg: 'bg-phone', icon: 'phone' },
-    { id: 'mail', label: 'Mail', bg: 'bg-mail', icon: 'mail' },
-    { id: 'settings', label: 'Settings', bg: 'bg-settings', icon: 'settings' },
+    { id: 'music', label: 'Music', bg: 'tile-music', icon: 'music', badge: '10', badgeColor: 'badge-blue' },
+    { id: 'arrowGame', label: 'Make Arrow', bg: 'tile-arrow', icon: 'arrow' },
+    { id: 'calculator', label: 'Calculator', bg: 'tile-calc', icon: 'calc' },
   ];
 
   const renderIconSvg = (name) => {
     switch (name) {
-      case 'diary':
+      case 'messages':
         return (
-          <svg className="app-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-            <polyline points="14 2 14 8 20 8" />
-            <line x1="16" y1="13" x2="8" y2="13" />
-            <line x1="16" y1="17" x2="8" y2="17" />
+          <svg className="app-svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-3 9H7V9h10v2zm-4 3H7v-2h6v2z" />
+          </svg>
+        );
+      case 'phone':
+        return (
+          <svg className="app-svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24 11.72 11.72 0 003.57.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1.02l-2.2 2.2z" />
+          </svg>
+        );
+      case 'mail':
+        return (
+          <svg className="app-svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
           </svg>
         );
       case 'gallery':
         return (
-          <svg className="app-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-            <circle cx="8.5" cy="8.5" r="1.5" />
-            <polyline points="21 15 16 10 5 21" />
+          <svg className="app-svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
           </svg>
         );
-      case 'ingram':
+      case 'pixabowl':
         return (
           <svg className="app-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
             <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
             <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+          </svg>
+        );
+      case 'diary':
+        return (
+          <svg className="app-svg" viewBox="0 0 24 24" fill="currentColor" style={{ color: '#f5e6cc' }}>
+            <path d="M6 2h11a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm0 2v16h11V4H6zm2 3h7v2H8V7zm0 4h7v2H8v-2z" />
+          </svg>
+        );
+      case 'symmetry':
+        return (
+          <svg className="app-svg" viewBox="0 0 24 24">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09V21.35z" fill="#ef5350" />
+            <path d="M12 5.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35V5.09z" fill="#4b5563" />
+          </svg>
+        );
+      case 'settings':
+        return (
+          <svg className="app-svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
           </svg>
         );
       case 'music':
@@ -474,40 +589,6 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
             <rect x="4" y="2" width="16" height="20" rx="2" />
             <line x1="8" y1="6" x2="16" y2="6" />
             <path d="M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01" />
-          </svg>
-        );
-      case 'gift':
-        return (
-          <svg className="app-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="3" y="8" width="18" height="4" rx="1" />
-            <path d="M12 8v13" />
-            <path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7" />
-            <path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5" />
-          </svg>
-        );
-      case 'messages':
-        return (
-          <svg className="app-svg" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z" />
-          </svg>
-        );
-      case 'phone':
-        return (
-          <svg className="app-svg" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
-          </svg>
-        );
-      case 'mail':
-        return (
-          <svg className="app-svg" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
-          </svg>
-        );
-      case 'settings':
-        return (
-          <svg className="app-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="3" />
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
           </svg>
         );
       default:
@@ -535,14 +616,12 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
           </div>
         </header>
 
-        {/* Hero Header */}
+        {/* Hero Header - ONLY "Happy Birthday Maheswari" as requested (All other text removed) */}
         <div className="native-hero-header">
-          <div className="hero-badge">A SPECIAL BIRTHDAY CELEBRATION</div>
           <h1 className="hero-title">Happy Birthday Maheswari</h1>
-          <p className="hero-subtitle">Handcrafted with love for Ammu</p>
         </div>
 
-        {/* 12-App Unified Grid (All bottom apps merged with above apps) */}
+        {/* 12-App Unified Grid matching Reference Image 1 */}
         <main className="unified-app-grid">
           {apps.map((app) => (
             <button
@@ -562,262 +641,414 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
                       e.target.src = 'assets/sketchbook-cover.jpg';
                     }}
                   />
-                  <div className="cover-gold-badge">3D</div>
+                  <span className="badge-dot badge-gold">3D</span>
                 </div>
               ) : (
-                <div className={`generic-tile ${app.bg}`}>{renderIconSvg(app.icon)}</div>
+                <div className={`generic-tile ${app.bg} ${app.isBordered ? 'tile-bordered' : ''}`}>
+                  {renderIconSvg(app.icon)}
+                  {app.badge && (
+                    <span className={`badge-dot ${app.badgeColor || 'badge-red'}`}>{app.badge}</span>
+                  )}
+                </div>
               )}
               <span className="app-cell-label">{app.label}</span>
             </button>
           ))}
         </main>
 
-        {/* Sky Tribute Quote Bar */}
-        <section className="native-sky-quote-bar">
-          <p className="sky-quote-text">&ldquo;Looking up at the same sky with you... always.&rdquo;</p>
-          <span className="sky-quote-author">&mdash; VISHNU</span>
-        </section>
+        {/* Swipe Right for Secret Vault Hint Pill (Matching Reference Image 1) */}
+        <div className="bottom-vault-hint-wrap">
+          <button
+            type="button"
+            className="bottom-vault-hint-btn"
+            onClick={() => {
+              openApp('gallery');
+              setShowVaultKeypad(true);
+            }}
+          >
+            Swipe right for Secret Vault →
+          </button>
+        </div>
       </div>
 
       {/* =====================================================================
-          MODAL 1: SCRAPBOOK FULL PHOTO PREVIEW (No upload needed, Full Photo view)
+          MODAL 1: SCRAPBOOK (Cover Portrait First -> Tells Fullscreen Slideshow)
           ===================================================================== */}
       {activeModal === 'scrapbook' && (
         <div className="native-app-modal scrapbook-modal">
-          <header className="modal-top-bar bg-amber-950">
-            <div className="modal-title-wrap">
-              <h2>Digital Scrapbook</h2>
-              <span className="modal-sub">
-                Page {scrapbookIndex + 1} of {SCRAPBOOK_PAGES.length}
-              </span>
-            </div>
-            <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
-              ✕
-            </button>
-          </header>
-
-          <div className="scrapbook-viewer-body">
-            {/* Full Image Main Stage */}
-            <div className="scrapbook-main-stage">
-              <img
-                src={SCRAPBOOK_PAGES[scrapbookIndex]}
-                alt={`Scrapbook Page ${scrapbookIndex + 1}`}
-                className="scrapbook-full-photo"
-              />
-            </div>
-
-            {/* Navigation Controls */}
-            <div className="scrapbook-nav-controls">
-              <button
-                type="button"
-                className="scrap-nav-btn"
-                disabled={scrapbookIndex <= 0}
-                onClick={() => setScrapbookIndex((i) => Math.max(0, i - 1))}
-              >
-                &larr; Prev Page
-              </button>
-              <button
-                type="button"
-                className="scrap-3d-btn"
-                onClick={() => {
-                  closeModal();
-                  onSelectSection('sketchbook');
-                }}
-              >
-                Open 3D Flipbook &rarr;
-              </button>
-              <button
-                type="button"
-                className="scrap-nav-btn"
-                disabled={scrapbookIndex >= SCRAPBOOK_PAGES.length - 1}
-                onClick={() => setScrapbookIndex((i) => Math.min(SCRAPBOOK_PAGES.length - 1, i + 1))}
-              >
-                Next Page &rarr;
-              </button>
-            </div>
-
-            {/* Thumbnail Scroll Strip */}
-            <div className="scrapbook-filmstrip">
-              {SCRAPBOOK_PAGES.map((src, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  className={`strip-thumb ${idx === scrapbookIndex ? 'active' : ''}`}
-                  onClick={() => setScrapbookIndex(idx)}
-                >
-                  <img src={src} alt={`Thumbnail ${idx + 1}`} loading="lazy" />
-                  <span className="strip-num">{idx + 1}</span>
+          {scrapbookMode === 'cover' ? (
+            /* SCRAPBOOK COVER VIEW (Portrait first, tells full screen) */
+            <div className="scrapbook-cover-stage">
+              <header className="modal-top-bar bg-amber-950">
+                <div className="modal-title-wrap">
+                  <h2>Digital Scrapbook</h2>
+                  <span className="modal-sub">Chapter M • 33 Handcrafted Pages</span>
+                </div>
+                <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
+                  ✕
                 </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+              </header>
 
-      {/* =====================================================================
-          MODAL 2: MUSIC PLAYER (10 Romantic Audio Tracks)
-          ===================================================================== */}
-      {activeModal === 'music' && (
-        <div className="native-app-modal music-modal">
-          <header className="modal-top-bar bg-purple-950">
-            <div className="modal-title-wrap">
-              <h2>Music Player</h2>
-              <span className="modal-sub">Birthday Playlist</span>
-            </div>
-            <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
-              ✕
-            </button>
-          </header>
+              <div className="scrapbook-cover-body">
+                {/* Portrait Scrapbook Cover Card */}
+                <div
+                  className="cover-portrait-card"
+                  onClick={() => {
+                    playTone('click');
+                    setScrapbookMode('slideshow');
+                    setScrapbookIndex(0);
+                  }}
+                  role="button"
+                  tabIndex={0}
+                >
+                  <img
+                    src="/assets/sketchbook-cover.jpg"
+                    alt="Handcrafted Scrapbook Cover"
+                    className="cover-portrait-img"
+                  />
+                  <div className="cover-glow-badge">Chapter M</div>
+                </div>
 
-          <div className="music-player-body">
-            {/* Spinning Disc / Album Art */}
-            <div className="vinyl-deck">
-              <div className={`vinyl-disc ${isPlaying ? 'spinning' : ''}`}>
-                <div className="disc-grooves" />
-                <div className="disc-center-label">
-                  <span className="disc-symbol">♥</span>
-                  <span className="disc-text">AMMU</span>
+                {/* Clear Fullscreen CTA Announcement */}
+                <div className="fullscreen-tell-banner">
+                  <h3 className="banner-heading">Handwritten Memories</h3>
+                  <p className="banner-desc">
+                    Tells full screen • High definition slideshow with swipe controls
+                  </p>
+                  <button
+                    type="button"
+                    className="enter-fullscreen-cta-btn"
+                    onClick={() => {
+                      playTone('click');
+                      setScrapbookMode('slideshow');
+                      setScrapbookIndex(0);
+                    }}
+                  >
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+                    </svg>
+                    <span>Open Fullscreen Slideshow</span>
+                  </button>
+                </div>
+
+                {/* Quick Page Navigator Grid */}
+                <div className="quick-page-picker">
+                  <span className="picker-title">Jump to Page</span>
+                  <div className="picker-grid">
+                    {SCRAPBOOK_PAGES.map((_, pIdx) => (
+                      <button
+                        key={pIdx}
+                        type="button"
+                        className={`page-pill-btn ${scrapbookIndex === pIdx ? 'active' : ''}`}
+                        onClick={() => {
+                          playTone('click');
+                          setScrapbookIndex(pIdx);
+                          setScrapbookMode('slideshow');
+                        }}
+                      >
+                        {pIdx + 1}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-
-            {/* Track Info */}
-            <div className="music-info-card">
-              <h3 className="music-track-title">{currentTrack.title}</h3>
-              <p className="music-track-artist">{currentTrack.artist}</p>
-            </div>
-
-            {/* Progress Slider */}
-            <div className="music-scrub-box">
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={audioProgress || 0}
-                onChange={handleSeek}
-                className="music-progress-slider"
-              />
-              <div className="time-labels">
-                <span>{audioCurrentTime}</span>
-                <span>{audioDuration}</span>
-              </div>
-            </div>
-
-            {/* Transport Controls */}
-            <div className="music-control-row">
-              <button type="button" className="ctrl-btn" onClick={handlePrevTrack} aria-label="Previous">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
-                </svg>
-              </button>
-              <button type="button" className="ctrl-play-btn" onClick={handlePlayPause} aria-label="Play/Pause">
-                {isPlaying ? (
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-                  </svg>
-                ) : (
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                )}
-              </button>
-              <button type="button" className="ctrl-btn" onClick={handleNextTrack} aria-label="Next">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
-                </svg>
-              </button>
-            </div>
-
-            {/* Track List */}
-            <div className="music-playlist-wrap">
-              <h4 className="playlist-heading">All Songs ({MUSIC_TRACKS.length})</h4>
-              <div className="playlist-scroll">
-                {MUSIC_TRACKS.map((t, idx) => (
+          ) : (
+            /* SCRAPBOOK FULLSCREEN SLIDESHOW VIEW (Neat alignments, no conflicts) */
+            <div
+              className="scrapbook-fullscreen-stage"
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+            >
+              {/* Top Controls Bar */}
+              <header className="slideshow-header-bar">
+                <button
+                  type="button"
+                  className="slideshow-back-btn"
+                  onClick={() => {
+                    playTone('click');
+                    setScrapbookMode('cover');
+                  }}
+                >
+                  ← Cover
+                </button>
+                <div className="slideshow-counter">
+                  Page {scrapbookIndex + 1} / {SCRAPBOOK_PAGES.length}
+                </div>
+                <div className="slideshow-right-actions">
                   <button
-                    key={t.id}
                     type="button"
-                    className={`playlist-item ${idx === currentTrackIndex ? 'playing' : ''}`}
-                    onClick={() => handleSelectTrack(idx)}
+                    className={`slideshow-auto-btn ${scrapbookAutoPlay ? 'auto-active' : ''}`}
+                    onClick={() => {
+                      playTone('click');
+                      setScrapbookAutoPlay(!scrapbookAutoPlay);
+                    }}
                   >
-                    <span className="pl-num">{idx + 1}</span>
-                    <div className="pl-meta">
-                      <span className="pl-title">{t.title}</span>
-                      <span className="pl-artist">{t.artist}</span>
-                    </div>
-                    <span className="pl-dur">{t.duration}</span>
+                    {scrapbookAutoPlay ? 'Pause' : 'Auto'}
                   </button>
-                ))}
+                  <button type="button" className="slideshow-x-btn" onClick={closeModal} aria-label="Close">
+                    ✕
+                  </button>
+                </div>
+              </header>
+
+              {/* Center Image Stage with Float Arrows */}
+              <div className="slideshow-center-stage">
+                <button
+                  type="button"
+                  className="slide-arrow-btn arrow-prev"
+                  onClick={handlePrevScrapbookPage}
+                  aria-label="Previous Page"
+                >
+                  ‹
+                </button>
+
+                <div className="slide-image-wrapper">
+                  <img
+                    src={SCRAPBOOK_PAGES[scrapbookIndex]}
+                    alt={`Scrapbook Page ${scrapbookIndex + 1}`}
+                    className="slide-main-image"
+                  />
+                </div>
+
+                <button
+                  type="button"
+                  className="slide-arrow-btn arrow-next"
+                  onClick={handleNextScrapbookPage}
+                  aria-label="Next Page"
+                >
+                  ›
+                </button>
               </div>
+
+              {/* Bottom Scrubber & Navigation Bar */}
+              <footer className="slideshow-bottom-bar">
+                <button
+                  type="button"
+                  className="slide-nav-pill"
+                  onClick={handlePrevScrapbookPage}
+                >
+                  Prev
+                </button>
+                <div className="slide-progress-track">
+                  <div
+                    className="slide-progress-fill"
+                    style={{ width: `${((scrapbookIndex + 1) / SCRAPBOOK_PAGES.length) * 100}%` }}
+                  />
+                </div>
+                <button
+                  type="button"
+                  className="slide-nav-pill"
+                  onClick={handleNextScrapbookPage}
+                >
+                  Next
+                </button>
+              </footer>
             </div>
-          </div>
+          )}
         </div>
       )}
 
       {/* =====================================================================
-          MODAL 3: GALLERY (Categorized like Reference Image 2 + All M-ui Images)
+          MODAL 2: GALLERY (28 Categories + Secret Hidden Gallery with PIN 2211)
           ===================================================================== */}
       {activeModal === 'gallery' && (
         <div className="native-app-modal gallery-modal">
-          <header className="modal-top-bar bg-rose-950">
+          <header className="modal-top-bar bg-slate-900">
             <div className="modal-title-wrap">
-              <h2>Photo Gallery</h2>
-              <span className="modal-sub">M-ui Photo Collection</span>
+              <h2>Moments &amp; Memories</h2>
+              <span className="modal-sub">28 Collections • 108 Photographs</span>
             </div>
             <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
               ✕
             </button>
           </header>
 
-          <div className="gallery-curated-body">
-            {GALLERY_CATEGORIES.map((cat, ci) => (
-              <section key={ci} className="gallery-section">
-                <h3 className="section-title">{cat.title}</h3>
-                {cat.layout === 'featured' && (
-                  <div className="featured-hero-wrap" onClick={() => openGalleryLightbox(cat.images[0])}>
-                    <img src={cat.images[0]} alt="Featured moment" className="featured-hero-img" loading="lazy" />
-                  </div>
-                )}
-                {cat.layout === 'two-col' && (
-                  <div className="two-col-grid">
-                    {cat.images.map((src, imgIdx) => (
-                      <div key={imgIdx} className="two-col-card" onClick={() => openGalleryLightbox(src)}>
-                        <img src={src} alt="Memory" className="two-col-img" loading="lazy" />
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {cat.layout === 'grid' && (
-                  <div className="all-photos-masonry">
-                    {cat.images.map((src, imgIdx) => (
-                      <div key={imgIdx} className="masonry-card" onClick={() => openGalleryLightbox(src)}>
-                        <img src={src} alt={`Photo ${imgIdx + 1}`} className="masonry-img" loading="lazy" />
-                      </div>
-                    ))}
-                  </div>
-                )}
+          <div className="gallery-view-body">
+            {/* VIP SECRET HIDDEN VAULT BANNER (Passcode 2211) */}
+            <div className="secret-vault-banner-card">
+              <div className="vault-banner-content">
+                <div className="vault-badge-tag">RESTRICTED VAULT</div>
+                <h3 className="vault-banner-title">Secret Hidden Memories</h3>
+                <p className="vault-banner-subtitle">
+                  {vaultUnlocked
+                    ? 'Vault is Unlocked! View exclusive memories & Vishnu’s heartfelt note.'
+                    : 'Protected by 4-digit Passcode (2211). Tap to unlock.'}
+                </p>
+              </div>
+              <button
+                type="button"
+                className={`vault-action-trigger-btn ${vaultUnlocked ? 'unlocked' : ''}`}
+                onClick={() => {
+                  if (vaultUnlocked) {
+                    setVaultUnlocked(false);
+                    playTone('click');
+                  } else {
+                    setShowVaultKeypad(true);
+                    playTone('click');
+                  }
+                }}
+              >
+                {vaultUnlocked ? 'Lock Vault' : 'Enter Passcode (2211)'}
+              </button>
+            </div>
+
+            {/* UNLOCKED SECRET VAULT SECTION */}
+            {vaultUnlocked && (
+              <section className="unlocked-vault-section">
+                <div className="vault-letter-card">
+                  <h4 className="vault-letter-greeting">Dearest Ammu,</h4>
+                  <p className="vault-letter-text">
+                    &ldquo;Looking at all our memories, I am reminded of how blessed I am to have you in my life.
+                    You bring endless light, quiet strength, and pure happiness into my world. Happy Birthday,
+                    my queen! Looking up at the same sky with you... always.&rdquo;
+                  </p>
+                  <span className="vault-letter-sign">&mdash; Vishnu</span>
+                </div>
+
+                <div className="vault-photos-grid">
+                  {VAULT_IMAGES.map((vImg, vIdx) => (
+                    <div
+                      key={vIdx}
+                      className="vault-photo-item"
+                      onClick={() => openGalleryPhoto(vImg, VAULT_IMAGES, vIdx)}
+                    >
+                      <img src={vImg} alt={`Secret Memory ${vIdx + 1}`} className="vault-img" />
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* 28 GALLERY CATEGORIES (Generated from 108 Photos) */}
+            {GALLERY_CATEGORIES.map((cat, cIdx) => (
+              <section key={cIdx} className="gallery-category-block">
+                <h3 className="gallery-section-title">{cat.title}</h3>
+                <div className={`gallery-photo-row ${cat.layout === 'featured' ? 'layout-featured' : 'layout-two-col'}`}>
+                  {cat.images.map((imgSrc, pIdx) => (
+                    <div
+                      key={pIdx}
+                      className="gallery-photo-card"
+                      onClick={() => openGalleryPhoto(imgSrc, cat.images, pIdx)}
+                      role="button"
+                      tabIndex={0}
+                    >
+                      <img
+                        src={imgSrc}
+                        alt={`${cat.title} ${pIdx + 1}`}
+                        className="gallery-thumb-img"
+                        loading="lazy"
+                      />
+                    </div>
+                  ))}
+                </div>
               </section>
             ))}
           </div>
 
-          {/* Lightbox for Gallery */}
-          {galleryLightboxImg && (
-            <div className="native-lightbox-backdrop" onClick={() => setGalleryLightboxImg(null)}>
-              <div className="lightbox-content-box" onClick={(e) => e.stopPropagation()}>
-                <button type="button" className="lightbox-x-btn" onClick={() => setGalleryLightboxImg(null)}>
-                  ✕
-                </button>
-                <img src={galleryLightboxImg} alt="Enlarged" className="lightbox-full-img" />
-                <div className="lightbox-bottom-bar">
-                  <button type="button" className="lb-btn" onClick={handlePrevGalleryPhoto}>
-                    &larr; Prev
+          {/* PASSCODE KEYPAD MODAL (FOR PIN 2211) */}
+          {showVaultKeypad && (
+            <div className="vault-keypad-overlay">
+              <div className="vault-keypad-modal">
+                <div className="keypad-header">
+                  <h3>Enter Secret Passcode</h3>
+                  <p>Enter 4-digit code to reveal hidden memories</p>
+                </div>
+
+                {/* 4 PIN Dots */}
+                <div className={`pin-dots-display ${vaultError ? 'shake-anim' : ''}`}>
+                  {[0, 1, 2, 3].map((dotIdx) => (
+                    <div
+                      key={dotIdx}
+                      className={`pin-dot ${vaultPinInput.length > dotIdx ? 'filled' : ''}`}
+                    />
+                  ))}
+                </div>
+
+                {vaultError && (
+                  <div className="pin-error-text">Incorrect code. Hint: 2211</div>
+                )}
+
+                {/* Keypad Grid */}
+                <div className="keypad-grid">
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+                    <button
+                      key={num}
+                      type="button"
+                      className="key-btn"
+                      onClick={() => handleVaultKeypadPress(num)}
+                    >
+                      {num}
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    className="key-btn key-clear"
+                    onClick={() => handleVaultKeypadPress('C')}
+                  >
+                    Clear
                   </button>
-                  <span className="lb-status">
-                    {galleryLightboxIdx + 1} of {gallery_imgs.length}
-                  </span>
-                  <button type="button" className="lb-btn" onClick={handleNextGalleryPhoto}>
-                    Next &rarr;
+                  <button
+                    type="button"
+                    className="key-btn"
+                    onClick={() => handleVaultKeypadPress(0)}
+                  >
+                    0
+                  </button>
+                  <button
+                    type="button"
+                    className="key-btn key-ok"
+                    onClick={() => handleVaultKeypadPress('OK')}
+                  >
+                    OK
                   </button>
                 </div>
+
+                <button
+                  type="button"
+                  className="keypad-cancel-btn"
+                  onClick={() => setShowVaultKeypad(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* FULLSCREEN PHOTO LIGHTBOX */}
+          {galleryLightboxImg && (
+            <div className="gallery-lightbox-modal">
+              <header className="lightbox-top-bar">
+                <span>
+                  Photo {galleryLightboxIdx + 1} of {galleryActiveCategoryImgs.length}
+                </span>
+                <button type="button" className="lightbox-close-btn" onClick={closeGalleryLightbox}>
+                  ✕
+                </button>
+              </header>
+
+              <div className="lightbox-image-stage">
+                <button
+                  type="button"
+                  className="lightbox-arrow-btn left"
+                  onClick={handlePrevGalleryPhoto}
+                  aria-label="Previous"
+                >
+                  ‹
+                </button>
+                <img
+                  src={galleryLightboxImg}
+                  alt="Full preview"
+                  className="lightbox-full-img"
+                />
+                <button
+                  type="button"
+                  className="lightbox-arrow-btn right"
+                  onClick={handleNextGalleryPhoto}
+                  aria-label="Next"
+                >
+                  ›
+                </button>
               </div>
             </div>
           )}
@@ -825,50 +1056,162 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
       )}
 
       {/* =====================================================================
-          MODAL 4: ARROW GAME ("CLEAR THE BOARD" - Reference Image 3)
+          MODAL 3: MUSIC PLAYER (Real HTML5 Audio with 10 Tracks)
           ===================================================================== */}
-      {activeModal === 'arrowGame' && (
-        <div className="native-app-modal arrow-game-modal">
-          {/* Top Bar with Reference Image 3 layout */}
-          <div className="clear-board-header">
-            <button type="button" className="cb-back-btn" onClick={closeModal} aria-label="Back">
-              &larr;
+      {activeModal === 'music' && (
+        <div className="native-app-modal music-modal">
+          <header className="modal-top-bar bg-sky-950">
+            <div className="modal-title-wrap">
+              <h2>Music Player</h2>
+              <span className="modal-sub">10 Romantic Melodies</span>
+            </div>
+            <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
+              ✕
             </button>
-            <div className="cb-level-title">Level {activeLevel.level}</div>
-            <button type="button" className="cb-settings-btn" onClick={resetArrowBoard} aria-label="Reset">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z" />
-              </svg>
-            </button>
-          </div>
+          </header>
 
-          <div className="clear-board-body">
-            {/* Title */}
-            <h2 className="cb-big-title">Clear the Board</h2>
-
-            {/* Sub-header with Rocket, Hearts, Difficulty */}
-            <div className="cb-stats-row">
-              <div className="cb-stat-pill rocket-pill">
-                <span className="stat-sym">&#10148;</span>
-                <span>{112 + clearedArrowIds.length * 10}</span>
+          <div className="music-view-body">
+            {/* Spinning Vinyl Visual */}
+            <div className="music-player-hero">
+              <div className={`music-disc-record ${isPlaying ? 'spinning-disc' : ''}`}>
+                <div className="disc-grooves">
+                  <div className="disc-center-label">
+                    <span className="disc-title-text">{currentTrack.title.slice(0, 14)}...</span>
+                  </div>
+                </div>
               </div>
-              <div className="cb-hearts-row">
-                {[1, 2, 3].map((h) => (
-                  <span key={h} className={`cb-heart ${h <= arrowLives ? 'active' : 'lost'}`}>
-                    &#9829;
-                  </span>
-                ))}
-              </div>
-              <div className="cb-stat-pill normal-pill">Normal</div>
+              <h3 className="playing-track-title">{currentTrack.title}</h3>
+              <p className="playing-track-artist">{currentTrack.artist}</p>
             </div>
 
-            {/* The SVG Board with dotted grid and bendy arrows */}
-            <div className="cb-board-container">
-              <svg className="cb-svg-canvas" viewBox="0 0 280 320">
-                {/* Dotted plane points */}
-                {Array.from({ length: 6 }).map((_, r) =>
-                  Array.from({ length: 5 }).map((_, c) => (
-                    <circle key={`${r}-${c}`} cx={40 + c * 50} cy={30 + r * 50} r="2.5" fill="#94a3b8" opacity="0.6" />
+            {/* Seek Bar */}
+            <div className="music-progress-wrap">
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={audioProgress}
+                onChange={handleSeek}
+                className="music-seek-bar"
+              />
+              <div className="music-time-row">
+                <span>{audioCurrentTime}</span>
+                <span>{audioDuration}</span>
+              </div>
+            </div>
+
+            {/* Playback Controls */}
+            <div className="music-controls-row">
+              <button type="button" className="ctrl-btn-round" onClick={handlePrevTrack} aria-label="Previous">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                className="ctrl-btn-main"
+                onClick={handlePlayPause}
+                aria-label={isPlaying ? 'Pause' : 'Play'}
+              >
+                {isPlaying ? (
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                  </svg>
+                ) : (
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                )}
+              </button>
+              <button type="button" className="ctrl-btn-round" onClick={handleNextTrack} aria-label="Next">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Playlist Track List */}
+            <div className="playlist-wrap">
+              <h4 className="playlist-heading">All 10 Tracks</h4>
+              <div className="track-items-list">
+                {MUSIC_TRACKS.map((track, idx) => (
+                  <div
+                    key={track.id}
+                    className={`track-item-card ${currentTrackIndex === idx ? 'playing-card' : ''}`}
+                    onClick={() => handleSelectTrack(idx)}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    <div className="track-left">
+                      <span className="track-idx">{idx + 1}</span>
+                      <div className="track-meta">
+                        <span className="track-name">{track.title}</span>
+                        <span className="track-singer">{track.artist}</span>
+                      </div>
+                    </div>
+                    <span className="track-len">{track.duration}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =====================================================================
+          MODAL 4: ARROW PUZZLE GAME ("Clear the Board")
+          ===================================================================== */}
+      {activeModal === 'arrowGame' && (
+        <div className="native-app-modal arrow-modal">
+          <header className="modal-top-bar bg-slate-900">
+            <div className="modal-title-wrap">
+              <h2>Clear the Board</h2>
+              <span className="modal-sub">
+                Level {activeLevel.level} &bull; Tap arrows whose exit path is clear
+              </span>
+            </div>
+            <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
+              ✕
+            </button>
+          </header>
+
+          <div className="arrow-game-body">
+            {/* Game Stats Row */}
+            <div className="game-stats-header">
+              <div className="stat-capsule">
+                <span className="stat-label">Remaining:</span>
+                <span className="stat-value">
+                  {activeLevel.arrows.length - clearedArrowIds.length} / {activeLevel.arrows.length}
+                </span>
+              </div>
+              <div className="lives-row">
+                {[1, 2, 3].map((heart) => (
+                  <svg
+                    key={heart}
+                    className={`life-heart-svg ${arrowLives >= heart ? 'alive' : 'lost'}`}
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                  </svg>
+                ))}
+              </div>
+              <span className="level-badge">Level {activeLevel.level}</span>
+            </div>
+
+            {/* Dot Grid Arrow SVG Board */}
+            <div className="arrow-svg-board">
+              <svg viewBox="0 0 280 280" className="board-svg-canvas">
+                {/* Dot plane background */}
+                {[...Array(6)].map((_, r) =>
+                  [...Array(6)].map((_, c) => (
+                    <circle
+                      key={`d-${r}-${c}`}
+                      cx={35 + c * 42}
+                      cy={35 + r * 42}
+                      r="2.5"
+                      fill="rgba(148, 163, 184, 0.4)"
+                    />
                   ))
                 )}
 
@@ -886,174 +1229,74 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
                       onClick={() => handleTapArrow(arr)}
                       style={{ cursor: 'pointer' }}
                     >
-                      {/* Thick transparent touch target */}
-                      <path d={arr.d} fill="none" stroke="transparent" strokeWidth="24" />
-                      {/* Visible Arrow Line */}
                       <path
                         d={arr.d}
                         fill="none"
-                        stroke={isHinted ? '#38bdf8' : '#0f172a'}
-                        strokeWidth="5"
+                        stroke={isHinted ? '#38bdf8' : isBumped ? '#ef4444' : '#1e293b'}
+                        strokeWidth="8"
                         strokeLinecap="round"
                         strokeLinejoin="round"
                       />
-                      {/* Arrowhead Marker */}
                       <polygon
-                        points={`${arr.head[0]},${arr.head[1]} ${arr.head[0] - 8},${arr.head[1] - 5} ${arr.head[0] - 8},${arr.head[1] + 5}`}
-                        fill={isHinted ? '#38bdf8' : '#0f172a'}
+                        points={`${arr.head[0]},${arr.head[1] - 8} ${arr.head[0] + 10},${arr.head[1] + 8} ${arr.head[0] - 10},${arr.head[1] + 8}`}
+                        fill={isHinted ? '#38bdf8' : isBumped ? '#ef4444' : '#1e293b'}
                         transform={`rotate(${arr.angle}, ${arr.head[0]}, ${arr.head[1]})`}
                       />
                     </g>
                   );
                 })}
               </svg>
-            </div>
 
-            {/* Victory / Game Over overlay */}
-            {boardCleared && (
-              <div className="cb-victory-card">
-                <div className="cb-victory-heart">&#9829;</div>
-                <h3>Board Cleared!</h3>
-                <p>&ldquo;Every path leads straight to you. Happy Birthday Maheswari!&rdquo;</p>
-                <button type="button" className="cb-restart-btn" onClick={resetArrowBoard}>
-                  Play Again
-                </button>
-              </div>
-            )}
-
-            {!boardCleared && arrowLives <= 0 && (
-              <div className="cb-gameover-card">
-                <h3>Out of Lives</h3>
-                <p>An arrow bumped into another path! Try clearing the unblocked arrows first.</p>
-                <button type="button" className="cb-restart-btn" onClick={resetArrowBoard}>
-                  Retry Level
-                </button>
-              </div>
-            )}
-
-            {/* Bottom Controls: Hint & Shuffle */}
-            <div className="cb-bottom-tools">
-              <button type="button" className="cb-tool-btn hint-btn" onClick={handleUseHint} aria-label="Hint">
-                <span className="tool-icon">&#9684;</span>
-                <span className="tool-badge">{hintCount}</span>
-              </button>
-              <button type="button" className="cb-tool-btn shuffle-btn" onClick={resetArrowBoard} aria-label="Reset">
-                <span className="tool-icon">#</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* =====================================================================
-          MODAL 5: INGRAM (Instagram-style birthday feed)
-          ===================================================================== */}
-      {activeModal === 'ingram' && (
-        <div className="native-app-modal ingram-modal">
-          <header className="modal-top-bar bg-purple-950">
-            <div className="modal-title-wrap">
-              <h2>Ingram &bull; @maheswari_birthday</h2>
-            </div>
-            <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
-              ✕
-            </button>
-          </header>
-
-          <div className="ingram-feed-body">
-            <div className="ingram-stories-row">
-              {['Celebration', 'Memories', 'Ammu', 'Smile', 'Forever'].map((s, i) => (
-                <div key={i} className="story-pill">
-                  <div className="story-ring-gold">
-                    <div className="story-avatar-star">&#9733;</div>
-                  </div>
-                  <span className="story-title">{s}</span>
+              {/* Game Over / Cleared Overlays */}
+              {boardCleared && (
+                <div className="board-cleared-banner">
+                  <h4 className="congrats-text">Board Cleared!</h4>
+                  <p className="congrats-sub">Ammu is a puzzle master!</p>
+                  <button
+                    type="button"
+                    className="action-pill-btn"
+                    onClick={() => {
+                      if (arrowLevelIdx + 1 < ARROW_PUZZLE_LEVELS.length) {
+                        setArrowLevelIdx((prev) => prev + 1);
+                      } else {
+                        setArrowLevelIdx(0);
+                      }
+                      resetArrowBoard();
+                    }}
+                  >
+                    Next Level
+                  </button>
                 </div>
-              ))}
-            </div>
+              )}
 
-            <article className="ingram-post-card">
-              <div className="post-top">
-                <div className="post-avi">M</div>
-                <div>
-                  <div className="post-name">maheswari_birthday</div>
-                  <div className="post-loc">Special Birthday Edition</div>
-                </div>
-              </div>
-
-              <div className="post-img-box" onDoubleClick={toggleLike}>
-                <img
-                  src="/assets/pose-04.png"
-                  alt="Maheswari Birthday"
-                  className="post-main-photo"
-                  onError={(e) => {
-                    e.target.src = 'assets/pose-04.png';
-                  }}
-                />
-              </div>
-
-              <div className="post-meta-row">
-                <button type="button" className={`heart-btn ${liked ? 'active' : ''}`} onClick={toggleLike}>
-                  &#9829;
-                </button>
-                <span className="likes-label">{likeCount.toLocaleString()} likes</span>
-              </div>
-
-              <div className="post-caption-box">
-                <p>
-                  <strong>vishnu:</strong> Celebrating the most precious day for the most wonderful girl in the world! Happy Birthday Ammu!
-                </p>
-                <div className="post-hashtags">#HappyBirthdayMaheswari #Forever #OurStory</div>
-              </div>
-            </article>
-          </div>
-        </div>
-      )}
-
-      {/* =====================================================================
-          MODAL 6: MESSAGES (Interactive Chat)
-          ===================================================================== */}
-      {activeModal === 'messages' && (
-        <div className="native-app-modal messages-modal">
-          <header className="modal-top-bar bg-slate-900">
-            <div className="modal-title-wrap">
-              <h2>Vishnu</h2>
-              <span className="modal-sub text-emerald-400">Online</span>
-            </div>
-            <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
-              ✕
-            </button>
-          </header>
-
-          <div className="messages-chat-body">
-            <div className="chat-stream">
-              {messagesList.map((m, i) => (
-                <div key={i} className={`chat-line ${m.sender}`}>
-                  <div className={`msg-bubble ${m.sender}`}>
-                    <p>{m.text}</p>
-                    <span className="msg-timestamp">{m.time}</span>
-                  </div>
-                </div>
-              ))}
-              {isTyping && (
-                <div className="chat-line vishnu">
-                  <div className="msg-bubble typing">
-                    <span>.</span>
-                    <span>.</span>
-                    <span>.</span>
-                  </div>
+              {arrowLives <= 0 && !boardCleared && (
+                <div className="board-cleared-banner retry-banner">
+                  <h4 className="congrats-text">Out of Hearts!</h4>
+                  <button type="button" className="action-pill-btn" onClick={resetArrowBoard}>
+                    Try Again
+                  </button>
                 </div>
               )}
             </div>
 
-            <div className="quick-reply-bar">
-              <button type="button" className="qr-chip" onClick={() => handleSendMessage('Thank you Vishnu!')}>
-                Thank you Vishnu!
+            {/* Bottom Controls */}
+            <div className="arrow-controls-row">
+              <button
+                type="button"
+                className="hint-btn-circle"
+                onClick={handleUseHint}
+                disabled={hintCount <= 0 || boardCleared}
+                title="Hint"
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-7 7c0 2.5 1.5 4.5 3 6h8c1.5-1.5 3-3.5 3-6a7 7 0 0 0-7-7z" />
+                </svg>
+                <span className="hint-counter-pill">{hintCount}</span>
               </button>
-              <button type="button" className="qr-chip" onClick={() => handleSendMessage('Looking up at the same sky!')}>
-                Looking up at the same sky!
-              </button>
-              <button type="button" className="qr-chip" onClick={() => handleSendMessage('Best Birthday Ever!')}>
-                Best Birthday Ever!
+              <button type="button" className="restart-btn-circle" onClick={resetArrowBoard} title="Reset">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
+                </svg>
               </button>
             </div>
           </div>
@@ -1061,69 +1304,137 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
       )}
 
       {/* =====================================================================
-          MODAL 7: PHONE DIALER
+          MODAL 5: MESSAGES APP
+          ===================================================================== */}
+      {activeModal === 'messages' && (
+        <div className="native-app-modal messages-modal">
+          <header className="modal-top-bar bg-blue-950">
+            <div className="modal-title-wrap">
+              <h2>Messages</h2>
+              <span className="modal-sub">Chatting with Vishnu</span>
+            </div>
+            <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
+              ✕
+            </button>
+          </header>
+
+          <div className="messages-view-body">
+            <div className="messages-stream">
+              {messagesList.map((m, idx) => (
+                <div key={idx} className={`chat-bubble ${m.sender === 'ammu' ? 'bubble-me' : 'bubble-them'}`}>
+                  <p className="bubble-content">{m.text}</p>
+                  <span className="bubble-ts">{m.time}</span>
+                </div>
+              ))}
+              {isTyping && (
+                <div className="chat-bubble bubble-them typing-indicator">
+                  <span>Vishnu is typing...</span>
+                </div>
+              )}
+            </div>
+
+            {/* Quick Birthday Response Chips */}
+            <div className="quick-replies-tray">
+              <button
+                type="button"
+                className="reply-chip"
+                onClick={() => handleSendMessage('Thank you so much Vishnu!')}
+              >
+                Thank you so much!
+              </button>
+              <button
+                type="button"
+                className="reply-chip"
+                onClick={() => handleSendMessage('Looking up at the same sky with you... always.')}
+              >
+                Under the same sky...
+              </button>
+              <button
+                type="button"
+                className="reply-chip"
+                onClick={() => handleSendMessage('This birthday phone is incredible!')}
+              >
+                I love this phone!
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =====================================================================
+          MODAL 6: PHONE DIALER
           ===================================================================== */}
       {activeModal === 'phone' && (
         <div className="native-app-modal phone-modal">
           <header className="modal-top-bar bg-emerald-950">
             <div className="modal-title-wrap">
               <h2>Phone</h2>
-              <span className="modal-sub">Keypad</span>
+              <span className="modal-sub">Direct Line to Vishnu</span>
             </div>
             <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
               ✕
             </button>
           </header>
 
-          <div className="phone-screen-body">
+          <div className="phone-dialer-body">
             {callActive ? (
-              <div className="active-call-pane">
-                <div className="call-avatar-circle">V</div>
-                <h3>Vishnu</h3>
-                <p className="call-duration">
-                  {String(Math.floor(callTimer / 60)).padStart(2, '0')}:{String(callTimer % 60).padStart(2, '0')}
+              <div className="call-active-stage">
+                <div className="caller-avatar-circle">V</div>
+                <h3 className="caller-name">Vishnu</h3>
+                <span className="call-duration-text">{formatTime(callTimer)}</span>
+                <p className="call-sweet-whisper">
+                  &ldquo;I am always just one call away, Ammu. Happy Birthday!&rdquo;
                 </p>
-                <div className="voice-note-card">
-                  &ldquo;Happy Birthday Ammu! Hearing your voice is my favorite thing. Keep that lovely smile shining all year long!&rdquo;
-                </div>
-                <button type="button" className="end-call-btn" onClick={() => setCallActive(false)}>
+                <button
+                  type="button"
+                  className="end-call-btn"
+                  onClick={() => {
+                    playTone('bump');
+                    setCallActive(false);
+                  }}
+                >
                   End Call
                 </button>
               </div>
             ) : (
-              <div className="dialer-pane">
-                <div className="dialer-screen-number">{dialNumber || 'Speed Dial: 2211'}</div>
-                <div className="dialer-grid">
-                  {['1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'].map((k) => (
+              <div className="dialer-stage">
+                <div className="dialer-display-num">{dialNumber || 'Enter digits...'}</div>
+                <div className="dialer-keypad-grid">
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, '*', 0, '#'].map((d) => (
                     <button
-                      key={k}
+                      key={d}
                       type="button"
                       className="dial-digit-btn"
                       onClick={() => {
                         playTone('click');
-                        setDialNumber((d) => (d.length < 10 ? d + k : d));
+                        setDialNumber((prev) => prev + String(d));
                       }}
                     >
-                      {k}
+                      {d}
                     </button>
                   ))}
                 </div>
-                <div className="dialer-actions">
+                <div className="dialer-actions-row">
                   <button
                     type="button"
-                    className="call-green-btn"
+                    className="dialer-backspace-btn"
+                    onClick={() => {
+                      playTone('click');
+                      setDialNumber((prev) => prev.slice(0, -1));
+                    }}
+                  >
+                    ⌫
+                  </button>
+                  <button
+                    type="button"
+                    className="dialer-call-btn"
                     onClick={() => {
                       playTone('success');
                       setCallActive(true);
                     }}
                   >
-                    Call Vishnu
+                    Call
                   </button>
-                  {dialNumber && (
-                    <button type="button" className="backspace-btn" onClick={() => setDialNumber((d) => d.slice(0, -1))}>
-                      ⌫
-                    </button>
-                  )}
                 </div>
               </div>
             )}
@@ -1132,14 +1443,14 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
       )}
 
       {/* =====================================================================
-          MODAL 8: MAIL
+          MODAL 7: MAIL
           ===================================================================== */}
       {activeModal === 'mail' && (
         <div className="native-app-modal mail-modal">
-          <header className="modal-top-bar bg-sky-950">
+          <header className="modal-top-bar bg-red-950">
             <div className="modal-title-wrap">
-              <h2>Mail</h2>
-              <span className="modal-sub">Inbox (1 Unread)</span>
+              <h2>Letters &amp; Mail</h2>
+              <span className="modal-sub">Inbox (3 Messages)</span>
             </div>
             <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
               ✕
@@ -1147,45 +1458,134 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
           </header>
 
           <div className="mail-view-body">
-            <article className="parchment-letter">
-              <div className="letter-meta-header">
-                <div>
-                  <strong>From:</strong> Vishnu &lt;vishnu@heart.com&gt;
-                </div>
-                <div>
-                  <strong>To:</strong> Maheswari &lt;ammu@love.com&gt;
-                </div>
-                <div>
-                  <strong>Subject:</strong> Happy Birthday to the Light of My Life
-                </div>
-              </div>
-              <hr className="letter-divider" />
-              <div className="letter-body-text">
-                <p>Dearest Maheswari,</p>
-                <p>
-                  Today is a celebration of the wonderful, kind, and resilient person you are. May your year ahead be blessed with boundless smiles, peace of mind, and the fulfillment of every dream.
-                </p>
-                <p>
-                  No matter the distance, looking up at the sky reminds me that we share the exact same universe.
-                </p>
-                <p className="letter-sign-off">
-                  With all my love,<br />
-                  <strong>Vishnu</strong>
-                </p>
-              </div>
-            </article>
+            <div className="mail-card-item">
+              <span className="mail-sender">From: Vishnu</span>
+              <h4 className="mail-subject">Happy Birthday Ammu!</h4>
+              <p className="mail-preview">
+                Wishing you endless laughter, peace, and dreams that come true today and always...
+              </p>
+            </div>
+            <div className="mail-card-item">
+              <span className="mail-sender">From: Secret Vault</span>
+              <h4 className="mail-subject">Passcode Reminder: 2211</h4>
+              <p className="mail-preview">
+                Your special hidden memories vault is ready with 108 photos and 28 collections.
+              </p>
+            </div>
+            <div className="mail-card-item">
+              <span className="mail-sender">From: The Universe</span>
+              <h4 className="mail-subject">Looking Up At The Same Sky</h4>
+              <p className="mail-preview">
+                No matter where we are, we share the exact same sky and the exact same starry night.
+              </p>
+            </div>
           </div>
         </div>
       )}
 
       {/* =====================================================================
-          MODAL 9: CALCULATOR
+          MODAL 8: PIXABOWL (INSTAGRAM)
+          ===================================================================== */}
+      {activeModal === 'pixabowl' && (
+        <div className="native-app-modal ingram-modal">
+          <header className="modal-top-bar bg-purple-950">
+            <div className="modal-title-wrap">
+              <h2>Pixabowl</h2>
+              <span className="modal-sub">@maheswari_ammu</span>
+            </div>
+            <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
+              ✕
+            </button>
+          </header>
+
+          <div className="ingram-view-body">
+            <div className="ingram-post-card">
+              <div className="post-author-row">
+                <div className="author-avatar">M</div>
+                <div className="author-meta">
+                  <span className="author-handle">maheswari_ammu</span>
+                  <span className="author-loc">Birthday Special Celebration</span>
+                </div>
+              </div>
+
+              <div className="post-photo-stage">
+                <img src="/assets/gallery/splmem.jpg" alt="Ammu portrait" className="post-img" />
+              </div>
+
+              <div className="post-actions-row">
+                <button
+                  type="button"
+                  className={`heart-like-btn ${liked ? 'liked' : ''}`}
+                  onClick={toggleLike}
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill={liked ? '#ef4444' : 'none'} stroke={liked ? '#ef4444' : '#ffffff'} strokeWidth="2">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                  </svg>
+                  <span>{likeCount.toLocaleString()} Likes</span>
+                </button>
+              </div>
+
+              <div className="post-caption-box">
+                <p>
+                  <strong>maheswari_ammu:</strong> A year older, a thousand reasons more grateful.
+                  Thank you for all the heartfelt love!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =====================================================================
+          MODAL 9: SYMMETRY (Split Heart Celebration)
+          ===================================================================== */}
+      {activeModal === 'symmetry' && (
+        <div className="native-app-modal symmetry-modal">
+          <header className="modal-top-bar bg-slate-900">
+            <div className="modal-title-wrap">
+              <h2>Symmetry</h2>
+              <span className="modal-sub">Two Hearts In Harmony</span>
+            </div>
+            <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
+              ✕
+            </button>
+          </header>
+
+          <div className="symmetry-view-body">
+            <div className="dual-heart-graphic">
+              <svg className="symmetry-svg" viewBox="0 0 24 24">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09V21.35z" fill="#ef5350" />
+                <path d="M12 5.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35V5.09z" fill="#38bdf8" />
+              </svg>
+            </div>
+            <h3 className="symmetry-title">Vishnu &bull; Maheswari</h3>
+            <p className="symmetry-prose">
+              &ldquo;Two individuals, one connected heartbeat. Distance is just a number when two souls
+              share the exact same sky.&rdquo;
+            </p>
+            <button
+              type="button"
+              className="shower-confetti-btn"
+              onClick={() => {
+                playTone('success');
+                triggerConfetti();
+              }}
+            >
+              Celebrate Our Bond
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* =====================================================================
+          MODAL 10: CALCULATOR
           ===================================================================== */}
       {activeModal === 'calculator' && (
         <div className="native-app-modal calc-modal">
-          <header className="modal-top-bar bg-slate-900">
+          <header className="modal-top-bar bg-rose-950">
             <div className="modal-title-wrap">
               <h2>Calculator</h2>
+              <span className="modal-sub">Try passcode 2211 =</span>
             </div>
             <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
               ✕
@@ -1193,33 +1593,33 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
           </header>
 
           <div className="calc-view-body">
-            <div className="calc-display-box">{calcDisplay}</div>
-            {calcSecret && <div className="calc-secret-alert">{calcSecret}</div>}
-            <div className="calc-keypad-grid">
-              {['C', '+/-', '%', '/', '7', '8', '9', '*', '4', '5', '6', '-', '1', '2', '3', '+', '0', '.', '='].map((b) => (
+            <div className="calc-screen-display">{calcDisplay}</div>
+            {calcSecret && <div className="calc-easter-egg-banner">{calcSecret}</div>}
+            <div className="calc-buttons-grid">
+              {['C', '(', ')', '/', 7, 8, 9, '*', 4, 5, 6, '-', 1, 2, 3, '+', 0, '.', '='].map((btn) => (
                 <button
-                  key={b}
+                  key={btn}
                   type="button"
-                  className={`calc-key ${b === '=' ? 'key-equals' : ''} ${['/', '*', '-', '+'].includes(b) ? 'key-op' : ''}`}
-                  onClick={() => handleCalcBtn(b)}
+                  className={`calc-btn ${btn === '=' ? 'btn-equals' : typeof btn === 'string' && ['/', '*', '-', '+'].includes(btn) ? 'btn-op' : ''}`}
+                  onClick={() => handleCalcBtn(btn)}
                 >
-                  {b}
+                  {btn}
                 </button>
               ))}
             </div>
-            <p className="calc-hint-text">Tip: Enter passcode 2211 or 1204 and tap =</p>
           </div>
         </div>
       )}
 
       {/* =====================================================================
-          MODAL 10: SETTINGS
+          MODAL 11: SETTINGS
           ===================================================================== */}
       {activeModal === 'settings' && (
         <div className="native-app-modal settings-modal">
-          <header className="modal-top-bar bg-slate-900">
+          <header className="modal-top-bar bg-zinc-900">
             <div className="modal-title-wrap">
               <h2>Settings</h2>
+              <span className="modal-sub">Maheswari Special Edition</span>
             </div>
             <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
               ✕
@@ -1238,7 +1638,7 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
               </div>
               <div className="set-row">
                 <span>Theme</span>
-                <span className="set-val">Deep Romantic Night</span>
+                <span className="set-val">Balcony Sunset Glow</span>
               </div>
             </div>
             <div className="settings-section-card">
@@ -1255,47 +1655,6 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
                 <span className="set-val highlight">Vishnu</span>
               </div>
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* =====================================================================
-          MODAL 11: SPECIAL GIFT
-          ===================================================================== */}
-      {activeModal === 'gift' && (
-        <div className="native-app-modal gift-modal">
-          <header className="modal-top-bar bg-amber-950">
-            <div className="modal-title-wrap">
-              <h2>Special Gift</h2>
-            </div>
-            <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
-              ✕
-            </button>
-          </header>
-
-          <div className="gift-view-body">
-            <div className="gift-gold-box">
-              <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#e5a93c" strokeWidth="1.5">
-                <rect x="3" y="8" width="18" height="4" rx="1" />
-                <path d="M12 8v13" />
-                <path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7" />
-                <path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5" />
-              </svg>
-            </div>
-            <h3 className="gift-heading">A Heartfelt Surprise</h3>
-            <p className="gift-quote">
-              &ldquo;May your day be filled with warm sunshine, endless laughter, and all the love in the universe. Happy Birthday Ammu!&rdquo;
-            </p>
-            <button
-              type="button"
-              className="shower-confetti-btn"
-              onClick={() => {
-                playTone('success');
-                triggerConfetti();
-              }}
-            >
-              Shower Birthday Confetti
-            </button>
           </div>
         </div>
       )}
