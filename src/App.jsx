@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Intro from './components/Intro';
 import HomeGrid from './components/HomeGrid';
 import SketchbookViewer from './components/SketchbookViewer';
@@ -8,24 +8,30 @@ import DeskBuddy from './components/DeskBuddy';
 import './App.css';
 
 function App() {
-  // Screens: 'intro' (Door + Lock PIN 2211) -> 'home' -> 'sketchbook' / 'story' / 'gift'
-  const [currentScreen, setCurrentScreen] = useState('intro');
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== 'undefined') return window.innerWidth <= 768;
+    return false;
+  });
 
-  const handleIntroComplete = () => {
-    setCurrentScreen('home');
-  };
+  // On mobile: skip intro door animation, go straight to home
+  const [currentScreen, setCurrentScreen] = useState(() => {
+    if (typeof window !== 'undefined' && window.innerWidth <= 768) return 'home';
+    return 'intro';
+  });
 
-  const handleBackToHome = () => {
-    setCurrentScreen('home');
-  };
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
-  const handleSelectSection = (sectionId) => {
-    setCurrentScreen(sectionId);
-  };
+  const handleIntroComplete = () => setCurrentScreen('home');
+  const handleBackToHome = () => setCurrentScreen('home');
+  const handleSelectSection = (sectionId) => setCurrentScreen(sectionId);
 
   return (
     <div className="app-main-wrapper">
-      {currentScreen === 'intro' && (
+      {currentScreen === 'intro' && !isMobile && (
         <Intro onComplete={handleIntroComplete} />
       )}
 
@@ -45,8 +51,7 @@ function App() {
         <Gift onBack={handleBackToHome} />
       )}
 
-      {/* Reaction Desk Buddy at bottom-left corner (hidden in full-screen sketchbook mode) */}
-      {currentScreen !== 'intro' && currentScreen !== 'sketchbook' && (
+      {currentScreen !== 'intro' && currentScreen !== 'sketchbook' && !isMobile && (
         <DeskBuddy />
       )}
     </div>

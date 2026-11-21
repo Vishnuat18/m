@@ -1,22 +1,23 @@
-/* Mobile Birthday Phone Stage */
-.mobile-phone-stage {
+/* =====================================================================
+   MOBILE BIRTHDAY PHONE - NATIVE APP LOOK & FEEL
+   ===================================================================== */
+.native-phone-stage {
   width: 100%;
   min-height: 100vh;
   min-height: 100dvh;
-  background: radial-gradient(ellipse at 50% 15%, #22153c 0%, #0d0818 60%, #050309 100%);
+  background: radial-gradient(ellipse at 50% 15%, #241442 0%, #0d0818 60%, #050309 100%);
   color: #ffffff;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   box-sizing: border-box;
-  position: relative;
   overflow-x: hidden;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
 
-.mobile-phone-body {
+.native-phone-screen {
   width: 100%;
   max-width: 440px;
   min-height: 100dvh;
@@ -28,9 +29,9 @@
 }
 
 /* 1. Status Bar */
-.phone-top-bar {
+.native-status-bar {
   height: 44px;
-  padding-top: env(safe-area-inset-top, 4px);
+  padding-top: env(safe-area-inset-top, 6px);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -38,36 +39,35 @@
   font-size: 13px;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.9);
-  letter-spacing: 0.3px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
-.status-time {
+.time-val {
   font-weight: 700;
   letter-spacing: 0.5px;
 }
 
-.status-carrier {
+.carrier-val {
   font-family: 'Cinzel', serif;
   font-size: 11px;
-  letter-spacing: 1.5px;
-  color: #ffb8f8;
+  letter-spacing: 2px;
+  color: #ffbbf9;
   text-transform: uppercase;
 }
 
-.status-icons {
+.status-indicators {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.stat-svg {
+.ind-svg {
   width: 14px;
   height: 14px;
   opacity: 0.85;
 }
 
-.battery-pill {
+.battery-rect {
   width: 22px;
   height: 11px;
   border: 1.5px solid rgba(255, 255, 255, 0.8);
@@ -78,7 +78,7 @@
   align-items: center;
 }
 
-.battery-pill::after {
+.battery-rect::after {
   content: '';
   position: absolute;
   right: -3px;
@@ -89,21 +89,21 @@
   border-radius: 0 1px 1px 0;
 }
 
-.battery-level {
+.battery-fill {
   width: 100%;
   height: 100%;
   background: #22c55e;
   border-radius: 1px;
 }
 
-/* 2. Greeting Header */
-.phone-hero-header {
+/* 2. Hero Header */
+.native-hero-header {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   padding: 0 4px;
 }
 
-.hero-celebration-pill {
+.hero-badge {
   display: inline-block;
   font-family: 'Cinzel', serif;
   font-size: 9.5px;
@@ -114,21 +114,21 @@
   border: 1px solid rgba(255, 159, 252, 0.35);
   padding: 3px 12px;
   border-radius: 999px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   text-transform: uppercase;
 }
 
-.hero-main-title {
+.hero-title {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 27px;
   font-weight: 600;
   color: #f7edff;
   line-height: 1.15;
   letter-spacing: 0.8px;
-  margin: 0 0 4px 0;
+  margin: 0 0 3px 0;
 }
 
-.hero-subtext {
+.hero-subtitle {
   font-family: 'Inter', sans-serif;
   font-size: 11.5px;
   color: #c9b4e8;
@@ -136,16 +136,16 @@
   letter-spacing: 0.3px;
 }
 
-/* 3. 8-App Grid (4 cols x 2 rows) */
-.phone-app-grid {
+/* 3. Unified 12-App Grid (4 cols x 3 rows) */
+.unified-app-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px 10px;
+  gap: 14px 10px;
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
 
-.app-item-btn {
+.app-cell-btn {
   background: none;
   border: none;
   outline: none;
@@ -158,11 +158,11 @@
   transition: transform 0.15s ease;
 }
 
-.app-item-btn:active {
+.app-cell-btn:active {
   transform: scale(0.92);
 }
 
-.app-squircle {
+.generic-tile {
   width: 58px;
   height: 58px;
   border-radius: 16px;
@@ -174,13 +174,50 @@
   transition: box-shadow 0.2s ease;
 }
 
+/* Real Image Scrapbook Tile - Slightly bigger as requested */
+.cell-scrapbook-featured .scrapbook-cover-tile {
+  width: 66px;
+  height: 66px;
+  border-radius: 18px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.6), 0 0 14px rgba(229, 169, 60, 0.4);
+  border: 2px solid rgba(229, 169, 60, 0.65);
+  background: #2a1810;
+}
+
+.scrapbook-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.25s ease;
+}
+
+.cell-scrapbook-featured:hover .scrapbook-cover-img {
+  transform: scale(1.08);
+}
+
+.cover-gold-badge {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  background: #e5a93c;
+  color: #1a0f05;
+  font-size: 8px;
+  font-weight: 800;
+  padding: 1px 4px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
 .app-svg {
   width: 28px;
   height: 28px;
   stroke: #ffffff;
 }
 
-.app-text {
+.app-cell-label {
   font-family: 'Inter', sans-serif;
   font-size: 11px;
   font-weight: 500;
@@ -193,64 +230,63 @@
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
 }
 
-/* App Background Colors */
-.bg-scrapbook { background: linear-gradient(135deg, #7c4d32 0%, #c89666 100%); }
+/* Tile Background Gradients */
 .bg-diary { background: linear-gradient(135deg, #442a69 0%, #7a52b3 100%); }
 .bg-gallery { background: linear-gradient(135deg, #831843 0%, #db2777 100%); }
 .bg-ingram { background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%); }
-.bg-arrowgame { background: linear-gradient(135deg, #065f46 0%, #10b981 100%); }
+.bg-music { background: linear-gradient(135deg, #3730a3 0%, #6366f1 100%); }
+.bg-arrow { background: linear-gradient(135deg, #065f46 0%, #10b981 100%); }
 .bg-calc { background: linear-gradient(135deg, #334155 0%, #64748b 100%); }
-.bg-settings { background: linear-gradient(135deg, #1e293b 0%, #475569 100%); }
 .bg-gift { background: linear-gradient(135deg, #b45309 0%, #f59e0b 100%); }
+.bg-messages { background: linear-gradient(135deg, #15803d 0%, #22c55e 100%); }
+.bg-phone { background: linear-gradient(135deg, #047857 0%, #10b981 100%); }
+.bg-mail { background: linear-gradient(135deg, #0369a1 0%, #38bdf8 100%); }
+.bg-settings { background: linear-gradient(135deg, #1e293b 0%, #475569 100%); }
 
-/* 4. Sky Tribute Quote Widget */
-.phone-quote-widget {
+/* 4. Sky Tribute Widget */
+.native-sky-widget {
   background: rgba(18, 12, 30, 0.65);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 18px;
-  padding: 12px 14px;
+  padding: 10px 14px;
   display: flex;
   align-items: center;
   gap: 12px;
   margin-top: auto;
-  margin-bottom: 16px;
   backdrop-filter: blur(12px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
-.quote-pose-wrap {
-  width: 48px;
-  height: 80px;
+.sky-figure-wrap {
+  width: 44px;
+  height: 72px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.quote-pose-img {
+.sky-figure-img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
 }
 
-.quote-bubble {
+.sky-text-wrap {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 }
 
-.bubble-text {
+.sky-quote {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-style: italic;
   font-size: 13.5px;
   line-height: 1.35;
   color: #ffea9f;
-  margin: 0 0 4px 0;
+  margin: 0 0 3px 0;
 }
 
-.bubble-author {
+.sky-author {
   font-family: 'Cinzel', serif;
   font-size: 9px;
   letter-spacing: 1.5px;
@@ -258,75 +294,26 @@
   text-transform: uppercase;
 }
 
-/* 5. Bottom Floating Dock (4 Apps) */
-.phone-bottom-dock {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-radius: 26px;
-  padding: 9px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  width: 100%;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
-}
-
-.dock-item-btn {
-  background: none;
-  border: none;
-  outline: none;
-  padding: 0;
-  cursor: pointer;
-  transition: transform 0.15s ease;
-}
-
-.dock-item-btn:active {
-  transform: scale(0.9);
-}
-
-.dock-squircle {
-  width: 50px;
-  height: 50px;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.dock-svg {
-  width: 24px;
-  height: 24px;
-  color: #ffffff;
-}
-
-.bg-phone { background: linear-gradient(135deg, #059669 0%, #10b981 100%); }
-.bg-messages { background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%); }
-.bg-mail { background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%); }
-.bg-browser { background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%); }
-
-/* =========================================================================
-   6. FULL SCREEN WORKABLE APP MODALS
-   ========================================================================= */
-.app-modal-overlay {
+/* =====================================================================
+   MODAL OVERLAY (Fullscreen native app view)
+   ===================================================================== */
+.native-app-modal {
   position: fixed;
   inset: 0;
   z-index: 1000;
   background: #0d0918;
   display: flex;
   flex-direction: column;
-  animation: modalFadeIn 0.22s ease-out;
+  animation: modalSlideUp 0.22s ease-out;
+  overflow: hidden;
 }
 
-@keyframes modalFadeIn {
-  from { opacity: 0; transform: translateY(16px); }
+@keyframes modalSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.app-modal-header {
+.modal-top-bar {
   height: 52px;
   padding: 0 16px;
   display: flex;
@@ -334,10 +321,9 @@
   justify-content: space-between;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   flex-shrink: 0;
-  user-select: none;
 }
 
-.app-modal-header h2 {
+.modal-title-wrap h2 {
   font-family: 'Cinzel', serif;
   font-size: 14px;
   font-weight: 600;
@@ -346,7 +332,12 @@
   margin: 0;
 }
 
-.modal-close-btn {
+.modal-sub {
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.modal-x-btn {
   background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: #ffffff;
@@ -358,233 +349,704 @@
   justify-content: center;
   font-size: 14px;
   cursor: pointer;
-  transition: background 0.15s ease;
 }
 
-.modal-close-btn:active {
+.modal-x-btn:active {
   background: rgba(255, 255, 255, 0.25);
 }
 
-.app-modal-body {
+/* ---------------------------------------------------------------------
+   1. SCRAPBOOK FULL PHOTO PREVIEW (Requirement 5)
+   --------------------------------------------------------------------- */
+.scrapbook-viewer-body {
   flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 16px;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  padding: 12px;
+  overflow: hidden;
+  background: #07050b;
 }
 
-/* Modal Header Themes */
-.bg-modal-arrow { background: #064e3b; }
-.bg-modal-ingram { background: #4a154b; }
-.bg-modal-gallery { background: #4c0519; }
-.bg-modal-messages { background: #111827; }
-.bg-modal-phone { background: #064e3b; }
-.bg-modal-mail { background: #0c4a6e; }
-.bg-modal-calc { background: #1e293b; }
-.bg-modal-browser { background: #1e1b4b; }
-.bg-modal-settings { background: #111827; }
-.bg-modal-gift { background: #451a03; }
-
-/* -------------------------------------------------------------------------
-   APP 1: MAKE ARROW GAME (Attachment 1)
-   ------------------------------------------------------------------------- */
-.arrow-game-body {
+.scrapbook-main-stage {
+  flex: 1;
+  display: flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: 16px;
-  padding-top: 20px;
+  justify-content: center;
+  min-height: 0;
+  position: relative;
 }
 
-.game-intro-card {
+.scrapbook-full-photo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 16px rgba(229, 169, 60, 0.2);
+  border: 1px solid rgba(229, 169, 60, 0.3);
+}
+
+.scrapbook-nav-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 0;
+}
+
+.scrap-nav-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.scrap-nav-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.scrap-3d-btn {
+  background: linear-gradient(135deg, #e5a93c, #b45309);
+  border: none;
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.scrapbook-filmstrip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 6px 0 2px 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.strip-thumb {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  background: #1a0f05;
+  flex-shrink: 0;
+  position: relative;
+  padding: 0;
+  cursor: pointer;
+}
+
+.strip-thumb.active {
+  border-color: #e5a93c;
+  box-shadow: 0 0 10px rgba(229, 169, 60, 0.7);
+}
+
+.strip-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.strip-num {
+  position: absolute;
+  bottom: 1px;
+  right: 2px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #ffffff;
+  font-size: 8px;
+  padding: 1px 3px;
+  border-radius: 3px;
+}
+
+/* ---------------------------------------------------------------------
+   2. MUSIC PLAYER (Requirement 2: Real audio player)
+   --------------------------------------------------------------------- */
+.music-player-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.vinyl-deck {
+  width: 180px;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0 16px 0;
+}
+
+.vinyl-disc {
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, #1e1136 0%, #0d0818 35%, #000000 70%);
+  border: 4px solid #2e1d52;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(124, 58, 237, 0.4);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.vinyl-disc.spinning {
+  animation: vinylSpin 6s linear infinite;
+}
+
+@keyframes vinylSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.disc-grooves {
+  position: absolute;
+  inset: 15px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+}
+
+.disc-center-label {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ec4899, #8b5cf6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.disc-symbol { font-size: 16px; line-height: 1; }
+.disc-text { font-size: 8px; font-weight: 800; letter-spacing: 1px; }
+
+.music-info-card {
   text-align: center;
-  max-width: 320px;
+  margin-bottom: 12px;
 }
 
-.game-instruction {
-  font-size: 13px;
-  color: #a7f3d0;
-  line-height: 1.4;
+.music-track-title {
+  font-family: 'Cinzel', serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #f7edff;
+  margin: 0 0 4px 0;
+}
+
+.music-track-artist {
+  font-size: 12px;
+  color: #c9b4e8;
   margin: 0;
 }
 
-/* 3x3 Grid */
-.arrow-grid-3x3 {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  background: rgba(6, 95, 70, 0.25);
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  padding: 16px;
-  border-radius: 20px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+.music-scrub-box {
+  width: 100%;
+  max-width: 320px;
+  margin-bottom: 14px;
 }
 
-.grid-row {
-  display: flex;
-  gap: 12px;
-}
-
-.grid-cell {
-  width: 62px;
-  height: 62px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
+.music-progress-slider {
+  width: 100%;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
   outline: none;
-  color: #ffffff;
+  accent-color: #ec4899;
 }
 
-.grid-cell.start-cell {
-  border-color: #34d399;
-  background: rgba(16, 185, 129, 0.25);
+.time-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 4px;
 }
 
-.cell-dot {
-  font-size: 20px;
-  color: #34d399;
-}
-
-.grid-cell.visited {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.4), rgba(5, 150, 105, 0.6));
-  border-color: #10b981;
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
-}
-
-.cell-sparkle {
-  color: #ffd43b;
-  font-size: 16px;
-}
-
-.grid-cell.pulse-target {
-  animation: cellPulse 1.2s infinite alternate ease-in-out;
-  border-color: #facc15;
-}
-
-@keyframes cellPulse {
-  from { box-shadow: 0 0 4px rgba(250, 204, 21, 0.3); border-color: rgba(250, 204, 21, 0.5); }
-  to { box-shadow: 0 0 16px rgba(250, 204, 21, 0.9); border-color: #facc15; }
-}
-
-/* Sequence of 8 Arrows (Matching Attachment 1) */
-.arrow-sequence-row {
+.music-control-row {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 8px 10px;
-  max-width: 100%;
-  overflow-x: auto;
+  gap: 22px;
+  margin-bottom: 20px;
 }
 
-.seq-arrow-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+.ctrl-btn {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: #ffffff;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
   cursor: pointer;
-  transition: all 0.15s ease;
-  outline: none;
-  flex-shrink: 0;
 }
 
-.seq-arrow-btn.active {
-  background: #10b981;
-  border-color: #34d399;
-  box-shadow: 0 0 10px rgba(16, 185, 129, 0.7);
-  transform: scale(1.1);
+.ctrl-play-btn {
+  background: linear-gradient(135deg, #ec4899, #8b5cf6);
+  border: none;
+  color: #ffffff;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(236, 72, 153, 0.5);
 }
 
-.seq-arrow-btn.passed {
-  background: rgba(16, 185, 129, 0.3);
-  border-color: #10b981;
-  color: #a7f3d0;
-  opacity: 0.6;
+.music-playlist-wrap {
+  width: 100%;
+  max-width: 360px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 12px;
 }
 
-.step-hint-text {
-  font-size: 11.5px;
-  color: #6ee7b7;
-  text-align: center;
-  margin: 0;
-}
-
-.game-victory-card {
-  text-align: center;
-  background: rgba(6, 78, 59, 0.6);
-  border: 1px solid rgba(52, 211, 153, 0.5);
-  border-radius: 18px;
-  padding: 16px;
-  animation: victoryPop 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-}
-
-@keyframes victoryPop {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-.victory-heart {
-  font-size: 32px;
-  color: #ff9ffc;
-  margin-bottom: 4px;
-}
-
-.victory-title {
+.playlist-heading {
   font-family: 'Cinzel', serif;
-  font-size: 18px;
-  color: #f7edff;
+  font-size: 12px;
+  color: #ff9ffc;
   margin: 0 0 8px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.victory-text {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-style: italic;
+.playlist-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.playlist-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  color: #ffffff;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.playlist-item.playing {
+  background: rgba(236, 72, 153, 0.2);
+  border: 1px solid rgba(236, 72, 153, 0.4);
+}
+
+.pl-num { font-size: 11px; opacity: 0.6; width: 16px; }
+.pl-meta { flex: 1; min-width: 0; }
+.pl-title { font-size: 12px; font-weight: 500; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pl-artist { font-size: 10px; opacity: 0.6; display: block; }
+.pl-dur { font-size: 10px; opacity: 0.6; }
+
+/* ---------------------------------------------------------------------
+   3. GALLERY (Requirement 3: Reference Image 2 Style)
+   --------------------------------------------------------------------- */
+.gallery-curated-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: #090e1a;
+}
+
+.gallery-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.section-title {
+  font-family: 'Inter', sans-serif;
   font-size: 15px;
-  color: #ecfdf5;
-  line-height: 1.4;
-  margin: 0 0 14px 0;
+  font-weight: 600;
+  color: #93c5fd;
+  margin: 0;
+  letter-spacing: 0.2px;
 }
 
-.game-reset-btn {
-  background: linear-gradient(135deg, #10b981, #059669);
+/* Featured Hero Image (Reference Image 2 Top card) */
+.featured-hero-wrap {
+  width: 100%;
+  height: 220px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}
+
+.featured-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Two-column grid (Reference Image 2 bottom rows) */
+.two-col-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.two-col-card {
+  width: 100%;
+  height: 140px;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+}
+
+.two-col-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* All Photos Masonry */
+.all-photos-masonry {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.masonry-card {
+  height: 96px;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.masonry-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Native Lightbox Backdrop */
+.native-lightbox-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.lightbox-content-box {
+  position: relative;
+  max-width: 95%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lightbox-x-btn {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.lightbox-full-img {
+  max-width: 100%;
+  max-height: 75vh;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.lightbox-bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 12px;
+  color: #ffffff;
+}
+
+.lb-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.lb-status { font-size: 12px; color: #cbd5e1; }
+
+/* ---------------------------------------------------------------------
+   4. ARROW GAME: "CLEAR THE BOARD" (Requirement 4: Reference Image 3)
+   --------------------------------------------------------------------- */
+.arrow-game-modal {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+.clear-board-header {
+  height: 48px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.cb-back-btn {
+  background: none;
+  border: none;
+  color: #2563eb;
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cb-level-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.cb-settings-btn {
+  background: none;
+  border: none;
+  color: #2563eb;
+  cursor: pointer;
+}
+
+.clear-board-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  background: #ffffff;
+  position: relative;
+}
+
+.cb-big-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 12px 0;
+  letter-spacing: -0.5px;
+}
+
+.cb-stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 16px;
+}
+
+.cb-stat-pill {
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.rocket-pill {
+  background: #eff6ff;
+  color: #1e40af;
+}
+
+.stat-sym { color: #2563eb; font-size: 13px; }
+
+.cb-hearts-row {
+  display: flex;
+  gap: 6px;
+}
+
+.cb-heart {
+  font-size: 20px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.cb-heart.active { color: #ef4444; }
+.cb-heart.lost { color: #cbd5e1; transform: scale(0.8); }
+
+.normal-pill {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+/* The Board Canvas */
+.cb-board-container {
+  width: 100%;
+  max-width: 320px;
+  height: 360px;
+  background: #f8fafc;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.03);
+  position: relative;
+}
+
+.cb-svg-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.bump-shake {
+  animation: bumpJiggle 0.35s ease-in-out;
+}
+
+@keyframes bumpJiggle {
+  0%, 100% { transform: translate(0, 0); }
+  20%, 60% { transform: translate(-4px, 2px); }
+  40%, 80% { transform: translate(4px, -2px); }
+}
+
+.hint-pulse {
+  animation: hintGlow 1s infinite alternate;
+}
+
+@keyframes hintGlow {
+  from { filter: drop-shadow(0 0 2px #38bdf8); }
+  to { filter: drop-shadow(0 0 8px #0284c7); }
+}
+
+/* Victory & Game Over Overlays */
+.cb-victory-card,
+.cb-gameover-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  border: 2px solid #22c55e;
+  border-radius: 20px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: 85%;
+  max-width: 280px;
+  z-index: 10;
+}
+
+.cb-gameover-card {
+  border-color: #ef4444;
+}
+
+.cb-victory-heart { font-size: 32px; color: #ec4899; }
+.cb-victory-card h3 { font-size: 18px; color: #1e293b; margin: 4px 0 8px 0; }
+.cb-victory-card p { font-size: 13px; color: #475569; margin: 0 0 14px 0; }
+.cb-restart-btn {
+  background: #2563eb;
   border: none;
   color: #ffffff;
   padding: 8px 20px;
   border-radius: 999px;
-  font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.5px;
+  font-size: 13px;
   cursor: pointer;
 }
 
-/* -------------------------------------------------------------------------
-   APP 2: INGRAM (INSTAGRAM FEED)
-   ------------------------------------------------------------------------- */
-.ingram-stories {
+/* Bottom Controls */
+.cb-bottom-tools {
   display: flex;
-  gap: 14px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  overflow-x: auto;
-  margin-bottom: 16px;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  margin-top: auto;
+  padding-top: 14px;
 }
 
-.story-item {
+.cb-tool-btn {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1.5px solid #dbeafe;
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2563eb;
+  cursor: pointer;
+  position: relative;
+  font-size: 22px;
+}
+
+.tool-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ffffff;
+}
+
+/* ---------------------------------------------------------------------
+   5. INGRAM FEED
+   --------------------------------------------------------------------- */
+.ingram-feed-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ingram-stories-row {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.story-pill {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -592,34 +1054,31 @@
   flex-shrink: 0;
 }
 
-.story-ring {
-  width: 54px;
-  height: 54px;
+.story-ring-gold {
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   padding: 2px;
-  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  background: linear-gradient(45deg, #f09433, #dc2743, #bc1888);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.story-avatar {
+.story-avatar-star {
   width: 100%;
   height: 100%;
   border-radius: 50%;
   background: #1e1035;
+  color: #ffd43b;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
-  color: #ffd43b;
+  font-size: 13px;
   border: 2px solid #0d0918;
 }
 
-.story-label {
-  font-size: 10px;
-  color: #c9b4e8;
-}
+.story-title { font-size: 10px; color: #c9b4e8; }
 
 .ingram-post-card {
   background: rgba(255, 255, 255, 0.04);
@@ -628,16 +1087,16 @@
   overflow: hidden;
 }
 
-.post-header {
+.post-top {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 10px 14px;
 }
 
-.post-avatar {
-  width: 34px;
-  height: 34px;
+.post-avi {
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: linear-gradient(135deg, #a855f7, #ec4899);
   color: #ffffff;
@@ -645,232 +1104,90 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 13px;
 }
 
-.post-meta {
-  display: flex;
-  flex-direction: column;
-}
+.post-name { font-size: 12px; font-weight: 600; color: #ffffff; }
+.post-loc { font-size: 10px; color: #a78bfa; }
 
-.post-user {
-  font-size: 12px;
-  font-weight: 600;
-  color: #ffffff;
-}
-
-.post-sub {
-  font-size: 10px;
-  color: #a78bfa;
-}
-
-.post-image-wrap {
+.post-img-box {
   width: 100%;
-  height: 360px;
+  height: 340px;
   background: #000000;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
 }
 
-.post-main-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
+.post-main-photo { width: 100%; height: 100%; object-fit: contain; }
 
-.post-actions-row {
+.post-meta-row {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 14px 6px 14px;
+  padding: 10px 14px 4px 14px;
 }
 
-.action-heart-btn {
+.heart-btn {
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 22px;
   color: rgba(255, 255, 255, 0.8);
   cursor: pointer;
-  transition: transform 0.15s ease, color 0.15s ease;
-  line-height: 1;
   padding: 0;
+  transition: transform 0.15s ease, color 0.15s ease;
 }
 
-.action-heart-btn.liked {
-  color: #ef4444;
-  transform: scale(1.15);
-}
+.heart-btn.active { color: #ef4444; transform: scale(1.15); }
+.likes-label { font-size: 12px; font-weight: 600; color: #ffffff; }
 
-.like-counter {
-  font-size: 12px;
-  font-weight: 600;
-  color: #ffffff;
-}
-
-.post-caption-block {
+.post-caption-box {
   padding: 0 14px 14px 14px;
   font-size: 12px;
   line-height: 1.45;
   color: #e2e8f0;
 }
 
-.post-caption-block strong {
-  color: #ffffff;
-}
+.post-hashtags { margin-top: 6px; color: #a78bfa; font-size: 11px; }
 
-.post-tags {
-  margin-top: 6px;
-  color: #a78bfa;
-  font-size: 11px;
-}
-
-/* -------------------------------------------------------------------------
-   APP 3: GALLERY
-   ------------------------------------------------------------------------- */
-.gallery-masonry-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-}
-
-.gallery-thumb-card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-.thumb-img {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  display: block;
-}
-
-.thumb-caption {
-  padding: 6px 8px;
-  font-size: 10px;
-  color: #e2e8f0;
-  line-height: 1.3;
-}
-
-.lightbox-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.92);
-  z-index: 2000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.lightbox-card {
-  position: relative;
-  max-width: 90%;
-  max-height: 90%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.lightbox-close {
-  position: absolute;
-  top: -36px;
-  right: 0;
-  background: none;
-  border: none;
-  color: #ffffff;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-.lightbox-img {
-  max-width: 100%;
-  max-height: 70vh;
-  object-fit: contain;
-  border-radius: 8px;
-}
-
-.lightbox-text {
-  margin-top: 10px;
-  color: #ffffff;
-  font-size: 13px;
-  text-align: center;
-}
-
-/* -------------------------------------------------------------------------
-   APP 4: MESSAGES
-   ------------------------------------------------------------------------- */
-.chat-header-user {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.user-dot {
-  color: #22c55e;
-  font-size: 12px;
-}
-
-.messages-body {
+/* ---------------------------------------------------------------------
+   6. MESSAGES CHAT
+   --------------------------------------------------------------------- */
+.messages-chat-body {
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 12px 14px;
 }
 
-.messages-stream {
+.chat-stream {
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-bottom: 14px;
+  overflow-y: auto;
 }
 
-.chat-bubble-row {
-  display: flex;
-  width: 100%;
-}
+.chat-line { display: flex; width: 100%; }
+.chat-line.vishnu { justify-content: flex-start; }
+.chat-line.ammu { justify-content: flex-end; }
 
-.chat-bubble-row.vishnu { justify-content: flex-start; }
-.chat-bubble-row.ammu { justify-content: flex-end; }
-
-.chat-bubble {
+.msg-bubble {
   max-width: 78%;
   padding: 9px 13px;
   border-radius: 16px;
   font-size: 13px;
   line-height: 1.35;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-.chat-bubble.vishnu {
-  background: #1f2937;
-  color: #f3f4f6;
-  border-bottom-left-radius: 4px;
-}
+.msg-bubble.vishnu { background: #1f2937; color: #f3f4f6; border-bottom-left-radius: 4px; }
+.msg-bubble.ammu { background: linear-gradient(135deg, #7c3aed, #a855f7); color: #ffffff; border-bottom-right-radius: 4px; }
+.msg-bubble.typing { background: #1f2937; color: #9ca3af; font-size: 18px; padding: 4px 12px; }
+.msg-bubble p { margin: 0 0 3px 0; }
+.msg-timestamp { font-size: 9.5px; opacity: 0.6; display: block; text-align: right; }
 
-.chat-bubble.ammu {
-  background: linear-gradient(135deg, #7c3aed, #a855f7);
-  color: #ffffff;
-  border-bottom-right-radius: 4px;
-}
-
-.chat-bubble.typing {
-  background: #1f2937;
-  color: #9ca3af;
-  font-size: 18px;
-  letter-spacing: 2px;
-  padding: 4px 12px;
-}
-
-.chat-bubble p { margin: 0 0 3px 0; }
-.msg-time { font-size: 9.5px; opacity: 0.6; display: block; text-align: right; }
-
-.quick-reply-dock {
+.quick-reply-bar {
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -878,7 +1195,7 @@
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.chip-btn {
+.qr-chip {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.18);
   color: #ffffff;
@@ -887,60 +1204,53 @@
   font-size: 12px;
   text-align: left;
   cursor: pointer;
-  transition: background 0.15s ease;
 }
 
-.chip-btn:active { background: rgba(255, 255, 255, 0.2); }
-
-/* -------------------------------------------------------------------------
-   APP 5: PHONE DIALER
-   ------------------------------------------------------------------------- */
-.phone-dialer-body {
-  align-items: center;
-  justify-content: center;
-}
-
-.dialer-screen {
-  width: 100%;
-  max-width: 280px;
+/* ---------------------------------------------------------------------
+   7. PHONE DIALER
+   --------------------------------------------------------------------- */
+.phone-screen-body {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  justify-content: center;
+  padding: 20px;
 }
 
-.dial-display {
+.dialer-pane {
+  width: 100%;
+  max-width: 270px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.dialer-screen-number {
   font-size: 26px;
   font-weight: 600;
-  min-height: 38px;
   letter-spacing: 2px;
   color: #ffffff;
+  min-height: 36px;
   text-align: center;
 }
 
-.dial-placeholder {
-  font-size: 13px;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.4);
-  letter-spacing: 0.5px;
-}
-
-.keypad-matrix {
+.dialer-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   width: 100%;
 }
 
-.num-key {
-  width: 64px;
-  height: 64px;
+.dial-digit-btn {
+  width: 62px;
+  height: 62px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: #ffffff;
   font-size: 22px;
-  font-weight: 500;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -948,16 +1258,14 @@
   margin: 0 auto;
 }
 
-.num-key:active { background: rgba(255, 255, 255, 0.25); }
-
-.dial-action-row {
+.dialer-actions {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-top: 6px;
+  gap: 14px;
+  margin-top: 4px;
 }
 
-.dial-call-btn {
+.call-green-btn {
   background: #10b981;
   border: none;
   color: #ffffff;
@@ -966,10 +1274,9 @@
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.5);
 }
 
-.dial-backspace {
+.backspace-btn {
   background: none;
   border: none;
   color: #ffffff;
@@ -977,45 +1284,42 @@
   cursor: pointer;
 }
 
-/* In-Call Screen */
-.in-call-screen {
+.active-call-pane {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 14px;
-  padding-top: 40px;
+  gap: 12px;
 }
 
-.call-avatar-pulse {
-  width: 80px;
-  height: 80px;
+.call-avatar-circle {
+  width: 76px;
+  height: 76px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: #10b981;
   color: #ffffff;
-  font-size: 32px;
+  font-size: 30px;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 0 24px rgba(16, 185, 129, 0.6);
-  animation: avatarPulse 2s infinite ease-in-out;
+  animation: pulseCall 2s infinite ease-in-out;
 }
 
-@keyframes avatarPulse {
+@keyframes pulseCall {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.08); }
 }
 
-.call-name { font-size: 20px; color: #ffffff; margin: 0; }
-.call-status { font-size: 13px; color: #a7f3d0; margin: 0; }
+.call-duration { font-size: 12px; color: #a7f3d0; margin: 0; }
 
-.call-transcript-card {
+.voice-note-card {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 16px;
   padding: 14px;
-  max-width: 300px;
+  max-width: 280px;
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-style: italic;
   font-size: 15px;
@@ -1023,7 +1327,7 @@
   color: #ffffff;
 }
 
-.call-end-btn {
+.end-call-btn {
   background: #ef4444;
   border: none;
   color: #ffffff;
@@ -1032,70 +1336,42 @@
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  margin-top: 16px;
+  margin-top: 10px;
 }
 
-/* -------------------------------------------------------------------------
-   APP 6: MAIL
-   ------------------------------------------------------------------------- */
-.love-letter-parchment {
+/* ---------------------------------------------------------------------
+   8. MAIL, CALCULATOR, SETTINGS, GIFT
+   --------------------------------------------------------------------- */
+.mail-view-body { flex: 1; overflow-y: auto; padding: 16px; }
+.parchment-letter {
   background: #fbf5ea;
   color: #2c1a11;
   border-radius: 16px;
   padding: 18px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
   border: 1px solid #d4c1a7;
 }
+.letter-meta-header { font-size: 11.5px; line-height: 1.6; color: #5d4037; }
+.letter-divider { height: 1px; background: #d4c1a7; margin: 12px 0; border: none; }
+.letter-body-text { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 15px; line-height: 1.6; }
+.letter-body-text p { margin: 0 0 10px 0; }
+.letter-sign-off { margin-top: 16px !important; font-family: 'Cinzel', serif; font-size: 12px; }
 
-.letter-header {
-  font-size: 11.5px;
-  line-height: 1.6;
-  color: #5d4037;
-}
-
-.letter-divider {
-  height: 1px;
-  background: #d4c1a7;
-  margin: 12px 0;
-}
-
-.letter-content {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: 15px;
-  line-height: 1.6;
-}
-
-.letter-content p { margin: 0 0 10px 0; }
-.letter-signature { margin-top: 16px !important; font-family: 'Cinzel', serif; font-size: 12px; }
-
-/* -------------------------------------------------------------------------
-   APP 7: CALCULATOR
-   ------------------------------------------------------------------------- */
-.calc-body {
-  align-items: center;
-  justify-content: center;
-}
-
-.calc-screen-box {
+.calc-view-body { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px; }
+.calc-display-box {
   width: 100%;
-  max-width: 280px;
+  max-width: 270px;
   background: #000000;
   border-radius: 12px;
   padding: 16px 14px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.calc-value {
-  font-size: 32px;
+  font-size: 30px;
   font-weight: 600;
   text-align: right;
   color: #ffffff;
-  overflow-x: auto;
 }
-
 .calc-secret-alert {
-  max-width: 280px;
+  max-width: 270px;
   background: rgba(234, 179, 8, 0.2);
   border: 1px solid #eab308;
   color: #fef08a;
@@ -1103,112 +1379,31 @@
   border-radius: 8px;
   font-size: 12px;
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
-
-.calc-pad-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  width: 100%;
-  max-width: 280px;
-}
-
-.calc-btn {
-  height: 52px;
+.calc-keypad-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; width: 100%; max-width: 270px; }
+.calc-key {
+  height: 50px;
   border-radius: 50%;
   background: #334155;
   border: none;
   color: #ffffff;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 600;
   cursor: pointer;
 }
+.calc-key.key-op { background: #f59e0b; }
+.calc-key.key-equals { background: #10b981; }
+.calc-hint-text { font-size: 11px; color: rgba(255, 255, 255, 0.4); margin-top: 12px; text-align: center; }
 
-.calc-btn.btn-op { background: #f59e0b; }
-.calc-btn.btn-equals { background: #10b981; }
-.calc-btn:active { opacity: 0.8; }
-
-.calc-hint {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.4);
-  margin-top: 12px;
-  text-align: center;
-}
-
-/* -------------------------------------------------------------------------
-   APP 8: BROWSER
-   ------------------------------------------------------------------------- */
-.browser-url-pill {
-  font-family: monospace;
-  font-size: 11px;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 4px 12px;
-  border-radius: 999px;
-  color: #a5b4fc;
-}
-
-.browser-page-card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 20px 16px;
-  text-align: center;
-}
-
-.starry-banner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-
-.star-icon { color: #facc15; font-size: 14px; }
-.starry-banner h3 {
-  font-family: 'Cinzel', serif;
-  font-size: 16px;
-  color: #ffffff;
-  margin: 0;
-}
-
-.browser-dedication {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-style: italic;
-  font-size: 14px;
-  line-height: 1.5;
-  color: #c7d2fe;
-  margin: 0 0 20px 0;
-}
-
-.browser-metrics {
-  display: flex;
-  justify-content: space-around;
-  gap: 10px;
-}
-
-.metric-box {
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-  padding: 10px;
-  flex: 1;
-}
-
-.metric-box .num { font-size: 20px; font-weight: 700; color: #f472b6; }
-.metric-box .lbl { font-size: 10px; color: #a5b4fc; text-transform: uppercase; }
-
-/* -------------------------------------------------------------------------
-   APP 9: SETTINGS
-   ------------------------------------------------------------------------- */
-.settings-group {
+.settings-view-body { flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+.settings-section-card {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
-  margin-bottom: 14px;
   overflow: hidden;
 }
-
-.settings-row {
+.set-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1217,40 +1412,24 @@
   font-size: 13px;
   color: #e2e8f0;
 }
+.set-row:last-child { border-bottom: none; }
+.set-val { color: #94a3b8; font-size: 12px; }
+.set-val.active { color: #34d399; }
+.set-val.highlight { color: #ff9ffc; }
 
-.settings-row:last-child { border-bottom: none; }
-.setting-val { color: #94a3b8; font-size: 12px; }
-
-/* -------------------------------------------------------------------------
-   APP 10: SPECIAL GIFT
-   ------------------------------------------------------------------------- */
-.gift-modal-body {
+.gift-view-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 14px;
   padding: 24px 16px;
+  gap: 12px;
 }
-
-.gift-big-svg { width: 72px; height: 72px; }
-.gift-modal-title {
-  font-family: 'Cinzel', serif;
-  font-size: 20px;
-  color: #fde68a;
-  margin: 0;
-}
-
-.gift-modal-text {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-style: italic;
-  font-size: 16px;
-  line-height: 1.45;
-  color: #fef3c7;
-  max-width: 300px;
-  margin: 0;
-}
-
-.gift-confetti-btn {
+.gift-heading { font-family: 'Cinzel', serif; font-size: 20px; color: #fde68a; margin: 0; }
+.gift-quote { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 16px; color: #fef3c7; max-width: 300px; margin: 0; }
+.shower-confetti-btn {
   background: linear-gradient(135deg, #f59e0b, #d97706);
   border: none;
   color: #ffffff;
@@ -1260,4 +1439,5 @@
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
+  margin-top: 8px;
 }
