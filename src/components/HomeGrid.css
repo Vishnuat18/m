@@ -74,18 +74,127 @@
   z-index: 2;
 }
 
-@media (max-width: 960px) {
+/* Card Title Typography */
+.card-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: #f7f1e8;
+  margin-bottom: 8px;
+}
+
+.desktop-card-title {
+  display: inline;
+}
+
+.mobile-card-title {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .home-grid-container {
+    padding: 30px 14px 36px 14px;
+    justify-content: flex-start;
+  }
+
   .home-header {
-    margin-bottom: 32px;
+    margin-top: 10px;
+    margin-bottom: 24px;
+    padding: 0 8px;
   }
-  .home-grid {
-    grid-template-columns: 1fr;
-    max-width: 420px;
-    gap: 20px;
-  }
+
   .birthday-main-title {
-    font-size: 32px;
+    font-size: 28px;
     letter-spacing: 1px;
+    line-height: 1.2;
+  }
+
+  /* Two cards side-by-side on mobile: Scrapbook on left, Notes on right */
+  .home-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 14px;
+    max-width: 440px;
+    width: 100%;
+    padding: 0;
+    margin: 0 auto;
+  }
+
+  /* Gift card hidden on mobile */
+  .card-gift {
+    display: none !important;
+  }
+
+  /* Under image, only text: hide badges, labels and action links */
+  .card-badge,
+  .card-label,
+  .card-action,
+  .desktop-card-title {
+    display: none !important;
+  }
+
+  .mobile-card-title {
+    display: block !important;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.6px;
+    color: #f7f1e8;
+    margin: 4px 0 0 0;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  .grid-card {
+    padding: 16px 10px 14px 10px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: auto;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+    background: rgba(22, 14, 42, 0.88);
+  }
+
+  .grid-card:hover,
+  .grid-card:active {
+    transform: translateY(-3px);
+  }
+
+  .card-visual-wrapper {
+    width: 100%;
+    height: 122px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sketchbook-cover-preview {
+    width: 84px;
+    height: 112px;
+    object-fit: cover;
+    border-radius: 7px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55), 0 0 12px rgba(212, 176, 117, 0.3);
+  }
+
+  .story-note-preview {
+    width: 84px;
+    height: 112px;
+    border-radius: 7px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55);
+    padding: 8px 6px;
+  }
+
+  .mini-note-header {
+    font-size: 11px;
+    margin-bottom: 4px;
+    padding-bottom: 2px;
+  }
+
+  .mini-line {
+    height: 3px;
   }
 }
 
@@ -238,14 +347,6 @@
 }
 
 /* Card Typography */
-.card-title {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: 26px;
-  font-weight: 600;
-  color: #f7f1e8;
-  margin-bottom: 8px;
-}
-
 .card-label {
   font-size: 13.5px;
   line-height: 1.5;

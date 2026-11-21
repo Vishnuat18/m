@@ -2,6 +2,19 @@ import React from 'react';
 import './HomeGrid.css';
 
 const HomeGrid = ({ onSelectSection }) => {
+  const handleOpenSketchbook = () => {
+    try {
+      if (!document.fullscreenElement) {
+        if (document.documentElement.requestFullscreen) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else if (document.documentElement.webkitRequestFullscreen) {
+          document.documentElement.webkitRequestFullscreen().catch(() => {});
+        }
+      }
+    } catch (e) {}
+    onSelectSection('sketchbook');
+  };
+
   return (
     <div className="home-grid-container">
       {/* Ambient background aura */}
@@ -13,37 +26,40 @@ const HomeGrid = ({ onSelectSection }) => {
       </header>
 
       <main className="home-grid">
-        {/* Card 1: Digital Sketchbook (Using Sketchbook Front Cover Image) */}
+        {/* Card 1: Scrapbook (div image, below that Scrapbook text only on mobile) */}
         <div
-          className="grid-card"
-          onClick={() => onSelectSection('sketchbook')}
+          className="grid-card card-sketchbook"
+          onClick={handleOpenSketchbook}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') onSelectSection('sketchbook');
+            if (e.key === 'Enter' || e.key === ' ') handleOpenSketchbook();
           }}
         >
           <div className="card-badge">SKETCHBOOK</div>
           <div className="card-visual-wrapper">
             <img
               src="/assets/sketchbook-cover.jpg"
-              alt="Digital Sketchbook Front Cover"
+              alt="Scrapbook Cover"
               className="sketchbook-cover-preview"
               onError={(e) => {
                 e.target.src = 'assets/sketchbook-cover.jpg';
               }}
             />
           </div>
-          <h2 className="card-title">Digital Sketchbook</h2>
+          <h2 className="card-title">
+            <span className="desktop-card-title">Digital Sketchbook</span>
+            <span className="mobile-card-title">Scrapbook</span>
+          </h2>
           <p className="card-label">
             Vintage scrapbooks, polaroids, taped memories &amp; 3D corner flips
           </p>
           <div className="card-action">OPEN SKETCHBOOK &rarr;</div>
         </div>
 
-        {/* Card 2: Story Notes (Miniature Parchment Note Preview - Clean, No Dates) */}
+        {/* Card 2: Notes (right of Scrapbook, div image, below that Notes text only on mobile) */}
         <div
-          className="grid-card"
+          className="grid-card card-notes"
           onClick={() => onSelectSection('story')}
           role="button"
           tabIndex={0}
@@ -64,7 +80,10 @@ const HomeGrid = ({ onSelectSection }) => {
               </div>
             </div>
           </div>
-          <h2 className="card-title">Our Story Notes</h2>
+          <h2 className="card-title">
+            <span className="desktop-card-title">Our Story Notes</span>
+            <span className="mobile-card-title">Notes</span>
+          </h2>
           <p className="card-label">
             Handwritten journal memories through every letter from M to I
           </p>
@@ -73,7 +92,7 @@ const HomeGrid = ({ onSelectSection }) => {
 
         {/* Card 3: Special Gift */}
         <div
-          className="grid-card"
+          className="grid-card card-gift"
           onClick={() => onSelectSection('gift')}
           role="button"
           tabIndex={0}

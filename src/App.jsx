@@ -45,8 +45,8 @@ function App() {
         <Gift onBack={handleBackToHome} />
       )}
 
-      {/* Reaction Desk Buddy at bottom-left corner */}
-      {currentScreen !== 'intro' && (
+      {/* Reaction Desk Buddy at bottom-left corner (hidden in full-screen sketchbook mode) */}
+      {currentScreen !== 'intro' && currentScreen !== 'sketchbook' && (
         <DeskBuddy />
       )}
     </div>

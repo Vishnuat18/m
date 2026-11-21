@@ -1,9 +1,13 @@
+/* Full-screen Scrapbook Viewer Container */
 .sketchbook-viewer-container {
-  position: relative;
+  position: fixed;
+  inset: 0;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   background: #090605;
+  z-index: 9999;
 }
 
 .sketchbook-frame {
@@ -14,33 +18,71 @@
   background: #090605;
 }
 
-/* Floating aesthetic glass Back button */
-.sketchbook-back-btn {
+/* Floating top navigation bar */
+.sketchbook-top-bar {
   position: absolute;
-  top: 18px;
-  left: 18px;
-  z-index: 1000;
-  background: rgba(22, 16, 12, 0.85);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(212, 176, 117, 0.35);
+  top: 14px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+/* Glassmorphic brass-accented buttons */
+.sketchbook-glass-btn {
+  pointer-events: auto;
+  appearance: none;
+  background: rgba(22, 16, 12, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(212, 176, 117, 0.38);
   color: #f3ead8;
   padding: 8px 18px;
   border-radius: 999px;
   font-family: 'Cinzel', serif, system-ui;
-  font-size: 13px;
+  font-size: 12.5px;
+  font-weight: 600;
   letter-spacing: 1.5px;
   cursor: pointer;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 232, 194, 0.1);
   transition: all 0.25s cubic-bezier(0.2, 0.9, 0.3, 1);
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
+  user-select: none;
 }
 
-.sketchbook-back-btn:hover {
-  background: rgba(212, 176, 117, 0.25);
+.sketchbook-glass-btn:hover {
+  background: rgba(45, 30, 20, 0.95);
   border-color: #d4b075;
-  color: #fff;
-  transform: translateX(-2px);
-  box-shadow: 0 6px 24px rgba(212, 176, 117, 0.35);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(212, 176, 117, 0.3);
+}
+
+.sketchbook-glass-btn:active {
+  transform: scale(0.96);
+}
+
+.sketchbook-glass-btn.active {
+  background: rgba(212, 176, 117, 0.22);
+  border-color: #d4b075;
+  color: #d4b075;
+}
+
+@media (max-width: 640px) {
+  .sketchbook-top-bar {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+  }
+
+  .sketchbook-glass-btn {
+    padding: 6px 12px;
+    font-size: 11px;
+    gap: 6px;
+  }
 }
