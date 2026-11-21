@@ -776,10 +776,16 @@
       22: [{ id: "photo-33", label: "PHOTO 33", cx: 60.91, cy: 46.91, w: 30.0, h: 26.95, angle: -5.97 }]
     };
 
-    const STORAGE_KEY = "sketchbook_22p_user_photos_v1";
     const TOTAL_PAGES = 22;
     const TOTAL_SLOTS = 33;
     const MAX_SPREAD = 12;
+
+    const DEFAULT_PHOTOS = {};
+    for (let i = 1; i <= TOTAL_SLOTS; i++) {
+      DEFAULT_PHOTOS[`photo-${i}`] = `assets/scrapbook/slot-${i}.jpg`;
+    }
+
+    const STORAGE_KEY = "sketchbook_22p_user_photos_v2";
 
     // DOM refs
     const canvas = document.getElementById("bookCanvas");
@@ -832,7 +838,7 @@
     let autoPlayTimer = null;
     let pendingSlotId = null;
     let previewPageNum = 1;
-    let userPhotos = {};
+    let userPhotos = { ...DEFAULT_PHOTOS };
     let audioCtx = null;
 
     const baseImages = {};
@@ -851,9 +857,12 @@
 
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) userPhotos = JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        userPhotos = { ...DEFAULT_PHOTOS, ...parsed };
+      }
     } catch (e) {
-      userPhotos = {};
+      userPhotos = { ...DEFAULT_PHOTOS };
     }
 
     function savePhotos() {
@@ -1071,6 +1080,11 @@
           render();
         };
         im.src = userPhotos[slotId];
+        if (im.complete) {
+          userPhotoImgs[slotId] = im;
+          const pg = findPageForSlot(slotId);
+          if (pg) compositePageCanvas(pg);
+        }
       });
     }
 
@@ -1824,14 +1838,16 @@
     });
 
     clearPhotosBtn.addEventListener("click", () => {
-      userPhotos = {};
+      userPhotos = { ...DEFAULT_PHOTOS };
       Object.keys(userPhotoImgs).forEach((k) => delete userPhotoImgs[k]);
-      savePhotos();
-      for (let p = 1; p <= TOTAL_PAGES; p++) compositePageCanvas(p);
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch (e) {}
+      loadAllAssets();
       updatePhotoCounters();
       rebuildVisibleHotspots();
       render();
-      showToast("Cleared all placed photos.");
+      showToast("Reset all photos to default scrapbook memories.");
     });
 
     // Auto-Play mode
