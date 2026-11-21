@@ -410,3 +410,85 @@
   gap: 10px;
   color: #ffffff;
 }
+
+/* Birthday Tribute Banner to fill empty bottom space with elegance */
+.home-birthday-banner {
+  margin-top: 32px;
+  max-width: 640px;
+  width: 100%;
+  padding: 18px 22px;
+  background: rgba(20, 13, 34, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  text-align: center;
+  box-sizing: border-box;
+  z-index: 2;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+.banner-sparkle-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  color: rgba(212, 168, 255, 0.5);
+}
+
+.sparkle-line {
+  width: 38px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 168, 255, 0.4), transparent);
+}
+
+.sparkle-symbol {
+  font-size: 11px;
+  color: #ff9ffc;
+}
+
+.banner-wishes {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #f7edff;
+  margin: 0 0 10px 0;
+  opacity: 0.94;
+}
+
+.banner-highlights {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 11.5px;
+  color: #c9b4e8;
+}
+
+.hl-item {
+  letter-spacing: 0.4px;
+}
+
+.hl-sep {
+  opacity: 0.4;
+  font-size: 8px;
+}
+
+@media (max-width: 768px) {
+  .home-birthday-banner {
+    margin-top: 18px;
+    padding: 14px 16px;
+    max-width: 440px;
+    border-radius: 16px;
+  }
+  .banner-wishes {
+    font-size: 14px;
+    line-height: 1.45;
+    margin-bottom: 8px;
+  }
+  .banner-highlights {
+    font-size: 10.5px;
+    gap: 6px;
+  }
+}

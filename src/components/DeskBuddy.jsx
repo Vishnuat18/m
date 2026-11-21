@@ -140,7 +140,6 @@ const DeskBuddy = () => {
             e.target.src = currentSlide.fallback;
           }}
         />
-        <div className="figure-glow-base" />
       </div>
 
       {/* Minimize control */}
