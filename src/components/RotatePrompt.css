@@ -1,0 +1,78 @@
+.rotate-prompt-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(9, 6, 15, 0.96);
+  backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  text-align: center;
+  color: #f0e8ff;
+  user-select: none;
+}
+
+.rotate-icon-wrapper {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rotating-phone {
+  width: 64px;
+  height: 64px;
+  animation: phone-rotate-loop 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  filter: drop-shadow(0 0 20px rgba(212, 168, 255, 0.7));
+}
+
+@keyframes phone-rotate-loop {
+  0%, 15% {
+    transform: rotate(0deg);
+  }
+  45%, 70% {
+    transform: rotate(-90deg);
+  }
+  85%, 100% {
+    transform: rotate(0deg);
+  }
+}
+
+.rotate-prompt-title {
+  font-family: 'Cinzel', serif, system-ui;
+  font-size: 24px;
+  letter-spacing: 2px;
+  color: #fff;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 14px rgba(212, 168, 255, 0.5);
+}
+
+.rotate-prompt-text {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  max-width: 320px;
+  color: #c4b5e0;
+  margin-bottom: 24px;
+}
+
+.rotate-bypass-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(212, 168, 255, 0.25);
+  color: #e0d4f5;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rotate-bypass-btn:hover {
+  background: rgba(212, 168, 255, 0.2);
+  color: #fff;
+}

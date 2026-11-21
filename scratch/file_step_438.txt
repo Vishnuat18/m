@@ -1,0 +1,957 @@
+/* ==========================================================================
+   DIGITAL SKETCHBOOK / SCRAPBOOK STYLESHEET
+   Crafted with romantic, vintage scrapbook textures, 3D page flips & animations
+   ========================================================================== */
+
+:root {
+  --cream: #F7F1E8;
+  --blush: #F4B6C8;
+  --cherry: #C0172B;
+  --ink: #121212;
+  --sepia: #B89B72;
+  --bg-dark: #0a0612;
+  --tape-beige: #efe5d5;
+  --label-black: #18161b;
+  --label-text: #f5eedf;
+  
+  --font-typewriter: 'Special Elite', 'Courier Prime', monospace;
+  --font-handwriting: 'Caveat', 'Reenie Beanie', cursive;
+  --font-serif: 'Playfair Display', serif;
+  --font-title: 'Cinzel', serif;
+
+  --book-w: 430px;
+  --book-h: 764px; /* 9:16 ratio */
+  --turn-duration: 900ms;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-dark);
+  background-image: 
+    radial-gradient(circle at 50% 20%, rgba(244, 182, 200, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 80% 80%, rgba(184, 155, 114, 0.06) 0%, transparent 50%),
+    linear-gradient(180deg, #07040d 0%, #110b1a 100%);
+  font-family: var(--font-handwriting);
+  color: var(--ink);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Ambient Floating Particles Canvas */
+#ambient-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.7;
+}
+
+/* Preload Heart Loader */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  z-index: 9999;
+  transition: opacity 0.6s ease, visibility 0.6s;
+}
+
+#loader.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.heart-pulse {
+  font-size: 2.8rem;
+  color: var(--cherry);
+  animation: pulseBeat 1.2s ease-in-out infinite;
+  text-shadow: 0 0 25px rgba(192, 23, 43, 0.6);
+}
+
+.loader-text {
+  font-family: var(--font-handwriting);
+  font-size: 1.3rem;
+  color: var(--blush);
+  letter-spacing: 0.1em;
+  opacity: 0.85;
+}
+
+@keyframes pulseBeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.28); }
+}
+
+/* Background Music Toggle Button */
+#music-btn {
+  position: fixed;
+  top: 1.4rem;
+  right: 1.4rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(244, 182, 200, 0.35);
+  background: rgba(22, 14, 34, 0.85);
+  backdrop-filter: blur(10px);
+  color: var(--blush);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2000;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#music-btn:hover {
+  transform: scale(1.1);
+  border-color: var(--blush);
+  box-shadow: 0 0 25px rgba(244, 182, 200, 0.4);
+}
+
+.music-icon {
+  font-size: 1.2rem;
+  transition: opacity 0.2s;
+}
+
+.sound-waves {
+  display: none;
+  align-items: center;
+  gap: 3px;
+  height: 16px;
+}
+
+.sound-waves .bar {
+  width: 3px;
+  height: 100%;
+  background: var(--cherry);
+  border-radius: 3px;
+  animation: waveBar 0.8s ease-in-out infinite alternate;
+}
+.sound-waves .bar:nth-child(2) { animation-delay: 0.2s; }
+.sound-waves .bar:nth-child(3) { animation-delay: 0.4s; }
+
+#music-btn.playing .music-icon { display: none; }
+#music-btn.playing .sound-waves { display: flex; }
+#music-btn.playing {
+  border-color: var(--cherry);
+  box-shadow: 0 0 20px rgba(192, 23, 43, 0.5);
+}
+
+@keyframes waveBar {
+  0% { transform: scaleY(0.2); }
+  100% { transform: scaleY(1); }
+}
+
+/* Navigation Arrow Controls */
+.nav-arrow {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid rgba(244, 182, 200, 0.25);
+  background: rgba(26, 16, 40, 0.7);
+  backdrop-filter: blur(8px);
+  color: var(--cream);
+  font-size: 2.2rem;
+  line-height: 48px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 1500;
+  transition: all 0.3s ease;
+  opacity: 0.6;
+}
+
+.nav-arrow:hover {
+  opacity: 1;
+  background: rgba(26, 16, 40, 0.95);
+  border-color: var(--blush);
+  box-shadow: 0 0 20px rgba(244, 182, 200, 0.3);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.nav-arrow.left { left: 1.5rem; }
+.nav-arrow.right { right: 1.5rem; }
+
+@media (max-width: 768px) {
+  .nav-arrow { display: none; }
+}
+
+/* ==========================================================================
+   APP CONTAINER & 9:16 SKETCHBOOK LAYOUT
+   ========================================================================== */
+
+.app-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  z-index: 10;
+}
+
+/* 9:16 Portrait Sketchbook Frame */
+.sketchbook-viewport {
+  position: relative;
+  width: min(calc(88vh * 9 / 16), 92vw, 440px);
+  height: min(88vh, calc(92vw * 16 / 9), 782px);
+  perspective: 2500px;
+  -webkit-perspective: 2500px;
+  border-radius: 12px;
+  filter: drop-shadow(0 25px 45px rgba(0, 0, 0, 0.65));
+}
+
+/* Metal Spiral Binding on Left Edge */
+.spiral-binding {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -12px;
+  width: 44px;
+  z-index: 1000;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.holes-strip {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 20px;
+  width: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 24px 0;
+}
+
+.holes-strip::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 22px,
+    rgba(15, 10, 8, 0.95) 22px,
+    rgba(15, 10, 8, 0.95) 34px
+  );
+  border-radius: 6px;
+  filter: drop-shadow(inset 0 1px 2px rgba(0,0,0,0.8));
+}
+
+.coils-wrap {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 16px 0;
+}
+
+.metal-coil {
+  width: 38px;
+  height: 22px;
+  background: linear-gradient(
+    170deg,
+    #55555e 0%,
+    #8f8f99 20%,
+    #ffffff 45%,
+    #73737d 70%,
+    #323238 95%
+  );
+  border-radius: 14px;
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.55),
+    inset 0 1px 2px rgba(255, 255, 255, 0.6),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.7);
+  transform: rotate(-12deg);
+  margin-left: 2px;
+}
+
+/* ==========================================================================
+   3D BOOK & PAGE FLIP ARCHITECTURE
+   ========================================================================== */
+
+.book-3d {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+}
+
+/* A single Page Leaf (Front & Back) */
+.page-leaf {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transition: transform var(--turn-duration) cubic-bezier(0.645, 0.045, 0.355, 1.000);
+  will-change: transform, z-index;
+  border-radius: 4px 14px 14px 4px;
+}
+
+/* Page Sides */
+.page-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 4px 14px 14px 4px;
+  overflow: hidden;
+  box-shadow: 
+    inset 25px 0 35px -15px rgba(0, 0, 0, 0.35),
+    inset 0 0 20px rgba(0, 0, 0, 0.08);
+}
+
+.page-face.front {
+  transform: rotateY(0deg);
+  z-index: 2;
+}
+
+.page-face.back {
+  transform: rotateY(180deg);
+  z-index: 1;
+  background-color: #efe8dc;
+  background-image: radial-gradient(circle at 50% 50%, rgba(184, 155, 114, 0.12) 0%, transparent 80%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Turned state: rotated -180deg */
+.page-leaf.turned {
+  transform: rotateY(-180deg);
+}
+
+/* Dynamic Page Turning Shadow */
+.page-shadow-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.45) 0%,
+    rgba(0, 0, 0, 0.15) 35%,
+    transparent 70%
+  );
+  z-index: 50;
+}
+
+.page-leaf.turning .page-shadow-overlay {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   PAGE BACKGROUNDS & TEXTURES
+   ========================================================================== */
+
+/* 1. Black Collage Cover */
+.bg-cover-black {
+  background-color: #121016;
+  background-image: 
+    radial-gradient(circle at 75% 25%, rgba(244, 182, 200, 0.12) 0%, transparent 60%),
+    radial-gradient(circle at 20% 80%, rgba(192, 23, 43, 0.1) 0%, transparent 60%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0.4) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Cover embossed border */
+.bg-cover-black::after {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border: 1.5px solid rgba(212, 168, 255, 0.2);
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+/* 2. Warm Cream Paper */
+.bg-paper-cream {
+  background-color: var(--cream);
+  background-image: 
+    radial-gradient(circle at 80% 10%, rgba(244, 182, 200, 0.12) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, rgba(230, 220, 205, 0.6) 100%);
+}
+
+/* 3. Vintage Torn Paper Edge */
+.torn-strip-left {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 48px;
+  background-size: cover;
+  background-repeat: repeat-y;
+  clip-path: polygon(0 0, 100% 0, 75% 15%, 95% 30%, 80% 50%, 100% 70%, 78% 85%, 90% 100%, 0 100%);
+  filter: drop-shadow(4px 0 8px rgba(0, 0, 0, 0.25));
+  opacity: 0.85;
+}
+
+/* 4. Torn Newspaper Corner */
+.newspaper-corner {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 140px;
+  height: 120px;
+  background-size: cover;
+  clip-path: polygon(100% 0, 20% 100%, 100% 100%);
+  opacity: 0.85;
+  filter: drop-shadow(-3px -3px 6px rgba(0,0,0,0.15));
+}
+
+/* 5. Gingham Corner */
+.gingham-corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 110px;
+  height: 110px;
+  background-size: 32px 32px;
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+  opacity: 0.75;
+}
+
+/* 6. Dark Closing Page */
+.bg-end-dark {
+  background-color: #0e0915;
+  background-image: 
+    radial-gradient(circle at 50% 40%, rgba(192, 23, 43, 0.18) 0%, transparent 65%),
+    linear-gradient(180deg, #130a1c 0%, #08040d 100%);
+  color: var(--cream);
+}
+
+/* ==========================================================================
+   SCRAPBOOK ELEMENTS: PHOTOS, STICKERS, NOTES, TAPES
+   ========================================================================== */
+
+/* Base Scrapbook Element Wrapper (Positions & Staggered Pop-In) */
+.sb-element {
+  position: absolute;
+  transform: rotate(var(--rot, 0deg));
+  transform-origin: center center;
+  z-index: var(--z, 10);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* Active Page Pop-In Animation */
+.page-leaf.active .sb-element.pop-in {
+  animation: popIn 650ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-delay: calc(var(--delay, 0ms));
+}
+
+.page-leaf.active .sb-element.drop-in {
+  animation: dropIn 750ms cubic-bezier(0.25, 1.3, 0.5, 1) forwards;
+  animation-delay: calc(var(--delay, 0ms));
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.55) rotate(calc(var(--rot, 0deg) - 12deg)) translateY(15px);
+  }
+  75% {
+    opacity: 1;
+    transform: scale(1.06) rotate(calc(var(--rot, 0deg) + 2deg)) translateY(-3px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(var(--rot, 0deg)) translateY(0);
+  }
+}
+
+@keyframes dropIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-45px) scale(0.92) rotate(calc(var(--rot, 0deg) - 6deg));
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(6px) scale(1.02) rotate(calc(var(--rot, 0deg) + 1deg));
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(var(--rot, 0deg));
+  }
+}
+
+/* 1. Die-Cut Transparent Stickers */
+.sticker-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  /* Thick white die-cut outline + soft shadow */
+  filter: 
+    drop-shadow(2px 0 0 #ffffff)
+    drop-shadow(-2px 0 0 #ffffff)
+    drop-shadow(0 2px 0 #ffffff)
+    drop-shadow(0 -2px 0 #ffffff)
+    drop-shadow(0 7px 14px rgba(0, 0, 0, 0.28));
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.sticker-img:hover {
+  transform: scale(1.06) rotate(2deg);
+}
+
+/* Idle Motion: Subtle Twinkle */
+.idle-twinkle {
+  animation: twinkle 2.6s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.75;
+    transform: scale(0.92) rotate(var(--rot, 0deg));
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.18) rotate(calc(var(--rot, 0deg) + 8deg));
+    filter: 
+      drop-shadow(0 0 12px rgba(255, 230, 150, 0.8))
+      drop-shadow(0 7px 14px rgba(0, 0, 0, 0.28));
+  }
+}
+
+/* Idle Motion: Disco Ball Sparkle */
+.idle-disco {
+  animation: discoSparkle 2.2s ease-in-out infinite;
+}
+
+@keyframes discoSparkle {
+  0%, 100% {
+    filter: 
+      drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff) drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff)
+      drop-shadow(0 0 10px rgba(255, 255, 255, 0.8))
+      drop-shadow(0 8px 18px rgba(0, 0, 0, 0.35));
+  }
+  50% {
+    filter: 
+      drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff) drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff)
+      drop-shadow(0 0 24px rgba(244, 182, 200, 1))
+      drop-shadow(0 10px 22px rgba(0, 0, 0, 0.45));
+  }
+}
+
+/* Idle Motion: Butterfly Flap */
+.idle-butterfly {
+  animation: butterflyFlap 1.8s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+@keyframes butterflyFlap {
+  0%, 100% {
+    transform: scaleX(1) rotate(var(--rot, 0deg));
+  }
+  50% {
+    transform: scaleX(0.72) rotate(calc(var(--rot, 0deg) + 5deg));
+  }
+}
+
+/* Idle Motion: Spinning Vinyl */
+.idle-spin {
+  animation: vinylSpin 14s linear infinite;
+  transform-origin: center center;
+}
+
+@keyframes vinylSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Idle Motion: Ribbon Sway */
+.idle-sway {
+  animation: bowSway 3s ease-in-out infinite alternate;
+  transform-origin: top center;
+}
+
+@keyframes bowSway {
+  0% { transform: rotate(calc(var(--rot, 0deg) - 4deg)); }
+  100% { transform: rotate(calc(var(--rot, 0deg) + 4deg)); }
+}
+
+/* ==========================================================================
+   PHOTOS & FRAMES (POLAROIDS, STRIPS, GINGHAM)
+   ========================================================================== */
+
+/* 1. Classic Polaroid */
+.polaroid-frame {
+  background: #ffffff;
+  padding: 8px 8px 30px 8px;
+  border-radius: 3px;
+  box-shadow: 
+    0 8px 22px rgba(0, 0, 0, 0.22),
+    0 2px 6px rgba(0, 0, 0, 0.12);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.polaroid-img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  display: block;
+  border-radius: 1px;
+}
+
+.polaroid-caption {
+  font-family: var(--font-handwriting);
+  font-size: 1.15rem;
+  color: #332d36;
+  text-align: center;
+  margin-top: 6px;
+  line-height: 1;
+}
+
+/* Polaroid with Washi Tape on Top */
+.washi-tape-strip {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 80px;
+  height: 24px;
+  background: var(--tape-beige);
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 6px, rgba(244,182,200,0.3) 6px, rgba(244,182,200,0.3) 12px);
+  opacity: 0.85;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+  clip-path: polygon(4% 0%, 96% 0%, 100% 50%, 96% 100%, 4% 100%, 0% 50%);
+  z-index: 10;
+}
+
+/* 2. Photo Strip (3 Mini Photos Stacked) */
+.photo-strip-frame {
+  background: #ffffff;
+  padding: 8px 7px 18px 7px;
+  border-radius: 2px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.photo-strip-frame .strip-photo {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+}
+
+/* 3. Pink Gingham Framed Photo */
+.gingham-photo-frame {
+  background: var(--cream);
+  padding: 10px;
+  border: 6px solid transparent;
+  border-image: url('assets/textures/gingham.png') 16 round;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.2);
+  border-radius: 4px;
+}
+
+.gingham-photo-frame img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  display: block;
+}
+
+/* 4. Camera Viewfinder Screen on Cover */
+.camera-viewfinder-wrap {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.camera-screen-photo {
+  position: absolute;
+  top: 31%;
+  left: 23%;
+  width: 44%;
+  height: 44%;
+  border-radius: 50%;
+  object-fit: cover;
+  z-index: 1;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.7);
+}
+
+.camera-sticker-layer {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  pointer-events: none;
+}
+
+/* Image Placeholder Fallback */
+.img-placeholder-box {
+  background: rgba(244, 182, 200, 0.2);
+  border: 2px dashed var(--blush);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  color: var(--cherry);
+  font-family: var(--font-typewriter);
+  font-size: 0.75rem;
+  text-align: center;
+  word-break: break-all;
+}
+
+/* ==========================================================================
+   TYPOGRAPHY: RANSOM LETTERS, LABEL TAPES, HANDWRITTEN NOTES
+   ========================================================================== */
+
+/* Ransom Letters Cover Title: "SketchBook" */
+.ransom-title {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  align-items: center;
+  justify-content: center;
+}
+
+.ransom-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 7px;
+  font-family: var(--font-title);
+  font-size: clamp(1.4rem, 5vw, 2.2rem);
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+  transform: rotate(var(--lrot, 0deg));
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+/* Typewriter Quote Strips on Beige Label Tape */
+.quote-strip {
+  background: var(--tape-beige);
+  color: var(--ink);
+  font-family: var(--font-typewriter);
+  font-size: clamp(0.72rem, 2.2vw, 0.88rem);
+  line-height: 1.45;
+  padding: 6px 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-left: 3px solid var(--cherry);
+  border-radius: 1px;
+  position: relative;
+  display: inline-block;
+  max-width: 90%;
+}
+
+.quote-strip::after {
+  content: '|';
+  color: var(--cherry);
+  animation: blinkCursor 0.8s infinite;
+  margin-left: 2px;
+}
+
+.quote-strip.done::after {
+  display: none;
+}
+
+@keyframes blinkCursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Handwritten Notes on Lined Paper */
+.handwritten-note {
+  background: #fffcf0;
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 20px,
+    rgba(155, 180, 220, 0.4) 20px,
+    rgba(155, 180, 220, 0.4) 21px
+  );
+  padding: 12px 14px;
+  border-radius: 2px;
+  font-family: var(--font-handwriting);
+  font-size: 1.25rem;
+  line-height: 1.5;
+  color: #1a1725;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+/* Tag style "I meet you" */
+.tag-badge {
+  background: var(--cherry);
+  color: #ffffff;
+  font-family: var(--font-typewriter);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  padding: 3px 8px;
+  border-radius: 2px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+  text-transform: uppercase;
+}
+
+/* Tap to Open Cover Badge */
+.tap-to-open {
+  position: absolute;
+  bottom: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(244, 182, 200, 0.15);
+  border: 1px dashed var(--blush);
+  padding: 7px 18px;
+  border-radius: 30px;
+  color: var(--blush);
+  font-family: var(--font-handwriting);
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: floatPulse 2.5s ease-in-out infinite;
+  cursor: pointer;
+  z-index: 50;
+}
+
+@keyframes floatPulse {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-6px); }
+}
+
+/* End Page Details */
+.end-title {
+  font-family: var(--font-serif);
+  font-size: 2.8rem;
+  font-weight: 800;
+  letter-spacing: 0.25em;
+  color: var(--blush);
+  text-shadow: 0 0 25px rgba(244, 182, 200, 0.5);
+  text-align: center;
+}
+
+.end-footer-text {
+  font-family: var(--font-typewriter);
+  font-size: 0.78rem;
+  color: rgba(247, 241, 232, 0.7);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.restart-btn {
+  margin-top: 1.2rem;
+  padding: 8px 20px;
+  background: transparent;
+  border: 1px solid var(--blush);
+  border-radius: 20px;
+  color: var(--blush);
+  font-family: var(--font-handwriting);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.restart-btn:hover {
+  background: var(--blush);
+  color: var(--ink);
+  box-shadow: 0 0 15px rgba(244, 182, 200, 0.5);
+}
+
+/* ==========================================================================
+   HIT ZONES & BOTTOM CAPTION BAR
+   ========================================================================== */
+
+/* Invisible Left / Right Tap Zones */
+.hit-zone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  z-index: 500;
+  cursor: pointer;
+}
+
+.hit-zone.left { left: 0; }
+.hit-zone.right { right: 0; }
+
+/* Bottom Caption Bar */
+.book-caption-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(calc(88vh * 9 / 16), 92vw, 440px);
+  margin-top: 10px;
+  padding: 0 8px;
+  color: var(--blush);
+}
+
+.caption-text {
+  font-family: var(--font-typewriter);
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  color: rgba(247, 241, 232, 0.65);
+  text-transform: uppercase;
+}
+
+.page-indicator {
+  font-family: var(--font-typewriter);
+  font-size: 0.82rem;
+  color: var(--blush);
+  letter-spacing: 0.1em;
+}
+
+.page-indicator .sep {
+  opacity: 0.4;
+  margin: 0 3px;
+}
+
+/* Reduced Motion Fallback */
+@media (prefers-reduced-motion: reduce) {
+  .page-leaf {
+    transition: transform 0.2s ease;
+  }
+  .idle-twinkle,
+  .idle-disco,
+  .idle-butterfly,
+  .idle-spin,
+  .idle-sway,
+  .heart-pulse {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,250 @@
+.home-grid-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  background: radial-gradient(ellipse at 50% 25%, #1d1038 0%, #0d0818 70%, #06040b 100%);
+  color: #f0e8ff;
+  box-sizing: border-box;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.home-header {
+  text-align: center;
+  margin-bottom: 48px;
+  z-index: 2;
+}
+
+.home-header .subtitle {
+  font-family: 'Cinzel', serif, system-ui;
+  font-size: 13px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: #c8b4e8;
+  margin-bottom: 12px;
+  opacity: 0.9;
+}
+
+.home-header h1 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 46px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  color: #ffffff;
+  text-shadow: 0 4px 25px rgba(212, 168, 255, 0.45);
+}
+
+/* 3-card Grid */
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px;
+  max-width: 1140px;
+  width: 100%;
+  z-index: 2;
+}
+
+@media (max-width: 960px) {
+  .home-grid {
+    grid-template-columns: 1fr;
+    max-width: 440px;
+    gap: 22px;
+  }
+  .home-header h1 {
+    font-size: 34px;
+  }
+}
+
+/* Minimalist Card Design */
+.grid-card {
+  position: relative;
+  background: rgba(22, 14, 42, 0.82);
+  border: 1px solid rgba(179, 136, 255, 0.24);
+  border-radius: 26px;
+  padding: 32px 24px 28px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  backdrop-filter: blur(18px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  transition: all 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
+  overflow: hidden;
+}
+
+.grid-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2.5px;
+  background: linear-gradient(90deg, transparent, #d4a8ff, transparent);
+  opacity: 0.6;
+}
+
+.grid-card:hover,
+.grid-card:focus-visible {
+  transform: translateY(-8px);
+  border-color: rgba(255, 159, 252, 0.65);
+  box-shadow: 0 24px 50px rgba(110, 40, 200, 0.4), 0 0 35px rgba(212, 168, 255, 0.25);
+}
+
+.grid-card:active {
+  transform: scale(0.98);
+}
+
+/* Badge in upper-right */
+.card-badge {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #ff9ffc;
+  background: rgba(255, 159, 252, 0.12);
+  border: 1px solid rgba(255, 159, 252, 0.35);
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-family: 'Cinzel', serif;
+}
+
+/* Card Visual / Image Section */
+.card-visual-wrapper {
+  width: 100%;
+  height: 150px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Sketchbook Front Page Preview */
+.sketchbook-cover-preview {
+  width: 105px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 16px rgba(212, 176, 117, 0.3);
+  border: 1px solid rgba(212, 176, 117, 0.4);
+  transition: transform 0.35s ease;
+}
+
+.grid-card:hover .sketchbook-cover-preview {
+  transform: scale(1.06) rotate(-2deg);
+}
+
+/* Story Note Parchment Preview */
+.story-note-preview {
+  width: 110px;
+  height: 140px;
+  background: #f4ecd8;
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  padding: 10px 8px;
+  box-sizing: border-box;
+  text-align: left;
+  position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  transition: transform 0.35s ease;
+  overflow: hidden;
+}
+
+.grid-card:hover .story-note-preview {
+  transform: scale(1.06) rotate(2deg);
+}
+
+.mini-note-header {
+  font-family: 'Caveat', cursive;
+  font-size: 11px;
+  color: #7a5030;
+  border-bottom: 1px dashed rgba(120, 80, 50, 0.3);
+  padding-bottom: 3px;
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+
+.mini-note-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mini-line {
+  height: 4px;
+  background: rgba(60, 40, 25, 0.25);
+  border-radius: 2px;
+}
+
+.mini-line.short {
+  width: 60%;
+}
+
+.mini-line.accent {
+  background: rgba(192, 23, 43, 0.5);
+  width: 80%;
+}
+
+.mini-note-doodle {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  font-size: 13px;
+  color: #c0172b;
+}
+
+/* Gift Visual (Clean SVG Icon, No Emojis) */
+.gift-svg-icon {
+  width: 68px;
+  height: 68px;
+  stroke: #ff9ffc;
+  filter: drop-shadow(0 6px 20px rgba(255, 159, 252, 0.45));
+  transition: transform 0.35s ease;
+}
+
+.grid-card:hover .gift-svg-icon {
+  transform: scale(1.12) rotate(4deg);
+}
+
+/* Card Typography */
+.card-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: #f7f1e8;
+  margin-bottom: 8px;
+}
+
+.card-label {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #bfa8dc;
+  margin-bottom: 22px;
+  flex-grow: 1;
+}
+
+.card-action {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #d4a8ff;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: gap 0.2s ease, color 0.2s ease;
+}
+
+.grid-card:hover .card-action {
+  gap: 10px;
+  color: #ffffff;
+}

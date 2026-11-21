@@ -1,0 +1,206 @@
+/* Story Notes: Vintage Parchment Diary Style (Matching Reference Image 2) */
+.story-wrapper {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at 50% 30%, #150c1e 0%, #08040d 70%, #030206 100%);
+  padding: 24px 16px;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+/* Parchment Note Sheet */
+.parchment-sheet {
+  position: relative;
+  max-width: 480px;
+  width: 100%;
+  min-height: 720px;
+  background: #f4ecdc;
+  background-image: 
+    radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.4) 0%, rgba(220, 198, 160, 0.4) 80%, rgba(160, 130, 90, 0.6) 100%),
+    linear-gradient(rgba(180, 140, 90, 0.08) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 28px;
+  border-radius: 12px;
+  padding: 30px 28px 36px 28px;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.7),
+    0 0 40px rgba(180, 140, 90, 0.25),
+    inset 0 0 35px rgba(140, 100, 60, 0.35);
+  border: 1px solid rgba(160, 120, 70, 0.4);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  color: #2b1810;
+  transition: transform 0.25s ease;
+}
+
+/* Header bar matching Image 2: Prev, Page Title, Next */
+.note-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed rgba(140, 100, 60, 0.4);
+}
+
+.note-nav-circle-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid #3b2214;
+  background: transparent;
+  color: #3b2214;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  padding: 0;
+}
+
+.note-nav-circle-btn:hover {
+  background: rgba(59, 34, 20, 0.12);
+  transform: scale(1.1);
+}
+
+.note-nav-circle-btn:active {
+  transform: scale(0.92);
+}
+
+.note-nav-circle-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: #3b2214;
+  stroke-width: 2.2;
+}
+
+.note-title-text {
+  font-family: 'Caveat', cursive;
+  font-size: 22px;
+  font-weight: 700;
+  color: #4a2c1b;
+  letter-spacing: 0.5px;
+  text-align: center;
+  flex-grow: 1;
+}
+
+/* Chapter Subtitle on Paper */
+.note-chapter-heading {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #7a4628;
+  margin-bottom: 16px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Handwriting Body Text */
+.note-body {
+  flex-grow: 1;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.note-handwritten-text {
+  font-family: 'Caveat', 'Kalam', cursive;
+  font-size: 21.5px;
+  line-height: 1.55;
+  color: #26140b;
+  white-space: pre-wrap;
+  word-break: break-word;
+  text-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.15);
+}
+
+/* Keyword Highlights (Like 'the pink bicycle' in red) */
+.note-handwritten-text .highlight-red {
+  color: #c0172b;
+  font-weight: 700;
+}
+
+.note-handwritten-text .highlight-purple {
+  color: #5227ff;
+  font-weight: 700;
+}
+
+/* Typing cursor */
+.note-cursor {
+  display: inline-block;
+  margin-left: 2px;
+  color: #c0172b;
+  font-weight: 600;
+  animation: note-blink 0.75s infinite;
+}
+
+@keyframes note-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Footer with Handwritten Doodles matching Image 2 */
+.note-footer {
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(140, 100, 60, 0.35);
+}
+
+.note-doodles {
+  font-family: 'Caveat', cursive;
+  font-size: 20px;
+  color: #3b2214;
+  letter-spacing: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.doodle-grid {
+  font-size: 16px;
+  display: inline-block;
+  letter-spacing: 0;
+}
+
+.note-progress-tag {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: #8c5634;
+  text-transform: uppercase;
+}
+
+/* Tap prompt */
+.note-tap-hint {
+  font-family: 'Caveat', cursive;
+  font-size: 14px;
+  color: #a0653c;
+  text-align: center;
+  margin-top: 8px;
+}
+
+@media (max-width: 520px) {
+  .story-wrapper {
+    padding: 10px 8px;
+  }
+  .parchment-sheet {
+    min-height: calc(100vh - 20px);
+    padding: 20px 16px;
+    border-radius: 8px;
+  }
+  .note-title-text {
+    font-size: 19px;
+  }
+  .note-handwritten-text {
+    font-size: 19px;
+    line-height: 1.5;
+  }
+}

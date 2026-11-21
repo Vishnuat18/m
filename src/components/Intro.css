@@ -1,0 +1,288 @@
+.intro-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 30%, #1c0e35 0%, #0d0818 70%, #06040b 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+/* =========================================================================
+   STAGE 1: PIN LOCK (Initial View - Only the PIN lock keypad, NO ANIMATION)
+   ========================================================================= */
+.lock-stage {
+  position: relative;
+  z-index: 10;
+  width: 320px;
+  max-width: 90vw;
+  text-align: center;
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.lock-stage.hidden {
+  opacity: 0;
+  transform: scale(0.92);
+  pointer-events: none;
+}
+
+.lock-stage.shake {
+  animation: lock-shake 0.5s ease-in-out;
+}
+
+@keyframes lock-shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-10px); }
+  40%, 80% { transform: translateX(10px); }
+}
+
+.lock-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.92rem;
+  letter-spacing: 0.35em;
+  color: #c8b4e8;
+  margin-bottom: 2.2rem;
+  text-transform: uppercase;
+  text-shadow: 0 2px 14px rgba(200, 180, 232, 0.45);
+}
+
+/* 4-Dot Passcode Display */
+.pass-display {
+  display: flex;
+  justify-content: center;
+  gap: 1.4rem;
+  margin-bottom: 2.4rem;
+}
+
+.dot {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #9b72cf;
+  border-radius: 50%;
+  transition: all 0.25s ease;
+  background: transparent;
+}
+
+.dot.active {
+  background: #c8b4e8;
+  box-shadow: 0 0 16px #c8b4e8;
+  transform: scale(1.25);
+  border-color: #c8b4e8;
+}
+
+.dot.success {
+  background: #2ed573;
+  border-color: #2ed573;
+  box-shadow: 0 0 18px #2ed573;
+  transform: scale(1.25);
+}
+
+.dot.error {
+  background: #ff4757;
+  border-color: #ff4757;
+  box-shadow: 0 0 18px #ff4757;
+}
+
+/* 3x4 Keypad */
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.95rem;
+  width: 100%;
+  max-width: 270px;
+  margin: 0 auto;
+}
+
+.key {
+  aspect-ratio: 1;
+  border: 1px solid rgba(155, 114, 207, 0.35);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0.9, 0.3, 1);
+  font-family: 'Cinzel', serif;
+  background: rgba(22, 13, 46, 0.72);
+  color: #f0e8ff;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.key:hover {
+  background: rgba(155, 114, 207, 0.45);
+  border-color: #d4a8ff;
+  color: #fff;
+  transform: scale(1.08);
+  box-shadow: 0 0 18px rgba(212, 168, 255, 0.4);
+}
+
+.key:active {
+  transform: scale(0.94);
+  background: rgba(212, 168, 255, 0.6);
+}
+
+.key.clear,
+.key.verify {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+
+.key.clear {
+  color: #ff9ffc;
+  border-color: rgba(255, 159, 252, 0.35);
+}
+
+.key.verify {
+  color: #d4a8ff;
+  border-color: rgba(212, 168, 255, 0.4);
+}
+
+.lock-err-msg {
+  height: 22px;
+  margin-top: 18px;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: #ff4757;
+  text-transform: uppercase;
+  transition: opacity 0.2s ease;
+}
+
+/* =========================================================================
+   STAGE 2: DOORS APPEAR AFTER PIN (Clean Doors with NO Text, Click to Open)
+   ========================================================================= */
+.doors-stage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 50;
+  display: flex;
+  perspective: 2000px;
+  cursor: pointer;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.doors-stage.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.doors-stage.opening {
+  pointer-events: none;
+}
+
+.door-panel {
+  width: 50%;
+  height: 100%;
+  background: #1a0f35;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 1.6s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(155, 114, 207, 0.25);
+  transform-style: preserve-3d;
+  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.85);
+}
+
+.door-panel.left {
+  border-right: 4px solid #d4a8ff;
+  transform-origin: left center;
+  background: linear-gradient(90deg, #130a2a, #201344);
+}
+
+.door-panel.right {
+  border-left: 4px solid #d4a8ff;
+  transform-origin: right center;
+  background: linear-gradient(-90deg, #130a2a, #201344);
+}
+
+.door-surface {
+  position: absolute;
+  inset: 24px;
+  border: 2px solid rgba(212, 175, 55, 0.25);
+  pointer-events: none;
+  border-radius: 4px;
+}
+
+.door-surface::before {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(212, 175, 55, 0.12);
+}
+
+.door-handle {
+  width: 74px;
+  height: 74px;
+  border: 3px solid #d4a8ff;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) translateZ(40px);
+  background: #25164d;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 35px rgba(212, 168, 255, 0.45);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.door-panel.left .door-handle {
+  right: -37px;
+}
+
+.door-panel.right .door-handle {
+  left: -37px;
+}
+
+.door-handle:hover {
+  transform: translateY(-50%) translateZ(45px) scale(1.08);
+  box-shadow: 0 0 45px rgba(212, 168, 255, 0.7);
+}
+
+/* Elegant concentric brass center instead of emoji or symbol */
+.door-handle::after {
+  content: '';
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, #d4a8ff 45%, #6a3fa0 100%);
+  box-shadow: 0 0 14px rgba(212, 168, 255, 0.6);
+}
+
+/* 3D Realistic Swing Animation */
+.doors-stage.opening .door-panel.left {
+  transform: rotateY(-110deg) translateZ(-50px);
+}
+
+.doors-stage.opening .door-panel.right {
+  transform: rotateY(110deg) translateZ(-50px);
+}
+
+@media (max-width: 600px) {
+  .door-handle {
+    width: 60px;
+    height: 60px;
+  }
+  .door-panel.left .door-handle { right: -30px; }
+  .door-panel.right .door-handle { left: -30px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .door-panel,
+  .lock-stage {
+    transition-duration: 0.05s !important;
+  }
+}
