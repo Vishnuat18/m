@@ -1634,32 +1634,25 @@
           el.style.width = `${slot.w * 0.01 * pageW}px`;
           el.style.height = `${slot.h * 0.01 * pageH}px`;
           el.style.transform = `rotate(${slot.angle}deg)`;
-          el.title = `Click to place photo in ${slot.label}`;
+          el.title = `Tap to view photo: ${slot.label}`;
           el.innerHTML = `
             <div class="tip">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-              <span>${slot.label}</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <span>View ${slot.label}</span>
             </div>
-            <button type="button" class="hotspot-del" title="Remove photo">&times;</button>
           `;
 
           el.addEventListener("pointerdown", (e) => e.stopPropagation());
           el.addEventListener("click", (e) => {
             e.stopPropagation();
-            if (e.target.classList.contains("hotspot-del")) {
-              delete userPhotos[slot.id];
-              delete userPhotoImgs[slot.id];
-              savePhotos();
-              compositePageCanvas(pageNum);
-              render();
-              updatePhotoCounters();
-              rebuildVisibleHotspots();
-              showToast(`Removed photo from ${slot.label}`);
-              return;
+            const photoSrc = userPhotos[slot.id] || DEFAULT_PHOTOS[slot.id];
+            if (photoSrc) {
+              previewImg.src = photoSrc;
+              previewTitle.textContent = slot.label || "Scrapbook Photo";
+              const slotNum = slot.id.replace('photo-', '');
+              previewCounter.textContent = `Photo ${slotNum} / ${TOTAL_SLOTS}`;
+              previewModal.classList.add("open");
             }
-            pendingSlotId = slot.id;
-            singlePhotoInput.value = "";
-            singlePhotoInput.click();
           });
 
           slotOverlay.appendChild(el);
@@ -1690,26 +1683,25 @@
       const sw = window.innerWidth;
       const sh = window.innerHeight;
       const isSmallScreen = Math.min(sw, sh) <= 680;
-      // On portrait mobile screens, rotate 90deg so the exact 2-page web view fills the phone!
-      isMobileRotated = sw <= 768 && sh > sw;
+      isMobileRotated = false;
 
-      document.body.classList.toggle("mobile-rotated", isMobileRotated);
-      document.body.classList.toggle("is-mobile", isSmallScreen || isMobileRotated);
+      document.body.classList.remove("mobile-rotated");
+      document.body.classList.toggle("is-mobile", isSmallScreen);
 
-      // Logical stage dimensions after optional 90-degree mobile rotation
-      const vw = isMobileRotated ? sh : sw;
-      const vh = isMobileRotated ? sw : sh;
+      // Logical stage dimensions without awkward sideways rotation
+      const vw = sw;
+      const vh = sh;
 
       const isFs = !!(document.fullscreenElement || window.parent?.document?.fullscreenElement);
       const maxHCap = isFs ? 840 : 680;
       const maxWCap = isFs ? 620 : 520;
-      const maxH = Math.min(vh * (isSmallScreen ? 0.76 : 0.82), maxHCap);
-      const maxW = Math.min(vw * 0.46, maxWCap);
-      let w = Math.min(maxW, maxH * 0.8);
-      let h = w * 1.25;
-      if (h > maxH) { h = maxH; w = h * 0.8; }
-      pageW = Math.max(140, Math.round(w));
-      pageH = Math.max(175, Math.round(h));
+      const maxH = Math.min(vh * (isSmallScreen ? 0.65 : 0.82), maxHCap);
+      const maxW = Math.min(vw * (isSmallScreen ? 0.48 : 0.46), maxWCap);
+      let w = Math.min(maxW, maxH * 0.76);
+      let h = w * 1.32;
+      if (h > maxH) { h = maxH; w = h / 1.32; }
+      pageW = Math.max(130, Math.round(w));
+      pageH = Math.max(170, Math.round(h));
       dpr = Math.min(window.devicePixelRatio || 1, 2);
 
       canvas.width = Math.round(pageW * 2 * dpr);

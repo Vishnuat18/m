@@ -65,6 +65,156 @@ const ARROW_PUZZLE_LEVELS = [
   }
 ];
 
+/* =====================================================================
+   DATA: BIRTHDAY MESSAGES FROM HER FRIENDS (Sanjuuu, NIkkii, Hemaa, Ranjuu, Vishnu)
+   ===================================================================== */
+const FRIENDS_CHATS = {
+  sanjuuu: {
+    key: 'sanjuuu',
+    name: 'Sanjuuu',
+    handle: '@sanjuuu_bestie',
+    avatar: 'S',
+    color: '#8b5cf6',
+    initialMsgs: [
+      { sender: 'them', text: 'Mahi dearrrr! Happiest Birthday to you! May this year bring endless smiles and laughter!', time: '09:15' },
+      { sender: 'them', text: 'You are truly one in a million and my sweetest friend ever! Treat eppo thara pora?', time: '09:16' },
+      { sender: 'them', text: 'Never stop smiling di, your happiness makes everyone around you happy! Love you always!', time: '09:17' }
+    ],
+    replies: [
+      'Thank you so much Sanjuuu! You are the best!',
+      'Hahaha treat kandippa undu! Love you too!',
+      'Thanks for always being there with me Sanjuuu!'
+    ],
+    replyResponse: 'Awww Ammu! Enjoy your day to the maximum! Sending you big virtual hugs!'
+  },
+  nikkii: {
+    key: 'nikkii',
+    name: 'NIkkii',
+    handle: '@nikkii.vibes',
+    avatar: 'N',
+    color: '#ec4899',
+    initialMsgs: [
+      { sender: 'them', text: 'Happy Birthday Maheswari! Wishing you the most magical and beautiful day!', time: '09:30' },
+      { sender: 'them', text: 'May all your dreams turn into reality this year. Keep rocking like always!', time: '09:31' },
+      { sender: 'them', text: 'Stay as bright and sweet as you always are, Ammu!', time: '09:32' }
+    ],
+    replies: [
+      'Thank you so much NIkkii!',
+      'Thanks dear! Means so much to me!',
+      'Love you NIkkii! So happy to have you!'
+    ],
+    replyResponse: 'Always here for you Maheswari! Have a blasting birthday celebration!'
+  },
+  hemaa: {
+    key: 'hemaa',
+    name: 'Hemaa',
+    handle: '@hemaa_sparkle',
+    avatar: 'H',
+    color: '#10b981',
+    initialMsgs: [
+      { sender: 'them', text: 'Happy Happy Birthday to my dear Maheswari!', time: '09:45' },
+      { sender: 'them', text: 'God bless you with all peace, health, and endless joy! Always stay blessed!', time: '09:46' },
+      { sender: 'them', text: 'Have a super special celebration today, Ammu!', time: '09:47' }
+    ],
+    replies: [
+      'Thank you so much Hemaa!',
+      'Thank you for your lovely blessings Hemaa!',
+      'So sweet of you Hemaa! Thank you!'
+    ],
+    replyResponse: 'Keep that glowing smile always, dear! Happy Birthday once again!'
+  },
+  ranjuu: {
+    key: 'ranjuu',
+    name: 'Ranjuu',
+    handle: '@ranjuu_cherished',
+    avatar: 'R',
+    color: '#f59e0b',
+    initialMsgs: [
+      { sender: 'them', text: 'Dearest Mahi! Wishing you a very Happy Birthday!', time: '10:00' },
+      { sender: 'them', text: 'May your journey ahead be filled with sweet surprises, laughter, and success!', time: '10:01' },
+      { sender: 'them', text: 'You bring so much warmth and fun into our lives. Have the best year ahead!', time: '10:02' }
+    ],
+    replies: [
+      'Thank you so much Ranjuu!',
+      'Thanks for such warm wishes Ranjuu!',
+      'So grateful for our friendship Ranjuu!'
+    ],
+    replyResponse: 'Cheers to many more wonderful years together! Enjoy your special day, Mahi!'
+  },
+  vishnu: {
+    key: 'vishnu',
+    name: 'Vishnu',
+    handle: '@vishnu',
+    avatar: 'V',
+    color: '#3b82f6',
+    initialMsgs: [
+      { sender: 'them', text: 'Happy Birthday Maheswari! Wishing you the happiest and most magical day ever!', time: '10:05' },
+      { sender: 'them', text: 'I built this special digital universe just for you to celebrate every wonderful memory.', time: '10:06' },
+      { sender: 'them', text: 'Looking up at the same sky with you... always.', time: '10:07' }
+    ],
+    replies: [
+      'Thank you so much Vishnu!',
+      'I love this surprise so much!',
+      'Looking up at the same sky with you too...'
+    ],
+    replyResponse: 'You deserve all the love, happiness, and peace in the universe, Ammu! Always with you.'
+  }
+};
+
+/* =====================================================================
+   DATA: PIXABOWL POSTS FROM HER FRIENDS (EXCEPT VISHNU)
+   ===================================================================== */
+const PIXABOWL_FRIENDS_POSTS = [
+  {
+    id: 'post-sanjuuu',
+    author: 'Sanjuuu',
+    handle: 'sanjuuu_bestie',
+    avatar: 'S',
+    avatarColor: '#8b5cf6',
+    location: 'College Memories & Cafe Dates',
+    img: '/assets/gallery/splmem.jpg',
+    caption: 'Happy Birthday to my sweetest Mahi! From non-stop gossiping in class to endless laughter, every memory with you is pure gold. Love you forever girl! Stay blessed and happy always.',
+    likes: 1248,
+    time: '2 hours ago'
+  },
+  {
+    id: 'post-nikkii',
+    author: 'NIkkii',
+    handle: 'nikkii.vibes',
+    avatar: 'N',
+    avatarColor: '#ec4899',
+    location: 'Campus Hangouts',
+    img: '/assets/gallery/IMG_20260403_125101_529.jpg',
+    caption: 'Happiest Birthday to the girl with the most infectious smile, Maheswari! May your year ahead be as shining and gorgeous as you are. Keep smiling, Ammu!',
+    likes: 1892,
+    time: '4 hours ago'
+  },
+  {
+    id: 'post-hemaa',
+    author: 'Hemaa',
+    handle: 'hemaa_sparkle',
+    avatar: 'H',
+    avatarColor: '#10b981',
+    location: 'Golden Evenings',
+    img: '/assets/gallery/IMG_20260403_125203_175.jpg',
+    caption: 'Happy Birthday Ammu! Always stay the joyful, kind-hearted soul that you are. Wishing you tons of love, success, and all your heart desires!',
+    likes: 1420,
+    time: '6 hours ago'
+  },
+  {
+    id: 'post-ranjuu',
+    author: 'Ranjuu',
+    handle: 'ranjuu_cherished',
+    avatar: 'R',
+    avatarColor: '#f59e0b',
+    location: 'Celebration Central',
+    img: '/assets/gallery/IMG_20260403_125216_226.jpg',
+    caption: 'To our dearest Mahi, Happy Birthday! Thank you for being the sunshine of our friend group. Today is all about you! Enjoy every single second!',
+    likes: 2045,
+    time: '8 hours ago'
+  }
+];
+
 /* Web Audio Tone Helper */
 const playTone = (type = 'click') => {
   try {
@@ -141,6 +291,10 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
     playTone('click');
     if (appId === 'diary') {
       onSelectSection('story');
+      return;
+    }
+    if (appId === 'scrapbook') {
+      onSelectSection('sketchbook');
       return;
     }
     setActiveModal(appId);
@@ -406,29 +560,37 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
   };
 
   /* =========================================================================
-     5. MESSAGES STATE
+     5. MESSAGES STATE (Multi-Friend Chats: Sanjuuu, NIkkii, Hemaa, Ranjuu, Vishnu)
      ========================================================================= */
-  const [messagesList, setMessagesList] = useState([
-    { sender: 'vishnu', text: 'Happy Birthday Maheswari! Wishing you the happiest and most magical day ever!', time: '10:00' },
-    { sender: 'vishnu', text: 'I built this special digital universe just for you to celebrate every wonderful memory.', time: '10:01' },
-    { sender: 'vishnu', text: 'Looking up at the same sky with you... always.', time: '10:02' },
-  ]);
-  const [isTyping, setIsTyping] = useState(false);
+  const [activeFriendKey, setActiveFriendKey] = useState('sanjuuu');
+  const [friendsThreads, setFriendsThreads] = useState(() => {
+    const init = {};
+    Object.keys(FRIENDS_CHATS).forEach((k) => {
+      init[k] = [...FRIENDS_CHATS[k].initialMsgs];
+    });
+    return init;
+  });
+  const [isFriendTyping, setIsFriendTyping] = useState(false);
 
-  const handleSendMessage = (msgText) => {
+  const handleSendFriendMessage = (friendKey, msgText) => {
     playTone('click');
-    const newMsg = { sender: 'ammu', text: msgText, time: currentTime };
-    setMessagesList((prev) => [...prev, newMsg]);
+    const newMsg = { sender: 'me', text: msgText, time: currentTime };
+    setFriendsThreads((prev) => ({
+      ...prev,
+      [friendKey]: [...(prev[friendKey] || []), newMsg]
+    }));
 
-    setIsTyping(true);
+    setIsFriendTyping(true);
     setTimeout(() => {
-      setIsTyping(false);
+      setIsFriendTyping(false);
       playTone('success');
-      let reply = 'Always here for you, Ammu! Have the most wonderful birthday!';
-      if (msgText.includes('sky')) reply = 'Under the same sky, our hearts are always connected.';
-      else if (msgText.includes('Thank')) reply = 'You deserve all the love, happiness, and peace in the world!';
-      setMessagesList((prev) => [...prev, { sender: 'vishnu', text: reply, time: currentTime }]);
-    }, 1100);
+      const friendObj = FRIENDS_CHATS[friendKey];
+      const replyText = friendObj ? friendObj.replyResponse : 'Happy Birthday Ammu!';
+      setFriendsThreads((prev) => ({
+        ...prev,
+        [friendKey]: [...(prev[friendKey] || []), { sender: 'them', text: replyText, time: currentTime }]
+      }));
+    }, 1000);
   };
 
   /* =========================================================================
@@ -479,25 +641,21 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
   };
 
   /* =========================================================================
-     8. PIXABOWL (INSTAGRAM) STATE
+     8. PIXABOWL (INSTAGRAM) STATE (Friends Posts Only - Except Vishnu)
      ========================================================================= */
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(22110);
+  const [likedPosts, setLikedPosts] = useState({});
 
-  const toggleLike = () => {
+  const togglePostLike = (postId) => {
     playTone('success');
-    if (!liked) {
-      setLiked(true);
-      setLikeCount((c) => c + 1);
-      triggerConfetti();
-    } else {
-      setLiked(false);
-      setLikeCount((c) => c - 1);
-    }
+    setLikedPosts((prev) => {
+      const isLiked = !!prev[postId];
+      if (!isLiked) triggerConfetti();
+      return { ...prev, [postId]: !isLiked };
+    });
   };
 
   /* =========================================================================
-     APP GRID CONFIGURATION (Exact Reference Image 1 & 12 Apps)
+     APP GRID CONFIGURATION (Exact Reference Image 1 & 12 Apps - Zero Symmetry)
      ========================================================================= */
   const apps = [
     { id: 'messages', label: 'Messages', bg: 'tile-messages', icon: 'messages', badge: '2' },
@@ -506,12 +664,12 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
     { id: 'gallery', label: 'Gallery', bg: 'tile-gallery', icon: 'gallery' },
     { id: 'pixabowl', label: 'Pixabowl', bg: 'tile-pixabowl', icon: 'pixabowl' },
     { id: 'diary', label: 'Diary', bg: 'tile-diary', icon: 'diary', badge: '4', badgeColor: 'badge-amber' },
-    { id: 'symmetry', label: 'Symmetry', bg: 'tile-symmetry', icon: 'symmetry', isBordered: true },
+    { id: 'arrowGame', label: 'Make Arrow', bg: 'tile-arrow', icon: 'arrow' },
     { id: 'settings', label: 'Settings', bg: 'tile-settings', icon: 'settings', isBordered: true },
     { id: 'scrapbook', label: 'Scrapbook', isScrapbookCover: true },
     { id: 'music', label: 'Music', bg: 'tile-music', icon: 'music', badge: '10', badgeColor: 'badge-blue' },
-    { id: 'arrowGame', label: 'Make Arrow', bg: 'tile-arrow', icon: 'arrow' },
     { id: 'calculator', label: 'Calculator', bg: 'tile-calc', icon: 'calc' },
+    { id: 'gift', label: 'Special Gift', bg: 'tile-gift', icon: 'gift' },
   ];
 
   const renderIconSvg = (name) => {
@@ -554,11 +712,13 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
             <path d="M6 2h11a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm0 2v16h11V4H6zm2 3h7v2H8V7zm0 4h7v2H8v-2z" />
           </svg>
         );
-      case 'symmetry':
+      case 'gift':
         return (
-          <svg className="app-svg" viewBox="0 0 24 24">
-            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09V21.35z" fill="#ef5350" />
-            <path d="M12 5.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35V5.09z" fill="#4b5563" />
+          <svg className="app-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="8" width="18" height="4" rx="1" />
+            <path d="M12 8v13" />
+            <path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7" />
+            <path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5" />
           </svg>
         );
       case 'settings':
@@ -1304,14 +1464,16 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
       )}
 
       {/* =====================================================================
-          MODAL 5: MESSAGES APP
+          MODAL 5: MESSAGES APP (Her Friends: Sanjuuu, NIkkii, Hemaa, Ranjuu, Vishnu)
           ===================================================================== */}
       {activeModal === 'messages' && (
         <div className="native-app-modal messages-modal">
           <header className="modal-top-bar bg-blue-950">
             <div className="modal-title-wrap">
               <h2>Messages</h2>
-              <span className="modal-sub">Chatting with Vishnu</span>
+              <span className="modal-sub">
+                Chatting with {FRIENDS_CHATS[activeFriendKey]?.name} ({FRIENDS_CHATS[activeFriendKey]?.handle})
+              </span>
             </div>
             <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
               ✕
@@ -1319,43 +1481,53 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
           </header>
 
           <div className="messages-view-body">
+            {/* Friends Selector Tab Row */}
+            <div className="friends-tab-selector">
+              {Object.values(FRIENDS_CHATS).map((f) => (
+                <button
+                  key={f.key}
+                  type="button"
+                  className={`friend-tab-btn ${activeFriendKey === f.key ? 'active' : ''}`}
+                  onClick={() => {
+                    playTone('click');
+                    setActiveFriendKey(f.key);
+                  }}
+                >
+                  <span className="friend-tab-avatar" style={{ backgroundColor: f.color }}>
+                    {f.avatar}
+                  </span>
+                  <span className="friend-tab-name">{f.name}</span>
+                </button>
+              ))}
+            </div>
+
+            {/* Conversation Stream */}
             <div className="messages-stream">
-              {messagesList.map((m, idx) => (
-                <div key={idx} className={`chat-bubble ${m.sender === 'ammu' ? 'bubble-me' : 'bubble-them'}`}>
+              {(friendsThreads[activeFriendKey] || []).map((m, idx) => (
+                <div key={idx} className={`chat-bubble ${m.sender === 'me' ? 'bubble-me' : 'bubble-them'}`}>
                   <p className="bubble-content">{m.text}</p>
                   <span className="bubble-ts">{m.time}</span>
                 </div>
               ))}
-              {isTyping && (
+              {isFriendTyping && (
                 <div className="chat-bubble bubble-them typing-indicator">
-                  <span>Vishnu is typing...</span>
+                  <span>{FRIENDS_CHATS[activeFriendKey]?.name} is typing...</span>
                 </div>
               )}
             </div>
 
             {/* Quick Birthday Response Chips */}
             <div className="quick-replies-tray">
-              <button
-                type="button"
-                className="reply-chip"
-                onClick={() => handleSendMessage('Thank you so much Vishnu!')}
-              >
-                Thank you so much!
-              </button>
-              <button
-                type="button"
-                className="reply-chip"
-                onClick={() => handleSendMessage('Looking up at the same sky with you... always.')}
-              >
-                Under the same sky...
-              </button>
-              <button
-                type="button"
-                className="reply-chip"
-                onClick={() => handleSendMessage('This birthday phone is incredible!')}
-              >
-                I love this phone!
-              </button>
+              {(FRIENDS_CHATS[activeFriendKey]?.replies || []).map((replyTxt, rIdx) => (
+                <button
+                  key={rIdx}
+                  type="button"
+                  className="reply-chip"
+                  onClick={() => handleSendFriendMessage(activeFriendKey, replyTxt)}
+                >
+                  {replyTxt}
+                </button>
+              ))}
             </div>
           </div>
         </div>
@@ -1484,14 +1656,14 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
       )}
 
       {/* =====================================================================
-          MODAL 8: PIXABOWL (INSTAGRAM)
+          MODAL 8: PIXABOWL (Friends Posts Only - EXCEPT Vishnu)
           ===================================================================== */}
       {activeModal === 'pixabowl' && (
         <div className="native-app-modal ingram-modal">
           <header className="modal-top-bar bg-purple-950">
             <div className="modal-title-wrap">
               <h2>Pixabowl</h2>
-              <span className="modal-sub">@maheswari_ammu</span>
+              <span className="modal-sub">Friends Wishing Maheswari</span>
             </div>
             <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
               ✕
@@ -1499,69 +1671,86 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
           </header>
 
           <div className="ingram-view-body">
-            <div className="ingram-post-card">
-              <div className="post-author-row">
-                <div className="author-avatar">M</div>
-                <div className="author-meta">
-                  <span className="author-handle">maheswari_ammu</span>
-                  <span className="author-loc">Birthday Special Celebration</span>
+            {PIXABOWL_FRIENDS_POSTS.map((post) => {
+              const isPostLiked = !!likedPosts[post.id];
+              const currentLikes = post.likes + (isPostLiked ? 1 : 0);
+
+              return (
+                <div key={post.id} className="ingram-post-card">
+                  <div className="post-author-row">
+                    <div className="author-avatar" style={{ backgroundColor: post.avatarColor }}>
+                      {post.avatar}
+                    </div>
+                    <div className="author-meta">
+                      <span className="author-handle">{post.handle}</span>
+                      <span className="author-loc">{post.location}</span>
+                    </div>
+                  </div>
+
+                  <div className="post-photo-stage">
+                    <img src={post.img} alt={`${post.author} post`} className="post-img" />
+                  </div>
+
+                  <div className="post-actions-row">
+                    <button
+                      type="button"
+                      className={`heart-like-btn ${isPostLiked ? 'liked' : ''}`}
+                      onClick={() => togglePostLike(post.id)}
+                    >
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill={isPostLiked ? '#ef4444' : 'none'}
+                        stroke={isPostLiked ? '#ef4444' : '#ffffff'}
+                        strokeWidth="2"
+                      >
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                      </svg>
+                      <span>{currentLikes.toLocaleString()} Likes</span>
+                    </button>
+                  </div>
+
+                  <div className="post-caption-box">
+                    <p>
+                      <strong>{post.handle}:</strong> {post.caption}
+                    </p>
+                    <span className="post-timestamp">{post.time}</span>
+                  </div>
                 </div>
-              </div>
-
-              <div className="post-photo-stage">
-                <img src="/assets/gallery/splmem.jpg" alt="Ammu portrait" className="post-img" />
-              </div>
-
-              <div className="post-actions-row">
-                <button
-                  type="button"
-                  className={`heart-like-btn ${liked ? 'liked' : ''}`}
-                  onClick={toggleLike}
-                >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill={liked ? '#ef4444' : 'none'} stroke={liked ? '#ef4444' : '#ffffff'} strokeWidth="2">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                  </svg>
-                  <span>{likeCount.toLocaleString()} Likes</span>
-                </button>
-              </div>
-
-              <div className="post-caption-box">
-                <p>
-                  <strong>maheswari_ammu:</strong> A year older, a thousand reasons more grateful.
-                  Thank you for all the heartfelt love!
-                </p>
-              </div>
-            </div>
+              );
+            })}
           </div>
         </div>
       )}
 
       {/* =====================================================================
-          MODAL 9: SYMMETRY (Split Heart Celebration)
+          MODAL 9: SPECIAL GIFT
           ===================================================================== */}
-      {activeModal === 'symmetry' && (
-        <div className="native-app-modal symmetry-modal">
-          <header className="modal-top-bar bg-slate-900">
+      {activeModal === 'gift' && (
+        <div className="native-app-modal gift-modal">
+          <header className="modal-top-bar bg-amber-950">
             <div className="modal-title-wrap">
-              <h2>Symmetry</h2>
-              <span className="modal-sub">Two Hearts In Harmony</span>
+              <h2>Special Gift</h2>
+              <span className="modal-sub">For Maheswari</span>
             </div>
             <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
               ✕
             </button>
           </header>
 
-          <div className="symmetry-view-body">
-            <div className="dual-heart-graphic">
-              <svg className="symmetry-svg" viewBox="0 0 24 24">
-                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09V21.35z" fill="#ef5350" />
-                <path d="M12 5.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35V5.09z" fill="#38bdf8" />
+          <div className="gift-view-body">
+            <div className="gift-gold-box">
+              <svg width="68" height="68" viewBox="0 0 24 24" fill="none" stroke="#e5a93c" strokeWidth="1.5">
+                <rect x="3" y="8" width="18" height="4" rx="1" />
+                <path d="M12 8v13" />
+                <path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7" />
+                <path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5" />
               </svg>
             </div>
-            <h3 className="symmetry-title">Vishnu &bull; Maheswari</h3>
-            <p className="symmetry-prose">
-              &ldquo;Two individuals, one connected heartbeat. Distance is just a number when two souls
-              share the exact same sky.&rdquo;
+            <h3 className="gift-heading">A Heartfelt Birthday Gift</h3>
+            <p className="gift-quote">
+              &ldquo;May your day be filled with warm sunshine, endless laughter, and all the love in the universe. Happy Birthday Ammu!&rdquo;
             </p>
             <button
               type="button"
@@ -1571,7 +1760,7 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
                 triggerConfetti();
               }}
             >
-              Celebrate Our Bond
+              Shower Birthday Confetti
             </button>
           </div>
         </div>
