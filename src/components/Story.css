@@ -1,71 +1,121 @@
-/* Story Notes: Vintage Parchment Diary Style (Matching Reference Image 2) */
+/* Story Notes: Vintage Parchment Diary Style (Pixel-Matched to Reference Image) */
 .story-wrapper {
   min-height: 100vh;
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  background: radial-gradient(ellipse at 50% 30%, #150c1e 0%, #08040d 70%, #030206 100%);
-  padding: 24px 16px;
+  justify-content: flex-start;
+  background: #1c1005;
+  background: radial-gradient(ellipse at 50% 25%, #2a1808 0%, #1c1005 65%, #100802 100%);
+  padding: 12px 8px 24px 8px;
   box-sizing: border-box;
   user-select: none;
 }
 
-/* Parchment Note Sheet */
+/* Discreet floating Home bar above the parchment */
+.story-top-floating-bar {
+  max-width: 440px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 8px;
+  padding: 0 4px;
+  box-sizing: border-box;
+}
+
+.story-home-pill-btn {
+  background: rgba(36, 21, 8, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(185, 142, 87, 0.4);
+  color: #ecd0a9;
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-family: 'Cinzel', serif;
+  font-size: 11.5px;
+  letter-spacing: 1.2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.story-home-pill-btn:hover {
+  background: rgba(185, 142, 87, 0.25);
+  color: #fff;
+  border-color: #d4a8ff;
+  transform: translateX(-2px);
+}
+
+/* Parchment Note Sheet - Exact Size & Aspect Ratio matching mobile reference image */
 .parchment-sheet {
   position: relative;
-  max-width: 480px;
+  max-width: 440px;
   width: 100%;
-  min-height: 720px;
-  background: #f4ecdc;
+  min-height: calc(100vh - 65px);
+  background: #ebd3af;
   background-image: 
-    radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.4) 0%, rgba(220, 198, 160, 0.4) 80%, rgba(160, 130, 90, 0.6) 100%),
-    linear-gradient(rgba(180, 140, 90, 0.08) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 28px;
-  border-radius: 12px;
-  padding: 30px 28px 36px 28px;
+    radial-gradient(ellipse at 50% 35%, rgba(255, 248, 235, 0.5) 0%, rgba(235, 210, 170, 0.65) 75%, rgba(180, 138, 85, 0.8) 100%),
+    linear-gradient(to bottom, rgba(135, 90, 45, 0.28) 0%, transparent 35px, transparent calc(100% - 50px), rgba(120, 75, 35, 0.35) 100%);
+  border-radius: 6px 8px 4px 6px;
+  padding: 16px 16px 24px 16px;
   box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.7),
-    0 0 40px rgba(180, 140, 90, 0.25),
-    inset 0 0 35px rgba(140, 100, 60, 0.35);
-  border: 1px solid rgba(160, 120, 70, 0.4);
+    0 16px 45px rgba(0, 0, 0, 0.85),
+    inset 0 0 40px rgba(130, 85, 40, 0.4),
+    inset 0 2px 8px rgba(110, 65, 25, 0.45);
+  border: 1px solid rgba(150, 105, 55, 0.4);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
-  color: #2b1810;
-  transition: transform 0.25s ease;
+  color: #2c170a;
+  cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
-/* Header bar matching Image 2: Prev, Page Title, Next */
+/* Subtle aged tea stain in bottom right corner */
+.parchment-sheet::after {
+  content: '';
+  position: absolute;
+  bottom: 80px;
+  right: 18px;
+  width: 90px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 60% 50%, rgba(145, 95, 45, 0.18) 0%, rgba(160, 110, 55, 0.08) 55%, transparent 75%);
+  pointer-events: none;
+  filter: blur(6px);
+}
+
+/* Header bar matching Reference Image: Circle (←), Page Title, Circle (▷) */
 .note-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 22px;
-  padding-bottom: 8px;
-  border-bottom: 1px dashed rgba(140, 100, 60, 0.4);
+  margin-bottom: 14px;
+  padding: 6px 4px 0 4px;
 }
 
 .note-nav-circle-btn {
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  border: 1.5px solid #3b2214;
+  border: 1.8px solid #3c2010;
   background: transparent;
-  color: #3b2214;
+  color: #3c2010;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-family: inherit;
   padding: 0;
+  box-sizing: border-box;
 }
 
 .note-nav-circle-btn:hover {
-  background: rgba(59, 34, 20, 0.12);
-  transform: scale(1.1);
+  background: rgba(60, 32, 16, 0.12);
+  transform: scale(1.08);
 }
 
 .note-nav-circle-btn:active {
@@ -73,68 +123,52 @@
 }
 
 .note-nav-circle-btn svg {
-  width: 18px;
-  height: 18px;
-  stroke: #3b2214;
-  stroke-width: 2.2;
+  width: 19px;
+  height: 19px;
+  stroke: #3c2010;
 }
 
 .note-title-text {
   font-family: 'Caveat', cursive;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 700;
-  color: #4a2c1b;
-  letter-spacing: 0.5px;
+  color: #3c2010;
+  letter-spacing: 0.3px;
   text-align: center;
   flex-grow: 1;
 }
 
-/* Chapter Subtitle on Paper */
-.note-chapter-heading {
-  font-family: 'Cinzel', serif;
-  font-size: 13px;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  color: #7a4628;
-  margin-bottom: 16px;
-  text-align: center;
-  font-weight: 600;
-}
-
-/* Handwriting Body Text */
+/* Handwriting Body Text matching Reference Image */
 .note-body {
   flex-grow: 1;
-  cursor: pointer;
   display: flex;
   flex-direction: column;
+  padding: 4px 6px 12px 6px;
 }
 
 .note-handwritten-text {
   font-family: 'Caveat', 'Kalam', cursive;
   font-size: 21.5px;
-  line-height: 1.55;
-  color: #26140b;
+  line-height: 1.62;
+  color: #2c170a;
   white-space: pre-wrap;
   word-break: break-word;
-  text-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.15);
+  letter-spacing: 0.2px;
+  text-shadow: 0 0.5px 0.5px rgba(60, 32, 16, 0.15);
 }
 
-/* Keyword Highlights (Like 'the pink bicycle' in red) */
-.note-handwritten-text .highlight-red {
-  color: #c0172b;
+/* Keyword Highlights in Dark Red Cursive (Like 'the pink bicycle' in Reference Image) */
+.highlight-red {
+  color: #b31b2c;
   font-weight: 700;
+  text-decoration: none;
 }
 
-.note-handwritten-text .highlight-purple {
-  color: #5227ff;
-  font-weight: 700;
-}
-
-/* Typing cursor */
+/* Typing blinking cursor */
 .note-cursor {
   display: inline-block;
   margin-left: 2px;
-  color: #c0172b;
+  color: #b31b2c;
   font-weight: 600;
   animation: note-blink 0.75s infinite;
 }
@@ -144,63 +178,59 @@
   50% { opacity: 0; }
 }
 
-/* Footer with Handwritten Doodles matching Image 2 */
+/* Footer Doodle Pattern matching Reference Image SVG */
 .note-footer {
-  margin-top: 24px;
+  margin-top: 18px;
+  padding: 0 4px 6px 4px;
+}
+
+.ref-doodle-container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding-top: 10px;
-  border-top: 1px dashed rgba(140, 100, 60, 0.35);
 }
 
-.note-doodles {
-  font-family: 'Caveat', cursive;
-  font-size: 20px;
-  color: #3b2214;
-  letter-spacing: 4px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.ref-doodle-svg {
+  width: 250px;
+  height: auto;
+  max-width: 90%;
+  display: block;
 }
 
-.doodle-grid {
-  font-size: 16px;
-  display: inline-block;
-  letter-spacing: 0;
-}
-
-.note-progress-tag {
-  font-family: 'Cinzel', serif;
-  font-size: 11px;
-  letter-spacing: 1.5px;
-  color: #8c5634;
-  text-transform: uppercase;
-}
-
-/* Tap prompt */
+/* Subtle tap guidance */
 .note-tap-hint {
   font-family: 'Caveat', cursive;
   font-size: 14px;
-  color: #a0653c;
+  color: #9c6538;
   text-align: center;
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
-@media (max-width: 520px) {
+/* Mobile responsive exact styling */
+@media (max-width: 480px) {
   .story-wrapper {
-    padding: 10px 8px;
+    padding: 4px 6px 16px 6px;
   }
+
+  .story-top-floating-bar {
+    margin-bottom: 6px;
+  }
+
   .parchment-sheet {
-    min-height: calc(100vh - 20px);
-    padding: 20px 16px;
-    border-radius: 8px;
+    min-height: calc(100vh - 48px);
+    padding: 12px 14px 20px 14px;
+    border-radius: 4px 6px 4px 4px;
   }
+
   .note-title-text {
-    font-size: 19px;
+    font-size: 22px;
   }
+
   .note-handwritten-text {
-    font-size: 19px;
-    line-height: 1.5;
+    font-size: 20px;
+    line-height: 1.58;
+  }
+
+  .ref-doodle-svg {
+    width: 220px;
   }
 }
