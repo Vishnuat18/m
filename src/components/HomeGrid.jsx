@@ -9,32 +9,7 @@ const HomeGrid = ({ onSelectSection }) => {
       <div className="ambient-glow bottom" aria-hidden="true" />
 
       <header className="home-header">
-        <div className="birthday-kicker">
-          <span>A Special Birthday Celebration</span>
-        </div>
         <h1 className="birthday-main-title">Happy Birthday Maheswari</h1>
-        <div className="name-acronym">
-          <span>M</span>
-          <span className="dot">&bull;</span>
-          <span>A</span>
-          <span className="dot">&bull;</span>
-          <span>H</span>
-          <span className="dot">&bull;</span>
-          <span>E</span>
-          <span className="dot">&bull;</span>
-          <span>S</span>
-          <span className="dot">&bull;</span>
-          <span>W</span>
-          <span className="dot">&bull;</span>
-          <span>A</span>
-          <span className="dot">&bull;</span>
-          <span>R</span>
-          <span className="dot">&bull;</span>
-          <span>I</span>
-        </div>
-        <p className="home-tagline">
-          Handcrafted with love &mdash; our story notes, digital sketchbook &amp; special surprise
-        </p>
       </header>
 
       <main className="home-grid">
