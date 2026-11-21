@@ -117,13 +117,37 @@ const HomeGrid = ({ onSelectSection }) => {
               <path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5" />
             </svg>
           </div>
-          <h2 className="card-title">Special Gift</h2>
-          <p className="card-label">
-            A personal surprise packed with loving thoughts just for you
-          </p>
-          <div className="card-action">UNWRAP GIFT &rarr;</div>
+          <div className="card-text-block">
+            <h2 className="card-title">
+              <span className="desktop-card-title">Special Gift</span>
+              <span className="mobile-card-title">Special Gift</span>
+            </h2>
+            <p className="card-label">
+              A personal surprise packed with loving thoughts just for you
+            </p>
+            <div className="card-action">UNWRAP GIFT &rarr;</div>
+          </div>
         </div>
       </main>
+
+      {/* Heartfelt Birthday Tribute Section to fill the bottom of mobile neatly */}
+      <footer className="home-birthday-banner" aria-label="Birthday Dedication">
+        <div className="banner-sparkle-row">
+          <span className="sparkle-line" />
+          <span className="sparkle-symbol">&loz;</span>
+          <span className="sparkle-line" />
+        </div>
+        <p className="banner-wishes">
+          &ldquo;Every chapter of our story is more wonderful with you in it. May your year ahead be as radiant and joyful as your smile.&rdquo;
+        </p>
+        <div className="banner-highlights">
+          <span className="hl-item">22 Scrapbook Memories</span>
+          <span className="hl-sep">&bull;</span>
+          <span className="hl-item">Handwritten Story Chapters</span>
+          <span className="hl-sep">&bull;</span>
+          <span className="hl-item">Personal Surprise</span>
+        </div>
+      </footer>
     </div>
   );
 };

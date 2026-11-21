@@ -15,37 +15,15 @@
   user-select: none;
 }
 
-/* Ambient glows */
+/* Ambient glows - removed for clean minimal look */
 .ambient-glow {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-  filter: blur(100px);
-  z-index: 1;
-}
-
-.ambient-glow.top {
-  width: 380px;
-  height: 380px;
-  background: radial-gradient(circle, rgba(212, 168, 255, 0.18) 0%, rgba(82, 39, 255, 0.1) 60%, transparent 80%);
-  top: -80px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.ambient-glow.bottom {
-  width: 500px;
-  height: 300px;
-  background: radial-gradient(circle, rgba(255, 159, 252, 0.12) 0%, transparent 70%);
-  bottom: -60px;
-  left: 50%;
-  transform: translateX(-50%);
+  display: none !important;
 }
 
 /* Header section */
 .home-header {
   text-align: center;
-  margin-bottom: 48px;
+  margin-bottom: 40px;
   z-index: 2;
   max-width: 860px;
   padding: 0 16px;
@@ -53,14 +31,11 @@
 
 .birthday-main-title {
   font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: 54px;
+  font-size: 52px;
   font-weight: 600;
   line-height: 1.15;
-  letter-spacing: 1.8px;
-  background: linear-gradient(135deg, #ffffff 15%, #ffd4fb 55%, #c8b4e8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 6px 28px rgba(212, 168, 255, 0.4);
+  letter-spacing: 1.5px;
+  color: #f7edff;
   margin: 0;
 }
 
@@ -113,23 +88,53 @@
   .home-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 14px;
+    gap: 16px 14px;
     max-width: 440px;
     width: 100%;
     padding: 0;
     margin: 0 auto;
   }
 
-  /* Gift card hidden on mobile */
-  .card-gift {
+  /* Scrapbook & Notes on mobile: Free-standing items (No card div box, no border, no background) */
+  .card-sketchbook,
+  .card-notes {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: auto !important;
+  }
+
+  .card-sketchbook::before,
+  .card-notes::before {
     display: none !important;
   }
 
+  .card-sketchbook:hover,
+  .card-sketchbook:active,
+  .card-notes:hover,
+  .card-notes:active {
+    transform: translateY(-2px);
+    border: none !important;
+    box-shadow: none !important;
+  }
+
   /* Under image, only text: hide badges, labels and action links */
-  .card-badge,
-  .card-label,
-  .card-action,
-  .desktop-card-title {
+  .card-sketchbook .card-badge,
+  .card-sketchbook .card-label,
+  .card-sketchbook .card-action,
+  .card-sketchbook .desktop-card-title,
+  .card-notes .card-badge,
+  .card-notes .card-label,
+  .card-notes .card-action,
+  .card-notes .desktop-card-title {
     display: none !important;
   }
 
@@ -140,26 +145,71 @@
     font-weight: 600;
     letter-spacing: 0.6px;
     color: #f7f1e8;
-    margin: 4px 0 0 0;
+    margin: 6px 0 0 0;
     text-align: center;
     line-height: 1.2;
   }
 
-  .grid-card {
-    padding: 16px 10px 14px 10px;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: auto;
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
-    background: rgba(22, 14, 42, 0.88);
+  /* Special Gift Card on Mobile: Sleek horizontal row spanning across both columns to fill space */
+  .card-gift {
+    grid-column: 1 / -1 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 14px !important;
+    padding: 12px 18px !important;
+    background: rgba(24, 16, 42, 0.72) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35) !important;
+    text-align: left !important;
+    margin-top: 4px;
+    backdrop-filter: blur(10px);
   }
 
-  .grid-card:hover,
-  .grid-card:active {
-    transform: translateY(-3px);
+  .card-gift::before {
+    display: none !important;
+  }
+
+  .card-gift .card-visual-wrapper {
+    width: 44px !important;
+    height: 44px !important;
+    margin-bottom: 0 !important;
+    flex-shrink: 0;
+  }
+
+  .card-gift .gift-svg-icon {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .card-gift .card-text-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .card-gift .card-title .mobile-card-title {
+    font-size: 16px !important;
+    text-align: left !important;
+    margin: 0 !important;
+    color: #ffd4fb;
+  }
+
+  .card-gift .card-label {
+    display: block !important;
+    font-size: 11.5px !important;
+    color: #bfa8dc !important;
+    margin: 2px 0 0 0 !important;
+    line-height: 1.35 !important;
+    text-align: left !important;
+  }
+
+  .card-gift .card-badge,
+  .card-gift .card-action {
+    display: none !important;
   }
 
   .card-visual-wrapper {
@@ -198,40 +248,29 @@
   }
 }
 
-/* Minimalist Card Design */
+/* Minimalist Card Design (No glow, clean minimal aesthetics) */
 .grid-card {
   position: relative;
-  background: rgba(22, 14, 42, 0.82);
-  border: 1px solid rgba(179, 136, 255, 0.22);
-  border-radius: 24px;
-  padding: 32px 22px 26px 22px;
+  background: rgba(18, 12, 28, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 30px 22px 24px 22px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   cursor: pointer;
-  backdrop-filter: blur(16px);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
-  transition: all 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  transition: all 0.25s ease;
   overflow: hidden;
-}
-
-.grid-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2.5px;
-  background: linear-gradient(90deg, transparent, #d4a8ff, transparent);
-  opacity: 0.6;
 }
 
 .grid-card:hover,
 .grid-card:focus-visible {
-  transform: translateY(-7px);
-  border-color: rgba(255, 159, 252, 0.6);
-  box-shadow: 0 22px 48px rgba(110, 40, 200, 0.38), 0 0 32px rgba(212, 168, 255, 0.22);
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
 }
 
 .grid-card:active {
@@ -338,7 +377,6 @@
   width: 66px;
   height: 66px;
   stroke: #ff9ffc;
-  filter: drop-shadow(0 6px 20px rgba(255, 159, 252, 0.4));
   transition: transform 0.35s ease;
 }
 
