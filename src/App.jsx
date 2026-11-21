@@ -51,7 +51,7 @@ function App() {
         <Gift onBack={handleBackToHome} />
       )}
 
-      {currentScreen !== 'intro' && currentScreen !== 'sketchbook' && !isMobile && (
+      {currentScreen !== 'intro' && currentScreen !== 'sketchbook' && (
         <DeskBuddy />
       )}
     </div>

@@ -173,10 +173,90 @@
   font-weight: 600;
 }
 
-/* Mobile View: Hide fixed mascot on mobile phone view to avoid overlapping bottom phone dock */
+/* Mobile View: Free-standing character mascot at bottom of mobile view */
 @media (max-width: 768px) {
-  .desk-buddy-container,
+  .desk-buddy-container {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 14px !important;
+    z-index: 9999 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    pointer-events: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* No borders, transparent background, slightly bigger */
+  .buddy-figure-wrap {
+    height: 205px !important;
+    max-height: 205px !important;
+    width: auto !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    outline: none !important;
+    background: transparent !important;
+    cursor: pointer !important;
+  }
+
+  .buddy-image {
+    height: 205px !important;
+    max-height: 205px !important;
+    width: auto !important;
+    object-fit: contain !important;
+    display: block !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    outline: none !important;
+    background: transparent !important;
+    filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.75)) !important;
+  }
+
+  .buddy-speech-bubble {
+    max-width: 220px !important;
+    padding: 7px 12px !important;
+    margin-bottom: 6px !important;
+    border-radius: 14px !important;
+    border-bottom-left-radius: 3px !important;
+    background: rgba(20, 12, 38, 0.94) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6) !important;
+    backdrop-filter: blur(12px) !important;
+  }
+
+  .bubble-text {
+    font-size: 11px !important;
+    line-height: 1.35 !important;
+    color: #f7edff !important;
+    font-weight: 500 !important;
+  }
+
+  .bubble-pointer {
+    left: 20px !important;
+    bottom: -5px !important;
+  }
+
+  .buddy-close-btn {
+    top: -6px !important;
+    right: -6px !important;
+    width: 22px !important;
+    height: 22px !important;
+    font-size: 15px !important;
+    background: rgba(35, 20, 60, 0.9) !important;
+    border: 1px solid rgba(212, 168, 255, 0.4) !important;
+    color: #ff9ffc !important;
+  }
+
   .desk-buddy-minimized {
-    display: none !important;
+    bottom: 12px !important;
+    left: 14px !important;
+    z-index: 9999 !important;
+    padding: 4px 12px 4px 4px !important;
   }
 }

@@ -572,22 +572,10 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
           ))}
         </main>
 
-        {/* Sky Tribute Widget */}
-        <section className="native-sky-widget">
-          <div className="sky-figure-wrap">
-            <img
-              src="/assets/pose-01.png"
-              alt="Maheswari looking up"
-              className="sky-figure-img"
-              onError={(e) => {
-                e.target.src = 'assets/pose-01.png';
-              }}
-            />
-          </div>
-          <div className="sky-text-wrap">
-            <p className="sky-quote">&ldquo;Looking up at the same sky with you... always.&rdquo;</p>
-            <span className="sky-author">&mdash; VISHNU</span>
-          </div>
+        {/* Sky Tribute Quote Bar */}
+        <section className="native-sky-quote-bar">
+          <p className="sky-quote-text">&ldquo;Looking up at the same sky with you... always.&rdquo;</p>
+          <span className="sky-quote-author">&mdash; VISHNU</span>
         </section>
       </div>
 
