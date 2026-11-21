@@ -4,14 +4,14 @@ import HomeGrid from './components/HomeGrid';
 import SketchbookViewer from './components/SketchbookViewer';
 import Story from './components/Story';
 import Gift from './components/Gift';
+import DeskBuddy from './components/DeskBuddy';
 import './App.css';
 
 function App() {
-  // Screens: 'intro' (Door + Scanner + Lock PIN 2211) -> 'home' (Reference Image 1 Cards) -> 'sketchbook' / 'story' (Reference Image 2 Note) / 'gift'
+  // Screens: 'intro' (Door + Lock PIN 2211) -> 'home' -> 'sketchbook' / 'story' / 'gift'
   const [currentScreen, setCurrentScreen] = useState('intro');
 
   const handleIntroComplete = () => {
-    // After animation, open the reference image home page
     setCurrentScreen('home');
   };
 
@@ -43,6 +43,11 @@ function App() {
 
       {currentScreen === 'gift' && (
         <Gift onBack={handleBackToHome} />
+      )}
+
+      {/* Reaction Desk Buddy at bottom-left corner */}
+      {currentScreen !== 'intro' && (
+        <DeskBuddy />
       )}
     </div>
   );
