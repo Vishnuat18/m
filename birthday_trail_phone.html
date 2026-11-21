@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>Happy Birthday Maheswari &mdash; Interactive Birthday Trail Phone</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
@@ -10,7 +10,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Cinzel:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      margin: 0;
+      padding: 0;
+    }
     html, body {
       margin: 0;
       padding: 0;
@@ -25,19 +30,21 @@
     .font-serif-clean { font-family: 'Cormorant Garamond', Georgia, serif; }
     .font-hand { font-family: 'Caveat', cursive; }
 
-    /* Phone Shell */
+    /* Phone Shell Stage */
     .phone-stage {
       width: 100%;
       height: 100%;
+      height: 100dvh;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 12px;
+      overflow: hidden;
     }
     .phone-frame {
       position: relative;
       width: 100%;
-      max-width: 392px;
+      max-width: 396px;
       height: 100%;
       max-height: 844px;
       background: #09080e;
@@ -47,19 +54,35 @@
                   0 0 0 12px #2f2b3e;
       overflow: hidden;
       display: flex;
-      flex-col;
+      flex-direction: column;
     }
-    @media (max-width: 480px) {
-      .phone-stage { padding: 0; }
+
+    /* Mobile Viewport Optimization */
+    @media (max-width: 600px) {
+      .phone-stage {
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+      }
       .phone-frame {
         max-width: 100%;
         max-height: 100%;
+        width: 100%;
+        height: 100%;
         border-radius: 0;
         box-shadow: none;
+        border: none;
+      }
+      .dynamic-island {
+        display: none !important;
+      }
+      .desktop-helper-panel {
+        display: none !important;
       }
     }
 
-    /* Hardware Elements */
+    /* Hardware Elements (Desktop only) */
     .dynamic-island {
       position: absolute;
       top: 10px;
@@ -90,22 +113,52 @@
       border-radius: 50%;
     }
 
+    /* Top Status Bar */
+    #statusBar {
+      height: 48px;
+      padding: 0 16px;
+      padding-top: env(safe-area-inset-top, 0px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      flex-shrink: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      z-index: 30;
+      user-select: none;
+    }
+
     /* Carousel Homescreens */
+    .carousel-wrap {
+      flex: 1;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
     .phones-track {
       display: flex;
       width: 200%;
       height: 100%;
+      flex-shrink: 0;
       transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
     .phone-page {
       width: 50%;
+      min-width: 50%;
+      max-width: 50%;
       height: 100%;
       position: relative;
       display: flex;
       flex-direction: column;
+      flex-shrink: 0;
       background-size: cover;
       background-position: center;
       user-select: none;
+      overflow-y: auto;
     }
 
     /* App Icons & Styling */
@@ -114,27 +167,49 @@
       flex-direction: column;
       align-items: center;
       gap: 6px;
+      width: 100%;
+      min-width: 0;
       transition: transform 0.15s ease;
       cursor: pointer;
+      background: none;
+      border: none;
+      outline: none;
     }
     .app-icon-btn:active { transform: scale(0.92); }
     .app-tile {
-      width: 60px;
-      height: 60px;
-      border-radius: 17px;
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
       box-shadow: 0 8px 18px rgba(0, 0, 0, 0.45);
       position: relative;
+      flex-shrink: 0;
       overflow: hidden;
+    }
+    @media (max-width: 380px) {
+      .app-tile {
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+      }
+      .app-label {
+        font-size: 10px !important;
+      }
     }
     .app-label {
       font-size: 11px;
       font-weight: 500;
       color: #ffffff;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
       letter-spacing: -0.01em;
+      text-align: center;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
     }
     .badge-dot {
       position: absolute;
@@ -170,20 +245,13 @@
     .sym-glow {
       box-shadow: 0 0 35px rgba(239, 100, 97, 0.45);
     }
-
-    /* Glass Panels */
-    .glass-card {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(12px);
-    }
   </style>
 </head>
 <body>
   <div class="phone-stage">
 
-    <!-- Desktop Side Helper Pill (outside phone frame on large screens) -->
-    <div class="hidden xl:flex flex-col gap-3 w-[240px] shrink-0 text-slate-300 text-xs">
+    <!-- Desktop Side Helper Panel (hidden on mobile) -->
+    <div class="desktop-helper-panel hidden xl:flex flex-col gap-3 w-[240px] shrink-0 text-slate-300 text-xs mr-6">
       <div class="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
         <div class="text-amber-300 font-semibold uppercase tracking-wider text-[10px] mb-1">Maheswari's Birthday Phone</div>
         <p class="leading-relaxed text-slate-300/90">
@@ -216,7 +284,7 @@
     <!-- Main Smartphone Shell -->
     <div class="phone-frame" id="phoneFrame">
 
-      <!-- Dynamic Island (camera cutout) -->
+      <!-- Dynamic Island (camera cutout - desktop only) -->
       <div class="dynamic-island">
         <div class="island-camera"></div>
         <div class="island-sensor"></div>
@@ -242,7 +310,7 @@
         </div>
 
         <!-- Step 2: Atmospheric Title Screen -->
-        <div id="introStep2" class="hidden absolute inset-0 flex-col items-center justify-between py-14 px-6 bg-gradient-to-b from-[#181128] via-[#0d0917] to-[#050408]">
+        <div id="introStep2" class="hidden absolute inset-0 flex flex-col items-center justify-between py-14 px-6 bg-gradient-to-b from-[#181128] via-[#0d0917] to-[#050408]">
           <div class="relative z-10 text-[11px] uppercase tracking-[0.28em] text-amber-200/70 mt-6">
             A Special Birthday Celebration
           </div>
@@ -261,16 +329,16 @@
       </div>
 
       <!-- ==================== TOP STATUS BAR ==================== -->
-      <div id="statusBar" class="h-11 px-5 flex items-center justify-between bg-black/60 backdrop-blur-md text-white text-xs select-none z-30 shrink-0 border-b border-white/5">
+      <div id="statusBar">
         <div class="flex items-center gap-2">
           <svg class="w-3.5 h-3.5 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M5 12.55a11 11 0 0 1 14.08 0" stroke-linecap="round"/>
             <path d="M8.53 16.11a6 6 0 0 1 6.95 0" stroke-linecap="round"/>
             <circle cx="12" cy="20" r="1" fill="currentColor"/>
           </svg>
-          <span id="statusClock" class="text-[11px] text-slate-300 font-medium">11:21</span>
+          <span id="statusClock" class="text-[12px] text-slate-300 font-medium">11:21</span>
         </div>
-        <button id="statusPhoneTitleBtn" class="text-[12px] font-medium tracking-wide text-amber-200/90 hover:text-amber-100 transition truncate max-w-[170px]">
+        <button id="statusPhoneTitleBtn" class="text-[13px] font-semibold tracking-wide text-amber-200/90 hover:text-amber-100 transition truncate px-2">
           Maheswari's phone
         </button>
         <div class="flex items-center gap-2.5">
@@ -294,7 +362,7 @@
       </div>
 
       <!-- ==================== HOME SCREENS (DUAL PHONE CAROUSEL) ==================== -->
-      <div class="flex-1 relative overflow-hidden flex flex-col">
+      <div class="carousel-wrap">
         <div id="phonesTrack" class="phones-track">
 
           <!-- PHONE 1: Primary Birthday Phone (Maheswari's Main Home Screen) -->
@@ -302,7 +370,7 @@
             <!-- Subtle background ambient art -->
             <div class="absolute inset-0 opacity-25 pointer-events-none bg-[radial-gradient(circle_at_50%_30%,#a855f7_0%,transparent_60%)]"></div>
 
-            <div class="px-5 pt-8 pb-4 grid grid-cols-4 gap-y-6 gap-x-3 relative z-10">
+            <div class="px-4 pt-7 pb-4 grid grid-cols-4 gap-y-5 gap-x-2 relative z-10 w-full">
 
               <!-- 1. Scrapbook -->
               <button class="app-icon-btn" data-app="scrapbook">
@@ -404,14 +472,14 @@
             </div>
 
             <!-- Heartfelt dedication quote pill at bottom -->
-            <div class="mt-auto mb-14 px-5 flex flex-col items-center text-center">
-              <div class="p-3 rounded-2xl bg-black/40 border border-white/10 backdrop-blur-md max-w-xs">
-                <p class="text-[11px] text-amber-200/90 leading-relaxed font-serif-clean italic">
+            <div class="mt-auto mb-16 px-4 flex flex-col items-center text-center">
+              <div class="p-3.5 rounded-2xl bg-black/45 border border-white/10 backdrop-blur-md max-w-xs shadow-lg">
+                <p class="text-[12px] text-amber-200/95 leading-relaxed font-serif-clean italic">
                   &ldquo;Looking up at the same sky with you... always.&rdquo;
                 </p>
                 <div class="text-[10px] text-slate-400 mt-1 uppercase tracking-wider">&mdash; Vishnu</div>
               </div>
-              <button id="swipeToVaultHint" class="mt-3 px-4 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] text-slate-400 hover:text-white transition">
+              <button id="swipeToVaultHint" class="mt-3.5 px-4 py-1.5 rounded-full bg-white/10 border border-white/15 text-[11px] text-slate-300 hover:text-white transition">
                 Swipe right for Secret Vault &rarr;
               </button>
             </div>
@@ -421,7 +489,7 @@
           <div id="phonePage2" class="phone-page bg-gradient-to-b from-[#131b2e] via-[#090e1a] to-[#04060b]">
             <div class="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(circle_at_50%_40%,#38bdf8_0%,transparent_60%)]"></div>
 
-            <div class="px-5 pt-8 pb-4 grid grid-cols-4 gap-y-6 gap-x-3 relative z-10">
+            <div class="px-4 pt-7 pb-4 grid grid-cols-4 gap-y-5 gap-x-2 relative z-10 w-full">
 
               <!-- Phone Dialer -->
               <button class="app-icon-btn" data-app="phone">
@@ -495,8 +563,8 @@
             </div>
 
             <!-- Bottom Back Hint -->
-            <div class="mt-auto mb-14 px-5 flex justify-center">
-              <button id="swipeToPhone1Hint" class="px-4 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] text-slate-400 hover:text-white transition">
+            <div class="mt-auto mb-16 px-4 flex justify-center">
+              <button id="swipeToPhone1Hint" class="px-4 py-1.5 rounded-full bg-white/10 border border-white/15 text-[11px] text-slate-300 hover:text-white transition">
                 &larr; Swipe back to Primary Screen
               </button>
             </div>
@@ -504,7 +572,7 @@
         </div>
 
         <!-- Bottom Phone Switcher Indicator Bar -->
-        <div class="absolute bottom-4 left-0 right-0 flex items-center justify-center gap-2 pointer-events-auto z-20">
+        <div class="absolute bottom-4 left-0 right-0 flex items-center justify-center gap-2.5 pointer-events-auto z-20">
           <button id="dotPhone1" class="w-2.5 h-2.5 rounded-full transition bg-white" title="Primary Home Screen"></button>
           <button id="dotPhone2" class="w-2.5 h-2.5 rounded-full transition bg-white/30" title="Secret Vault"></button>
         </div>
@@ -2047,6 +2115,25 @@
           if (app) openApp(app);
         });
       });
+
+      // Native mobile touch swipe between home screen pages
+      let touchStartX = 0;
+      let touchStartY = 0;
+      const track = document.getElementById('phonesTrack');
+      if (track) {
+        track.addEventListener('touchstart', e => {
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+        track.addEventListener('touchend', e => {
+          const dx = e.changedTouches[0].clientX - touchStartX;
+          const dy = e.changedTouches[0].clientY - touchStartY;
+          if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+            if (dx < 0 && currentPhone === 0) switchPhone(1);
+            else if (dx > 0 && currentPhone === 1) switchPhone(0);
+          }
+        }, { passive: true });
+      }
 
       // Clock
       function updateClock() {
