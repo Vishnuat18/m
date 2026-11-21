@@ -1,0 +1,2070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Happy Birthday Maheswari &mdash; Interactive Birthday Trail Phone</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Cinzel:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 20%, #171324 0%, #08070d 80%);
+      color: #f3f4f6;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow: hidden;
+    }
+    .font-title { font-family: 'Cinzel', Georgia, serif; }
+    .font-serif-clean { font-family: 'Cormorant Garamond', Georgia, serif; }
+    .font-hand { font-family: 'Caveat', cursive; }
+
+    /* Phone Shell */
+    .phone-stage {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+    .phone-frame {
+      position: relative;
+      width: 100%;
+      max-width: 392px;
+      height: 100%;
+      max-height: 844px;
+      background: #09080e;
+      border-radius: 46px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9),
+                  0 0 0 10px #1e1b29,
+                  0 0 0 12px #2f2b3e;
+      overflow: hidden;
+      display: flex;
+      flex-col;
+    }
+    @media (max-width: 480px) {
+      .phone-stage { padding: 0; }
+      .phone-frame {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
+
+    /* Hardware Elements */
+    .dynamic-island {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 28px;
+      background: #000;
+      border-radius: 20px;
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      pointer-events: none;
+    }
+    .island-camera {
+      width: 10px;
+      height: 10px;
+      background: #0b0f19;
+      border-radius: 50%;
+      border: 1.5px solid #1c2438;
+    }
+    .island-sensor {
+      width: 7px;
+      height: 7px;
+      background: #10141f;
+      border-radius: 50%;
+    }
+
+    /* Carousel Homescreens */
+    .phones-track {
+      display: flex;
+      width: 200%;
+      height: 100%;
+      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .phone-page {
+      width: 50%;
+      height: 100%;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      background-size: cover;
+      background-position: center;
+      user-select: none;
+    }
+
+    /* App Icons & Styling */
+    .app-icon-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.15s ease;
+      cursor: pointer;
+    }
+    .app-icon-btn:active { transform: scale(0.92); }
+    .app-tile {
+      width: 60px;
+      height: 60px;
+      border-radius: 17px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.45);
+      position: relative;
+      overflow: hidden;
+    }
+    .app-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: #ffffff;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+      letter-spacing: -0.01em;
+    }
+    .badge-dot {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 4px;
+      border-radius: 9px;
+      background: #ef4444;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #000;
+    }
+
+    /* Parchment styling for Diary */
+    .parchment-bg {
+      background-color: #f7efdc;
+      background-image: radial-gradient(#d6c29c 1px, transparent 1px);
+      background-size: 18px 18px;
+      color: #2b1f13;
+    }
+
+    /* Custom Scrollbar */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Concentric game glow */
+    .sym-glow {
+      box-shadow: 0 0 35px rgba(239, 100, 97, 0.45);
+    }
+
+    /* Glass Panels */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-stage">
+
+    <!-- Desktop Side Helper Pill (outside phone frame on large screens) -->
+    <div class="hidden xl:flex flex-col gap-3 w-[240px] shrink-0 text-slate-300 text-xs">
+      <div class="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
+        <div class="text-amber-300 font-semibold uppercase tracking-wider text-[10px] mb-1">Maheswari's Birthday Phone</div>
+        <p class="leading-relaxed text-slate-300/90">
+          Swipe left/right or tap the switcher dots below to explore all apps, memories, and secret trail clues.
+        </p>
+        <div class="mt-3 pt-3 border-t border-white/10 flex flex-col gap-2">
+          <button id="deskSwitchBtn" class="w-full py-2 px-3 rounded-xl bg-white/10 hover:bg-white/15 text-white font-medium flex items-center justify-between transition">
+            <span>Switch Screens</span>
+            <span class="text-amber-300">&harr;</span>
+          </button>
+          <button id="deskScrapbookBtn" class="w-full py-2 px-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 font-medium flex items-center justify-between transition">
+            <span>Open Scrapbook</span>
+            <span>&rarr;</span>
+          </button>
+          <button id="deskReplayIntroBtn" class="w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 flex items-center justify-between transition">
+            <span>Replay Intro</span>
+            <span>&#8634;</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10 text-[11px] space-y-1.5 text-slate-400">
+        <div class="text-white font-medium">Quick Keys</div>
+        <div>&bull; Passcode: <span class="text-amber-300 font-mono">2211</span></div>
+        <div>&bull; Recipient: <span class="text-amber-200">Maheswari</span></div>
+        <div>&bull; Sender: <span class="text-amber-200">Vishnu (Mama)</span></div>
+      </div>
+    </div>
+
+    <!-- Main Smartphone Shell -->
+    <div class="phone-frame" id="phoneFrame">
+
+      <!-- Dynamic Island (camera cutout) -->
+      <div class="dynamic-island">
+        <div class="island-camera"></div>
+        <div class="island-sensor"></div>
+      </div>
+
+      <!-- ==================== INTRO / SPLASH OVERLAY ==================== -->
+      <div id="introOverlay" class="absolute inset-0 z-50 bg-[#07070b] flex flex-col items-center justify-center text-center">
+        <!-- Step 1: Headphones prompt -->
+        <div id="introStep1" class="flex flex-col items-center justify-center px-8">
+          <svg class="w-20 h-20 text-amber-300/80 mb-6" viewBox="0 0 64 64" fill="none">
+            <path d="M12 36V30C12 18.954 20.954 10 32 10C43.046 10 52 18.954 52 30V36" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <rect x="8" y="34" width="11" height="19" rx="5.5" fill="currentColor"/>
+            <rect x="45" y="34" width="11" height="19" rx="5.5" fill="currentColor"/>
+          </svg>
+          <h3 class="text-white text-xl font-serif-clean tracking-wider mb-2">Happy Birthday Maheswari</h3>
+          <p class="text-zinc-300 text-sm font-normal tracking-wide leading-relaxed mb-8">
+            Put on headphones for sweet sound effects &amp; chime melodies.
+          </p>
+          <button id="startExperienceBtn" class="px-8 py-3 rounded-full bg-amber-500/20 border border-amber-400/50 text-amber-200 text-sm font-semibold tracking-wide hover:bg-amber-500/30 active:scale-95 transition">
+            Tap to Begin
+          </button>
+          <button id="skipIntroBtn" class="mt-4 text-xs text-zinc-500 hover:text-zinc-300 transition">Skip Intro</button>
+        </div>
+
+        <!-- Step 2: Atmospheric Title Screen -->
+        <div id="introStep2" class="hidden absolute inset-0 flex-col items-center justify-between py-14 px-6 bg-gradient-to-b from-[#181128] via-[#0d0917] to-[#050408]">
+          <div class="relative z-10 text-[11px] uppercase tracking-[0.28em] text-amber-200/70 mt-6">
+            A Special Birthday Celebration
+          </div>
+          <div class="relative z-10 flex flex-col items-center mb-8">
+            <h1 id="splashTitleText" class="font-title text-3xl leading-snug text-[#e5c98f] drop-shadow-[0_4px_24px_rgba(229,201,143,0.35)] text-center">
+              Happy Birthday<br/>Maheswari
+            </h1>
+            <p id="splashSubtitleText" class="mt-3 text-xs text-amber-100/80 tracking-widest uppercase">
+              Unlock the memories inside
+            </p>
+            <button id="enterPhoneBtn" class="mt-8 px-9 py-3 rounded-full bg-[#d8b773]/20 border border-[#d8b773]/60 text-[#f5e6cc] font-medium text-xs tracking-widest uppercase hover:bg-[#d8b773]/30 active:scale-95 transition shadow-lg">
+              Unlock Phone
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== TOP STATUS BAR ==================== -->
+      <div id="statusBar" class="h-11 px-5 flex items-center justify-between bg-black/60 backdrop-blur-md text-white text-xs select-none z-30 shrink-0 border-b border-white/5">
+        <div class="flex items-center gap-2">
+          <svg class="w-3.5 h-3.5 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12.55a11 11 0 0 1 14.08 0" stroke-linecap="round"/>
+            <path d="M8.53 16.11a6 6 0 0 1 6.95 0" stroke-linecap="round"/>
+            <circle cx="12" cy="20" r="1" fill="currentColor"/>
+          </svg>
+          <span id="statusClock" class="text-[11px] text-slate-300 font-medium">11:21</span>
+        </div>
+        <button id="statusPhoneTitleBtn" class="text-[12px] font-medium tracking-wide text-amber-200/90 hover:text-amber-100 transition truncate max-w-[170px]">
+          Maheswari's phone
+        </button>
+        <div class="flex items-center gap-2.5">
+          <button id="quickAudioBtn" title="Toggle Music" class="text-slate-300 hover:text-amber-300 transition">
+            <svg id="audioOnIcon" class="w-4 h-4 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 18V5l12-2v13"/>
+              <circle cx="6" cy="18" r="3" fill="currentColor"/>
+              <circle cx="18" cy="16" r="3" fill="currentColor"/>
+            </svg>
+            <svg id="audioOffIcon" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="1" y1="1" x2="23" y2="23"/>
+              <path d="M9 9v9"/>
+              <circle cx="6" cy="18" r="3"/>
+              <path d="M12 5l9-2v9"/>
+            </svg>
+          </button>
+          <span id="statusClueBadge" class="px-1.5 py-0.5 rounded bg-white/10 border border-white/20 text-[10px] font-bold text-amber-300">
+            2211
+          </span>
+        </div>
+      </div>
+
+      <!-- ==================== HOME SCREENS (DUAL PHONE CAROUSEL) ==================== -->
+      <div class="flex-1 relative overflow-hidden flex flex-col">
+        <div id="phonesTrack" class="phones-track">
+
+          <!-- PHONE 1: Primary Birthday Phone (Maheswari's Main Home Screen) -->
+          <div id="phonePage1" class="phone-page bg-gradient-to-b from-[#231838] via-[#120d1f] to-[#07050c]">
+            <!-- Subtle background ambient art -->
+            <div class="absolute inset-0 opacity-25 pointer-events-none bg-[radial-gradient(circle_at_50%_30%,#a855f7_0%,transparent_60%)]"></div>
+
+            <div class="px-5 pt-8 pb-4 grid grid-cols-4 gap-y-6 gap-x-3 relative z-10">
+
+              <!-- 1. Scrapbook -->
+              <button class="app-icon-btn" data-app="scrapbook">
+                <div class="app-tile bg-gradient-to-tr from-[#7c4d32] to-[#c89666] text-white">
+                  <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                    <path d="M8 7h8m-8 4h5"/>
+                  </svg>
+                </div>
+                <span class="app-label">Scrapbook</span>
+              </button>
+
+              <!-- 2. Notes -->
+              <button class="app-icon-btn" data-app="notes">
+                <div class="app-tile bg-gradient-to-tr from-[#3b2d54] to-[#7952b3] text-white">
+                  <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10 9 9 9 8 9"/>
+                  </svg>
+                </div>
+                <span class="app-label">Notes</span>
+              </button>
+
+              <!-- 3. Gallery -->
+              <button class="app-icon-btn" data-app="gallery">
+                <div class="app-tile bg-gradient-to-tr from-[#1e293b] to-[#38bdf8] text-white">
+                  <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21 15 16 10 5 21"/>
+                  </svg>
+                </div>
+                <span class="app-label">Gallery</span>
+              </button>
+
+              <!-- 4. Moments (renamed from Pixabowl) -->
+              <button class="app-icon-btn" data-app="pixabowl">
+                <div class="app-tile bg-gradient-to-tr from-[#6b21a8] to-[#ec4899] text-white">
+                  <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                    <circle cx="12" cy="13" r="4"/>
+                  </svg>
+                </div>
+                <span class="app-label">Moments</span>
+              </button>
+
+              <!-- 5. Game -->
+              <button class="app-icon-btn" data-app="symmetry">
+                <div class="app-tile bg-gradient-to-tr from-[#181829] to-[#ef6461] text-white border border-white/10">
+                  <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="6" width="20" height="12" rx="3"/>
+                    <path d="M6 12h4m-2-2v4"/>
+                    <circle cx="15" cy="10" r="1" fill="currentColor"/>
+                    <circle cx="18" cy="13" r="1" fill="currentColor"/>
+                  </svg>
+                </div>
+                <span class="app-label">Game</span>
+              </button>
+
+              <!-- 6. Messages -->
+              <button class="app-icon-btn" data-app="messages">
+                <div class="app-tile bg-gradient-to-tr from-[#1d4ed8] to-[#60a5fa] text-white">
+                  <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                  </svg>
+                  <span id="msgUnreadBadge" class="badge-dot">2</span>
+                </div>
+                <span class="app-label">Messages</span>
+              </button>
+
+              <!-- 7. Diary -->
+              <button class="app-icon-btn" data-app="diary">
+                <div class="app-tile bg-gradient-to-tr from-[#452d21] to-[#a06b49] text-[#fef3c7]">
+                  <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                  </svg>
+                  <span id="diaryLockedBadge" class="badge-dot bg-amber-500">4</span>
+                </div>
+                <span class="app-label">Diary</span>
+              </button>
+
+              <!-- 8. Settings -->
+              <button class="app-icon-btn" data-app="settings">
+                <div class="app-tile bg-gradient-to-tr from-[#1e1e2d] to-[#475569] text-white border border-white/10">
+                  <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                  </svg>
+                </div>
+                <span class="app-label">Settings</span>
+              </button>
+            </div>
+
+            <!-- Heartfelt dedication quote pill at bottom -->
+            <div class="mt-auto mb-14 px-5 flex flex-col items-center text-center">
+              <div class="p-3 rounded-2xl bg-black/40 border border-white/10 backdrop-blur-md max-w-xs">
+                <p class="text-[11px] text-amber-200/90 leading-relaxed font-serif-clean italic">
+                  &ldquo;Looking up at the same sky with you... always.&rdquo;
+                </p>
+                <div class="text-[10px] text-slate-400 mt-1 uppercase tracking-wider">&mdash; Vishnu</div>
+              </div>
+              <button id="swipeToVaultHint" class="mt-3 px-4 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] text-slate-400 hover:text-white transition">
+                Swipe right for Secret Vault &rarr;
+              </button>
+            </div>
+          </div>
+
+          <!-- PHONE 2: Companion / Secret Vault Phone -->
+          <div id="phonePage2" class="phone-page bg-gradient-to-b from-[#131b2e] via-[#090e1a] to-[#04060b]">
+            <div class="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(circle_at_50%_40%,#38bdf8_0%,transparent_60%)]"></div>
+
+            <div class="px-5 pt-8 pb-4 grid grid-cols-4 gap-y-6 gap-x-3 relative z-10">
+
+              <!-- Phone Dialer -->
+              <button class="app-icon-btn" data-app="phone">
+                <div class="app-tile bg-gradient-to-tr from-[#15803d] to-[#4ade80] text-white">
+                  <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                  </svg>
+                </div>
+                <span class="app-label">Phone</span>
+              </button>
+
+              <!-- Mail -->
+              <button class="app-icon-btn" data-app="mail">
+                <div class="app-tile bg-gradient-to-tr from-[#991b1b] to-[#f87171] text-white">
+                  <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                  </svg>
+                  <span id="mailUnreadBadge" class="badge-dot">3</span>
+                </div>
+                <span class="app-label">Mail</span>
+              </button>
+
+              <!-- Calculator -->
+              <button class="app-icon-btn" data-app="calculator">
+                <div class="app-tile bg-[#1f2937] border border-white/10 text-white">
+                  <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="4" y="2" width="16" height="20" rx="2"/>
+                    <line x1="8" y1="6" x2="16" y2="6"/>
+                    <line x1="16" y1="14" x2="16" y2="18"/>
+                    <path d="M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M8 18h.01M12 18h.01"/>
+                  </svg>
+                </div>
+                <span class="app-label">Calculator</span>
+              </button>
+
+              <!-- Browser -->
+              <button class="app-icon-btn" data-app="browser">
+                <div class="app-tile bg-gradient-to-tr from-[#0369a1] to-[#38bdf8] text-white">
+                  <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="2" y1="12" x2="22" y2="12"/>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                  </svg>
+                </div>
+                <span class="app-label">Browser</span>
+              </button>
+
+              <!-- Archive -->
+              <button class="app-icon-btn" data-app="archive">
+                <div class="app-tile bg-[#27272a] border border-white/10 text-white">
+                  <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="21 8 21 21 3 21 3 8"/>
+                    <rect x="1" y="3" width="22" height="5"/>
+                    <line x1="10" y1="12" x2="14" y2="12"/>
+                  </svg>
+                </div>
+                <span class="app-label">Archive</span>
+              </button>
+
+              <!-- Gift Studio -->
+              <button class="app-icon-btn" data-app="studio">
+                <div class="app-tile bg-gradient-to-tr from-[#b45309] to-[#fbbf24] text-black">
+                  <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 20h9"/>
+                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                  </svg>
+                </div>
+                <span class="app-label">Gift Studio</span>
+              </button>
+            </div>
+
+            <!-- Bottom Back Hint -->
+            <div class="mt-auto mb-14 px-5 flex justify-center">
+              <button id="swipeToPhone1Hint" class="px-4 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] text-slate-400 hover:text-white transition">
+                &larr; Swipe back to Primary Screen
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Phone Switcher Indicator Bar -->
+        <div class="absolute bottom-4 left-0 right-0 flex items-center justify-center gap-2 pointer-events-auto z-20">
+          <button id="dotPhone1" class="w-2.5 h-2.5 rounded-full transition bg-white" title="Primary Home Screen"></button>
+          <button id="dotPhone2" class="w-2.5 h-2.5 rounded-full transition bg-white/30" title="Secret Vault"></button>
+        </div>
+      </div>
+
+      <!-- ==================== APP FULL VIEW OVERLAY CONTAINER ==================== -->
+      <div id="appOverlay" class="hidden absolute inset-0 z-40 bg-[#0a0a0f] flex flex-col">
+        <!-- Rendered dynamically by active app -->
+      </div>
+
+      <!-- ==================== GENERIC MODAL DIALOG CONTAINER ==================== -->
+      <div id="modalContainer" class="hidden absolute inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div id="modalBox" class="w-full max-w-xs rounded-2xl bg-[#181926] border border-white/15 p-5 text-white shadow-2xl relative">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- Global Toast Alert -->
+      <div id="globalToast" class="pointer-events-none fixed bottom-8 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-black/90 border border-amber-400/40 text-amber-200 text-xs shadow-xl opacity-0 transition-opacity duration-300">
+        Notification
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================================
+       1. DATA MODEL FOR MAHESWARI'S BIRTHDAY TRAIL PHONE
+       ========================================================================= */
+    const STORAGE_KEY = 'birthday_trail_maheswari_v2';
+
+    const STORY_CHAPTERS = [
+      {
+        letter: "M",
+        title: "Making My First Glance at You",
+        text: "Yes, Namma First meet indha College RPSIT — an unexpected beginning nu sollalamaa...? First 2-3 weeks en kannulaye padadha indha ponnu epudraaa enkitaa pesuunaa... ivan ponnunga kitaaye pesamatan.\n\nNamma thodakame oru chinna sandaii kutty sorry oda, lab la nadandha andha incident. But enaku konja bayam, epdi da pesusradhu, hurt panra mari pesiten, how it could be? But You accepted my sorry.\n\nAnd then daily una class la gavanichite, unaiyaa okandhu nalla sight adhichiruken. Apo nee enaku thaniyaa therinja. I didn't know you'd become my favourite chapter. But something in my chest already knew — this person matters."
+      },
+      {
+        letter: "A",
+        title: "Always Laughing Like the World Was Ours",
+        text: "This chapter is about ennaiya sirika vechiruka paithiyam mari. Neraiya phone ah paathu text panitu sirichitu irupanga — idhe nee enaku panirukaa most of the times.\n\nClass la nee oru mari 2sec paathutu siripaa, adhu ipo kooda inum maarala, that is something magical. And nee cringe thanama neraiya comedy panuva chatting la, aana nalla loosu mari siripa.\n\nMall la un kaal vilundhadhu — a man's ego lost in your eyes. Apo nee sirichaa (enaku apo unaiya hug pannumnu thonichu). Nee epovum sirichitu irukanum, that is all I ever want."
+      },
+      {
+        letter: "H",
+        title: "Holding Feelings I Couldn't Say Aloud",
+        text: "Oru friend ah irundhu konjaa heart crush aaye Lovee ah maarunadhu. Indha feel enakuu romba vandhadhu namma bus la travel pannumbothu unnoda kai ah first time thotta, pudhichita, Holded Tightly — apo thonunadhu un kai aah vida koodadhunu.\n\nUnaa saree la paakum bothu, its nothing to say, its perfect. And enaaiya force panii dii solla vechadhu, un chellama ma.. nu koopudradhu, aproo nicknames: Mahi.., Kolandha, Ammu, Bun uhh, Thakkali, thoppa kutty, koranguu... Na unakaga neraiya nickname vechirukaa, in the top of the list Kolandha di nee.\n\nMall la namma onna ice cream saptuu unnoda last tip of cone na sapudradhu, its kind of love."
+      },
+      {
+        letter: "E",
+        title: "Every Day Felt Like the Beginning of Forever",
+        text: "This chapter turns Maheswari to My Ammu...\n\nIndha love starts from oru video call. Na aniku un kita kiss pannuviya nu ketadhu, nee adhuku oru mari reaction pannitu aama nu sonnadhu — so lovely moment.\n\nNamma love confess panna andha special day. You told about your past, and shared my past, and that brings the trust about you — quiet beautiful about LOVE. Video calls, silent calls, virtual kisses.\n\nEnaku romba favourite part was nee enaiya Mamaaa.. nu kupudradhu, na unnaiya Pondatii nu solradhu. Daily kutty sandaii, but ena dha sanda potalum na unaa samadhanam panna try paniruken, cause thoonguradhuku munnadi sandhosama thoonganum."
+      },
+      {
+        letter: "S",
+        title: "Storms We Walked Into Without Knowing",
+        text: "Ella page um romba happy ah irukadhu la. Adhe mari namakula neraiya sandaii. Namma endha alavuku love pannomo adhe alavuku neraiya sandaii dha potrukom, but andha sandai elamm ipo nenachaa silly ah iruku.\n\nBut enaku over possessive, overcaring, overthinking — idhula ennoda mind la unaku na highest priority kudutha. But edhu na pannano adhu ennaiya regret panna vechadhu..."
+      },
+      {
+        letter: "W",
+        title: "Wounds That Wrote Themselves in Silence",
+        text: "En nee enkita romba open ah irundhum na unaku freedom kuduthadhu kedaiyadhu. What I did to you is absolutely wrong and obviously shameful — that ended with us breaking apart. Idhu namma worst chapter in my life.\n\nNaa unnaiya neraiya thitiruken, vulgar ah pesiruken. Ipo nenaikumbothu oru ponnu kita behave pannadhu enaku romba asingama iruku. I felt very bad for you, and I regret it with all my heart."
+      },
+      {
+        letter: "A",
+        title: "Apart — But Never Fully Gone",
+        text: "That period was the hardest time for me. Unkita pesama enaku romba kastama irundhadhu. Ennala seriyaa thoongamudiyala, edhukune theriyama una nenachu aluven. Na veetlaye irundhen, veliya kooda polaa.\n\nSongs and memories were all I had in the late nights. Enaku unkita epdi pesuradhunu therla — pesuna thituduva ilaa pudikalnu soliduvanu na pesa kooda try panla. But I learnt from this chapter that edhume nerandharm illa, nee enaku puriya vechadhuku thanks."
+      },
+      {
+        letter: "R",
+        title: "Returning to Where I Always Belonged",
+        text: "Namma thirumba pesa thotangunadhum again chat la dha. But nee normal ah again pesunadhu was such a surprise. Indha universe la namaku kedaikumnu irundha adhu kandipaa kedaikum.\n\nAnyway, we could be great as friends, or even my crush. Ennoda heart la idhuku melaa yaarukum idham kuduka poradhila — that is the respect I will forever give you. Nee unnoda vazhkaila nalla vazhanum, sirichitute irukanum. That is enough for me."
+      },
+      {
+        letter: "I",
+        title: "Infinity — Because Some Stories Don't End",
+        text: "If I failed as a friend, I'm sorry.\nIf I failed as a Boyfriend, I'm sorry.\nSorry for hurting you.\n\nSometimes I smile for no reason — it's because of you.\nYou are the best thing that has ever happened in my life. You are perfect.\n\nI love you, Kolandha.\nI still love you.\nYou are always special in my life.\nI'm yours, even if you're not mine."
+      }
+    ];
+
+    const DEFAULT_GALLERY = [
+      { id: 'g1', dateGroup: 'Special Moments', title: 'Grace & Smile', caption: 'Your beautiful smile that brightens up every single day.', img: 'assets/scrapbook/slot-1.jpg', hidden: false },
+      { id: 'g2', dateGroup: 'Special Moments', title: 'Looking Up', caption: 'Looking up at the same sky with you... always.', img: 'assets/scrapbook/slot-2.jpg', hidden: false },
+      { id: 'g3', dateGroup: 'Special Moments', title: 'Pure Joy', caption: 'Laughing like the world is ours.', img: 'assets/scrapbook/slot-3.jpg', hidden: false },
+      { id: 'g4', dateGroup: 'Special Moments', title: 'Elegance', caption: 'Quiet perfection in every pose.', img: 'assets/scrapbook/slot-4.jpg', hidden: false },
+      { id: 'g5', dateGroup: 'Special Moments', title: 'Warmth', caption: 'The warmth you bring wherever you walk.', img: 'assets/scrapbook/slot-5.jpg', hidden: false },
+      { id: 'g6', dateGroup: 'Special Moments', title: 'Gentle Breeze', caption: 'A moment frozen in time.', img: 'assets/scrapbook/slot-6.jpg', hidden: false },
+      { id: 'g7', dateGroup: 'Special Moments', title: 'Golden Light', caption: 'Shining brighter than the sunset.', img: 'assets/scrapbook/slot-7.jpg', hidden: false },
+      { id: 'g8', dateGroup: 'Special Moments', title: 'Playful Heart', caption: 'The smile that melts my heart every single time.', img: 'assets/scrapbook/slot-8.jpg', hidden: false },
+      { id: 'g9', dateGroup: 'Special Moments', title: 'Serenity', caption: 'Peace, strength, and happiness always for you.', img: 'assets/scrapbook/slot-9.jpg', hidden: false },
+      { id: 'g10', dateGroup: 'College & Campus Days', title: 'College Days', caption: 'RPSIT memories where our story first began.', img: 'assets/scrapbook/slot-10.jpg', hidden: false },
+      { id: 'g11', dateGroup: 'College & Campus Days', title: 'Classroom Glance', caption: 'Sitting in class and watching you smile.', img: 'assets/scrapbook/slot-11.jpg', hidden: false },
+      { id: 'g12', dateGroup: 'College & Campus Days', title: 'Afternoon Breeze', caption: 'Simple days that turned into our favorite memories.', img: 'assets/scrapbook/slot-12.jpg', hidden: false },
+      { id: 'g13', dateGroup: 'College & Campus Days', title: 'Shared Laughter', caption: 'Conversations that made hours feel like seconds.', img: 'assets/scrapbook/slot-13.jpg', hidden: false },
+      { id: 'g14', dateGroup: 'College & Campus Days', title: 'Quiet Steps', caption: 'Walking side by side without a care in the world.', img: 'assets/scrapbook/slot-14.jpg', hidden: false },
+      { id: 'g15', dateGroup: 'College & Campus Days', title: 'Sunshine Hours', caption: 'Every afternoon felt brighter with you.', img: 'assets/scrapbook/slot-15.jpg', hidden: false },
+      { id: 'g16', dateGroup: 'College & Campus Days', title: 'Unfiltered Joy', caption: 'True happiness in simple moments.', img: 'assets/scrapbook/slot-16.jpg', hidden: false },
+      { id: 'g17', dateGroup: 'College & Campus Days', title: 'The Look', caption: 'That magical 2-second glance across the room.', img: 'assets/scrapbook/slot-17.jpg', hidden: false },
+      { id: 'g18', dateGroup: 'Laughs & Little Things', title: 'Sweet Chaos', caption: 'Chatting and laughing like absolute kids.', img: 'assets/scrapbook/slot-18.jpg', hidden: false },
+      { id: 'g19', dateGroup: 'Laughs & Little Things', title: 'Mall Adventures', caption: 'Ice cream cones and holding hands tightly.', img: 'assets/scrapbook/slot-19.jpg', hidden: false },
+      { id: 'g20', dateGroup: 'Laughs & Little Things', title: 'Endless Chats', caption: 'Late-night phone calls that kept us smiling.', img: 'assets/scrapbook/slot-20.jpg', hidden: false },
+      { id: 'g21', dateGroup: 'Laughs & Little Things', title: 'Bus Journeys', caption: 'Looking out the window, knowing this person matters.', img: 'assets/scrapbook/slot-21.jpg', hidden: false },
+      { id: 'g22', dateGroup: 'Laughs & Little Things', title: 'Secret Nicknames', caption: 'Kolandha, Ammu, Bun, Thakkali... forever special.', img: 'assets/scrapbook/slot-22.jpg', hidden: false },
+      { id: 'g23', dateGroup: 'Laughs & Little Things', title: 'Candid Moments', caption: 'Unplanned, unscripted, and perfectly you.', img: 'assets/scrapbook/slot-23.jpg', hidden: false },
+      { id: 'g24', dateGroup: 'Favorite Memories', title: 'A Special Day', caption: 'Trust, love, and understanding that stays forever.', img: 'assets/scrapbook/slot-24.jpg', hidden: false },
+      { id: 'g25', dateGroup: 'Favorite Memories', title: 'Together', caption: 'Every storm taught us the true meaning of caring.', img: 'assets/scrapbook/slot-25.jpg', hidden: false },
+      { id: 'g26', dateGroup: 'Favorite Memories', title: 'Unbreakable Bond', caption: 'Time and distance can never change the respect I hold.', img: 'assets/scrapbook/slot-26.jpg', hidden: false },
+      { id: 'g27', dateGroup: 'Favorite Memories', title: 'Return to Smiles', caption: 'Surprise conversations and warmth renewed.', img: 'assets/scrapbook/slot-27.jpg', hidden: false },
+      { id: 'g28', dateGroup: 'Favorite Memories', title: 'Bright Future', caption: 'Wishing you a life filled with joy, peace, and dreams.', img: 'assets/scrapbook/slot-28.jpg', hidden: false },
+      { id: 'g29', dateGroup: 'Favorite Memories', title: 'Endless Smile', caption: 'You are the best thing that ever happened in my life.', img: 'assets/scrapbook/slot-29.jpg', hidden: false },
+      { id: 'g30', dateGroup: 'Favorite Memories', title: 'Heartfelt Wishes', caption: 'Always special, always cherished.', img: 'assets/scrapbook/slot-30.jpg', hidden: false },
+      { id: 'g31', dateGroup: 'Favorite Memories', title: 'Infinity', caption: 'Some stories do not end; they live in our hearts.', img: 'assets/scrapbook/slot-31.jpg', hidden: false },
+      { id: 'g32', dateGroup: 'Favorite Memories', title: 'Forever Special', caption: 'To Maheswari, with all my love.', img: 'assets/scrapbook/slot-32.jpg', hidden: false },
+      { id: 'g33', dateGroup: 'Hidden Vault', title: 'Secret Birthday Portrait', caption: 'You found the secret photo! Passcode: 2211.', img: 'assets/scrapbook/slot-33.jpg', hidden: true }
+    ];
+
+    const DEFAULT_GIFT_DATA = {
+      meta: {
+        splashTitle: 'Happy Birthday\nMaheswari',
+        splashSubtitle: 'Unlock the memories inside',
+        recipientName: 'Maheswari',
+        senderName: 'Vishnu',
+        phone1Title: "Maheswari's phone",
+        phone2Title: "Secret Vault",
+        secretPin: '2211',
+        birthdayDate: 'November 22',
+        dedication: 'Handcrafted with love for Maheswari. Dedicated to our story notes, 22-page digital sketchbook, and beautiful memories together. Peace, strength, and happiness always for you, Kolandha!'
+      },
+      messages: [
+        {
+          id: 'vishnu',
+          name: 'Vishnu (Mama)',
+          avatar: 'V',
+          color: '#8b5cf6',
+          unread: true,
+          history: [
+            { from: 'them', text: 'Happy Birthday Ammu!! I made this phone trail especially for you.', time: '11:16 PM' },
+            { from: 'them', text: 'Explore Scrapbook, Notes (our story), Gallery, Moments, and the Game. Clue: Passcode is 2211!', time: '11:18 PM' }
+          ],
+          choices: [
+            {
+              label: "Thank you Mama! Which app should I open first?",
+              reply: "Start with Scrapbook to flip through all our 22 photo pages, then open Notes to read Chapter M to I!"
+            },
+            {
+              label: "Where are the secret birthday letters?",
+              reply: "Check Diary! Page 1 asks what word started our friendship after the lab incident. (Hint: sorry)"
+            }
+          ]
+        },
+        {
+          id: 'trail',
+          name: 'Memory Trail Clues',
+          avatar: 'T',
+          color: '#d97706',
+          unread: true,
+          history: [
+            { from: 'them', text: 'Welcome to the Birthday Trail for Maheswari.', time: '11:00 PM' },
+            { from: 'them', text: 'Solve the Diary riddles: Lab sorry, holding hands tightly, Kolandha nickname, and passcode 2211!', time: '11:02 PM' }
+          ],
+          choices: [
+            {
+              label: "I love solving these riddles!",
+              reply: "You will unlock every single chapter in no time. Check the eye icon in Gallery for a secret photo too!"
+            }
+          ]
+        }
+      ],
+      emails: [
+        {
+          id: 'e1',
+          sender: 'Birthday Wishes Dispatch',
+          subject: 'A Special Day for Maheswari',
+          time: 'Today',
+          unread: true,
+          body: 'Dear Maheswari,\n\nWishing you a birthday filled with endless laughter, gentle peace, and all the dreams your heart holds.\n\nFrom our first meeting at RPSIT to every laugh and late-night conversation, you will always be the most cherished chapter in my life.\n\nHappy Birthday Ammu!'
+        },
+        {
+          id: 'e2',
+          sender: 'Vishnu',
+          subject: 'Forever Special To Me',
+          time: 'Today',
+          unread: true,
+          body: 'Pondatii,\n\nWhatever storms came our way, nothing has ever diminished the love and respect I hold for you. Stay happy, stay smiling, and know that you are deeply cared for.\n\nEnjoy your Scrapbook, Notes, and this interactive phone!'
+        }
+      ],
+      gallery: DEFAULT_GALLERY,
+      moments: [
+        {
+          id: 'p1',
+          handle: '@maheswari_birthday',
+          location: 'Special Celebration',
+          img: 'assets/scrapbook/slot-1.jpg',
+          caption: 'Another trip around the sun! Wishing you the happiest birthday, Ammu. Keep shining bright.',
+          likes: 54,
+          liked: true,
+          saved: true,
+          comments: [
+            { user: 'vishnu', text: 'The most beautiful smile in the entire universe.' },
+            { user: 'mama', text: 'Happy Birthday Pondatii! Always keep smiling.' }
+          ]
+        },
+        {
+          id: 'p2',
+          handle: '@maheswari_birthday',
+          location: 'RPSIT College Memories',
+          img: 'assets/scrapbook/slot-10.jpg',
+          caption: 'Where it all began. The accidental start, the lab sorry, and the glance across the room.',
+          likes: 48,
+          liked: true,
+          saved: false,
+          comments: [
+            { user: 'vishnu', text: 'Did not know back then you would become my favorite chapter.' }
+          ]
+        },
+        {
+          id: 'p3',
+          handle: '@maheswari_birthday',
+          location: 'Pure Laughter',
+          img: 'assets/scrapbook/slot-8.jpg',
+          caption: 'Unfiltered joy and pure laughter. Looking up at the same sky with you... always.',
+          likes: 62,
+          liked: false,
+          saved: true,
+          comments: [
+            { user: 'ammu', text: 'Such sweet memories!' }
+          ]
+        },
+        {
+          id: 'p4',
+          handle: '@maheswari_birthday',
+          location: 'Forever & Always',
+          img: 'assets/scrapbook/slot-33.jpg',
+          caption: 'Infinity — because some stories never end. Special birthday tribute for Kolandha.',
+          likes: 77,
+          liked: true,
+          saved: true,
+          comments: [
+            { user: 'vishnu', text: 'You are the best thing that ever happened in my life.' }
+          ]
+        }
+      ],
+      diary: [
+        {
+          id: 'd1',
+          pageLabel: 'Page 1',
+          date: 'Chapter M',
+          riddle: 'Lab incident la start aana chinna sandai, apro naan sonna first word... what did you accept?',
+          answer: 'sorry',
+          hint: '5 letters — check Chapter M in Notes!',
+          unlocked: false,
+          content: 'Namma First meet indha College RPSIT — an unexpected beginning nu sollalamaa...? Lab la nadandha andha incident. Kutty sorry oda namma thodanginom, and you accepted my sorry. Then daily una class la gavanichite irundhen. You became my favourite chapter.'
+        },
+        {
+          id: 'd2',
+          pageLabel: 'Page 2',
+          date: 'Chapter H',
+          riddle: 'Bus travel la unnoda kai ah first time pudichappo thonunadhu... How did I hold your hand?',
+          answer: 'tightly',
+          hint: '7 letters — check Chapter H in Notes!',
+          unlocked: false,
+          content: 'Oru friend ah irundhu konjaa heart crush aaye Lovee ah maarunadhu... Namma bus la travel pannumbothu unnoda kai ah first time thotta, pudhichita, Holded Tightly — apo thonunadhu un kai aah vida koodadhunu.'
+        },
+        {
+          id: 'd3',
+          pageLabel: 'Page 3',
+          date: 'Chapter H',
+          riddle: 'Top of my nicknames list for you... en chella peru unakku?',
+          answer: 'kolandha',
+          hint: '8 letters — check Chapter H in Notes!',
+          unlocked: false,
+          content: 'Mahi.., Kolandha, Ammu, Bun uhh, Thakkali, thoppa kutty, koranguu... Na unakaga neraiya nickname vechirukaa, in the top of the list Kolandha di nee. Mall la ice cream saputadhu... its kind of love.'
+        },
+        {
+          id: 'd4',
+          pageLabel: 'Page 4',
+          date: 'Final Secret',
+          riddle: 'Our special 4-digit passcode to unlock everything inside this birthday phone and website?',
+          answer: '2211',
+          hint: '4 digits — your birthday date!',
+          unlocked: false,
+          content: 'You unlocked every secret page!\n\nSometimes I smile for no reason — it is because of you. You are the best thing that has ever happened in my life. You are perfect. I love you, Kolandha. Happy Birthday Maheswari!'
+        }
+      ],
+      contacts: [
+        { id: 'c1', name: 'Vishnu (Mama)', number: '2211', note: 'Calling with birthday wishes and endless love for Ammu!' },
+        { id: 'c2', name: 'Birthday Melody Line', number: '1204', note: 'Playing your special birthday tune on Web Audio!' },
+        { id: 'c3', name: 'Ammu Direct Line', number: '0000', note: 'You are the best chapter in my life.' }
+      ],
+      customNotes: [
+        { id: 'cn1', title: 'Birthday Wishes', body: 'May this birthday bring you immense joy, peace, good health, and success in everything you set your heart upon.' },
+        { id: 'cn2', title: 'Always Special', body: 'No matter where life leads us, your happiness is my highest wish. Keep smiling always, Kolandha!' }
+      ],
+      symmetry: {
+        lives: 3,
+        gems: 33,
+        level: 1,
+        bestLevel: 1
+      },
+      quests: {
+        readMystery: false,
+        unlockDiary1: false,
+        findHiddenPhoto: false,
+        playSymmetry: false,
+        secretPinFound: false
+      },
+      settings: {
+        music: false,
+        sound: true
+      }
+    };
+
+    /* =========================================================================
+       2. STATE PERSISTENCE
+       ========================================================================= */
+    function deepClone(obj) { return JSON.parse(JSON.stringify(obj)); }
+
+    let state = (() => {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          return {
+            ...deepClone(DEFAULT_GIFT_DATA),
+            ...parsed,
+            meta: { ...DEFAULT_GIFT_DATA.meta, ...(parsed.meta || {}) },
+            settings: { ...DEFAULT_GIFT_DATA.settings, ...(parsed.settings || {}) }
+          };
+        }
+      } catch (e) {}
+      return deepClone(DEFAULT_GIFT_DATA);
+    })();
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {}
+      updateHomeBadges();
+    }
+
+    let currentPhone = 0; // 0: Primary Phone, 1: Vault
+    let activeApp = null;
+    let showHiddenGallery = false;
+    let activeAnimFrame = null;
+    let callTimerInterval = null;
+    let notesTab = 'chapters'; // 'chapters' or 'custom'
+
+    /* =========================================================================
+       3. WEB AUDIO SYNTHESIZER
+       ========================================================================= */
+    const SoundEngine = (() => {
+      let ctx = null;
+      let musicInterval = null;
+      let musicStep = 0;
+      const ambientNotes = [220.0, 261.63, 329.63, 392.0, 293.66, 329.63, 246.94, 196.0];
+
+      function ensureCtx() {
+        if (!ctx) {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          if (AC) ctx = new AC();
+        }
+        if (ctx && ctx.state === 'suspended') ctx.resume();
+        return ctx;
+      }
+
+      function playTone(freq, dur = 0.14, type = 'sine', vol = 0.08) {
+        if (!state.settings.sound) return;
+        const c = ensureCtx();
+        if (!c) return;
+        const osc = c.createOscillator();
+        const gain = c.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, c.currentTime);
+        gain.gain.setValueAtTime(0.001, c.currentTime);
+        gain.gain.exponentialRampToValueAtTime(vol, c.currentTime + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + dur);
+        osc.connect(gain);
+        gain.connect(c.destination);
+        osc.start();
+        osc.stop(c.currentTime + dur + 0.02);
+      }
+
+      function click() { playTone(520, 0.06, 'triangle', 0.05); }
+      function chime() {
+        playTone(523.25, 0.22, 'sine', 0.07);
+        setTimeout(() => playTone(659.25, 0.25, 'sine', 0.07), 110);
+        setTimeout(() => playTone(783.99, 0.35, 'sine', 0.08), 220);
+      }
+      function error() { playTone(185, 0.18, 'sawtooth', 0.05); }
+      function dtmf(digit) {
+        const map = { '1':697,'2':735,'3':770,'4':810,'5':852,'6':895,'7':941,'8':985,'9':1040,'0':640,'*':580,'#':1120 };
+        playTone(map[digit] || 700, 0.12, 'sine', 0.06);
+      }
+      function birthdayTune() {
+        const seq = [
+          [261.6, 0], [261.6, 260], [293.7, 500], [261.6, 850], [349.2, 1200], [329.6, 1550],
+          [261.6, 2100], [261.6, 2360], [293.7, 2600], [261.6, 2950], [392.0, 3300], [349.2, 3650]
+        ];
+        seq.forEach(([f, t]) => setTimeout(() => playTone(f, 0.32, 'sine', 0.09), t));
+      }
+
+      function startMusic() {
+        ensureCtx();
+        state.settings.music = true;
+        saveState();
+        if (musicInterval) clearInterval(musicInterval);
+        musicInterval = setInterval(() => {
+          if (!state.settings.music) return;
+          const freq = ambientNotes[musicStep % ambientNotes.length];
+          playTone(freq, 0.85, 'sine', 0.035);
+          musicStep++;
+        }, 1100);
+        updateAudioIcons();
+      }
+
+      function stopMusic() {
+        state.settings.music = false;
+        saveState();
+        if (musicInterval) { clearInterval(musicInterval); musicInterval = null; }
+        updateAudioIcons();
+      }
+
+      function toggleMusic() {
+        if (state.settings.music) stopMusic();
+        else startMusic();
+      }
+
+      function updateAudioIcons() {
+        const on = document.getElementById('audioOnIcon');
+        const off = document.getElementById('audioOffIcon');
+        if (on && off) {
+          on.classList.toggle('hidden', !state.settings.music);
+          off.classList.toggle('hidden', state.settings.music);
+        }
+      }
+
+      return { ensureCtx, click, chime, error, dtmf, birthdayTune, startMusic, stopMusic, toggleMusic, playTone };
+    })();
+
+    /* =========================================================================
+       4. UI HELPERS & NAVIGATION
+       ========================================================================= */
+    function showToast(msg) {
+      const el = document.getElementById('globalToast');
+      if (!el) return;
+      el.textContent = msg;
+      el.style.opacity = '1';
+      setTimeout(() => { el.style.opacity = '0'; }, 2400);
+    }
+
+    function openModal(htmlContent) {
+      const c = document.getElementById('modalContainer');
+      const box = document.getElementById('modalBox');
+      box.innerHTML = htmlContent;
+      c.classList.remove('hidden');
+    }
+    function closeModal() {
+      document.getElementById('modalContainer').classList.add('hidden');
+    }
+
+    function escapeHtml(str) {
+      return String(str || '').replace(/[&<>"']/g, s => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[s]));
+    }
+
+    function updateHomeBadges() {
+      const unreadMsgs = state.messages.reduce((acc, m) => acc + (m.unread ? 1 : 0), 0);
+      const msgBadge = document.getElementById('msgUnreadBadge');
+      if (msgBadge) {
+        msgBadge.textContent = unreadMsgs;
+        msgBadge.classList.toggle('hidden', unreadMsgs === 0);
+      }
+
+      const lockedDiary = state.diary.filter(d => !d.unlocked).length;
+      const diaryBadge = document.getElementById('diaryLockedBadge');
+      if (diaryBadge) {
+        diaryBadge.textContent = lockedDiary;
+        diaryBadge.classList.toggle('hidden', lockedDiary === 0);
+      }
+
+      const unreadMails = state.emails.filter(e => e.unread).length;
+      const mailBadge = document.getElementById('mailUnreadBadge');
+      if (mailBadge) {
+        mailBadge.textContent = unreadMails;
+        mailBadge.classList.toggle('hidden', unreadMails === 0);
+      }
+
+      const titleBtn = document.getElementById('statusPhoneTitleBtn');
+      if (titleBtn) titleBtn.textContent = currentPhone === 0 ? state.meta.phone1Title : state.meta.phone2Title;
+    }
+
+    function switchPhone(index) {
+      currentPhone = index === 1 ? 1 : 0;
+      document.getElementById('phonesTrack').style.transform = `translateX(${currentPhone === 0 ? '0%' : '-50%'})`;
+      document.getElementById('dotPhone1').className = `w-2.5 h-2.5 rounded-full transition ${currentPhone === 0 ? 'bg-white' : 'bg-white/30'}`;
+      document.getElementById('dotPhone2').className = `w-2.5 h-2.5 rounded-full transition ${currentPhone === 1 ? 'bg-white' : 'bg-white/30'}`;
+      updateHomeBadges();
+      SoundEngine.click();
+    }
+
+    function appHeaderHtml(title, bgClass = 'bg-[#151224]', leftHtml = '', rightExtra = '') {
+      return `
+        <div class="${bgClass} px-4 py-3 flex items-center justify-between border-b border-white/10 shrink-0">
+          <div class="flex items-center gap-1.5">
+            <button data-action="close-app" class="px-2.5 py-1 rounded-lg bg-white/10 text-white text-xs font-semibold hover:bg-white/20 active:scale-95 transition flex items-center gap-1">
+              <span>&larr;</span>
+              <span>Back</span>
+            </button>
+            ${leftHtml}
+          </div>
+          <h2 class="text-[15px] font-semibold tracking-wide text-white truncate px-2">${escapeHtml(title)}</h2>
+          <div class="flex items-center justify-end gap-2">
+            ${rightExtra}
+          </div>
+        </div>
+      `;
+    }
+
+    function closeApp() {
+      if (activeAnimFrame) { cancelAnimationFrame(activeAnimFrame); activeAnimFrame = null; }
+      if (callTimerInterval) { clearInterval(callTimerInterval); callTimerInterval = null; }
+      activeApp = null;
+      const overlay = document.getElementById('appOverlay');
+      overlay.classList.add('hidden');
+      overlay.innerHTML = '';
+      SoundEngine.click();
+      updateHomeBadges();
+    }
+
+    function openApp(appName) {
+      if (activeAnimFrame) { cancelAnimationFrame(activeAnimFrame); activeAnimFrame = null; }
+      if (callTimerInterval) { clearInterval(callTimerInterval); callTimerInterval = null; }
+      activeApp = appName;
+      SoundEngine.click();
+      const overlay = document.getElementById('appOverlay');
+      overlay.classList.remove('hidden');
+
+      switch (appName) {
+        case 'scrapbook': renderScrapbookApp(); break;
+        case 'notes': renderNotesApp(); break;
+        case 'gallery': renderGalleryApp(); break;
+        case 'pixabowl': renderMomentsApp(); break;
+        case 'symmetry': renderSymmetryApp(); break;
+        case 'messages': renderMessagesApp(); break;
+        case 'diary': renderDiaryApp(); break;
+        case 'settings': renderSettingsApp(); break;
+        case 'phone': renderPhoneApp(); break;
+        case 'mail': renderMailApp(); break;
+        case 'calculator': renderCalculatorApp(); break;
+        case 'browser': renderBrowserApp(); break;
+        case 'archive': renderArchiveApp(); break;
+        case 'studio': renderGiftStudioApp(); break;
+        default: closeApp();
+      }
+
+      // Wire close button
+      overlay.querySelectorAll('[data-action="close-app"]').forEach(b => {
+        b.addEventListener('click', closeApp);
+      });
+    }
+
+    /* =========================================================================
+       5. APP 1: SCRAPBOOK (Embedded Sketchbook.html with Full Screen link)
+       ========================================================================= */
+    function renderScrapbookApp() {
+      const overlay = document.getElementById('appOverlay');
+      overlay.innerHTML = `
+        ${appHeaderHtml('Digital Scrapbook', 'bg-[#221815]', '', `
+          <a href="Sketchbook.html" target="_blank" class="px-2.5 py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-[11px] text-amber-200 font-semibold hover:bg-amber-500/30 transition">
+            Full Screen &nearr;
+          </a>
+        `)}
+        <div class="flex-1 w-full h-full relative bg-[#0e0c14] overflow-hidden flex flex-col">
+          <div class="px-4 py-2 bg-[#1b1728] border-b border-white/10 flex items-center justify-between text-[11px] text-amber-200/90 shrink-0">
+            <span>22 Pages &bull; 33 Photo Spots</span>
+            <span class="text-slate-400">Corner-Peel Flipbook</span>
+          </div>
+          <iframe src="Sketchbook.html" class="flex-1 w-full h-full border-0" allow="fullscreen" title="Digital Scrapbook"></iframe>
+        </div>
+      `;
+    }
+
+    /* =========================================================================
+       6. APP 2: NOTES (M.A.H.E.S.W.A.R.I Story Chapters + Custom Wishes)
+       ========================================================================= */
+    function renderNotesApp() {
+      const overlay = document.getElementById('appOverlay');
+      overlay.innerHTML = `
+        ${appHeaderHtml('Story & Notes', 'bg-[#261d3b]', '', `
+          <button id="addCustomNoteBtn" class="px-2.5 py-1 rounded-lg bg-amber-400 text-black text-xs font-semibold hover:bg-amber-300 transition">
+            + Note
+          </button>
+        `)}
+        
+        <!-- Tab Switcher -->
+        <div class="bg-[#1a1429] px-4 pt-2.5 pb-2 flex border-b border-white/10 shrink-0 gap-2">
+          <button id="notesTabChapters" class="flex-1 py-1.5 rounded-xl text-xs font-semibold transition ${notesTab === 'chapters' ? 'bg-amber-500/20 text-amber-200 border border-amber-400/40' : 'text-slate-400 hover:text-white'}">
+            M.A.H.E.S.W.A.R.I (${STORY_CHAPTERS.length})
+          </button>
+          <button id="notesTabWishes" class="flex-1 py-1.5 rounded-xl text-xs font-semibold transition ${notesTab === 'custom' ? 'bg-amber-500/20 text-amber-200 border border-amber-400/40' : 'text-slate-400 hover:text-white'}">
+            Wishes &amp; Notes (${state.customNotes.length})
+          </button>
+        </div>
+
+        <!-- Notes Content Body -->
+        <div class="flex-1 overflow-y-auto no-scrollbar bg-[#110d1c] p-4 space-y-4">
+          ${notesTab === 'chapters' ? `
+            <div class="text-[11px] text-amber-200/80 mb-2 font-serif-clean italic text-center">
+              Our complete story written across every letter of your name &mdash; no dates, just timeless memories.
+            </div>
+            ${STORY_CHAPTERS.map(ch => `
+              <div class="p-4 rounded-2xl bg-white/[0.04] border border-white/10 hover:border-amber-400/30 transition">
+                <div class="flex items-center gap-2.5 mb-2">
+                  <span class="w-7 h-7 rounded-lg bg-amber-400/20 border border-amber-400/50 text-amber-300 font-bold text-sm flex items-center justify-center font-title">
+                    ${escapeHtml(ch.letter)}
+                  </span>
+                  <h4 class="text-sm font-semibold text-white tracking-wide font-serif-clean text-base">
+                    ${escapeHtml(ch.title)}
+                  </h4>
+                </div>
+                <p class="text-xs text-slate-200 whitespace-pre-line leading-relaxed font-sans pl-1">
+                  ${escapeHtml(ch.text)}
+                </p>
+              </div>
+            `).join('')}
+          ` : `
+            <div class="text-[11px] text-slate-400 mb-2 text-center">
+              Personal birthday wishes and notes saved on your phone.
+            </div>
+            ${state.customNotes.map(n => `
+              <div class="p-4 rounded-2xl bg-white/[0.04] border border-white/10 relative">
+                <div class="flex items-center justify-between mb-1.5">
+                  <h4 class="text-sm font-semibold text-amber-200">${escapeHtml(n.title)}</h4>
+                  <button data-del-note="${n.id}" class="text-[11px] text-slate-500 hover:text-rose-400 transition">Delete</button>
+                </div>
+                <p class="text-xs text-slate-200 whitespace-pre-line leading-relaxed">${escapeHtml(n.body)}</p>
+              </div>
+            `).join('')}
+          `}
+        </div>
+      `;
+
+      // Tab clicks
+      document.getElementById('notesTabChapters')?.addEventListener('click', () => {
+        notesTab = 'chapters';
+        SoundEngine.click();
+        renderNotesApp();
+      });
+      document.getElementById('notesTabWishes')?.addEventListener('click', () => {
+        notesTab = 'custom';
+        SoundEngine.click();
+        renderNotesApp();
+      });
+
+      // Add custom note
+      document.getElementById('addCustomNoteBtn')?.addEventListener('click', () => {
+        openModal(`
+          <h4 class="font-semibold text-sm mb-3 text-amber-200">New Birthday Wish / Note</h4>
+          <form id="newCustomNoteForm" class="space-y-3">
+            <input id="noteTitleInp" required placeholder="Note Title" class="w-full px-3 py-2 rounded-xl bg-black/50 border border-white/15 text-xs text-white outline-none focus:border-amber-400" />
+            <textarea id="noteBodyInp" required rows="3" placeholder="Write your heartfelt note..." class="w-full px-3 py-2 rounded-xl bg-black/50 border border-white/15 text-xs text-white outline-none focus:border-amber-400"></textarea>
+            <div class="flex justify-end gap-2">
+              <button type="button" id="cancelNoteBtn" class="px-3 py-1.5 text-xs text-slate-300">Cancel</button>
+              <button type="submit" class="px-4 py-1.5 rounded-lg bg-amber-400 text-black font-semibold text-xs">Save</button>
+            </div>
+          </form>
+        `);
+        document.getElementById('cancelNoteBtn').addEventListener('click', closeModal);
+        document.getElementById('newCustomNoteForm').addEventListener('submit', e => {
+          e.preventDefault();
+          state.customNotes.unshift({
+            id: 'cn_' + Date.now(),
+            title: document.getElementById('noteTitleInp').value.trim(),
+            body: document.getElementById('noteBodyInp').value.trim()
+          });
+          saveState();
+          closeModal();
+          SoundEngine.chime();
+          notesTab = 'custom';
+          renderNotesApp();
+        });
+      });
+
+      // Delete custom note
+      overlay.querySelectorAll('[data-del-note]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.customNotes = state.customNotes.filter(n => n.id !== btn.dataset.delNote);
+          saveState();
+          renderNotesApp();
+        });
+      });
+    }
+
+    /* =========================================================================
+       7. APP 3: GALLERY (All 33 Real Photos from M-ui/spl + Lightbox)
+       ========================================================================= */
+    function renderGalleryApp() {
+      const overlay = document.getElementById('appOverlay');
+      const visibleItems = state.gallery.filter(g => showHiddenGallery ? true : !g.hidden);
+      const groups = {};
+      visibleItems.forEach(item => {
+        if (!groups[item.dateGroup]) groups[item.dateGroup] = [];
+        groups[item.dateGroup].push(item);
+      });
+
+      const eyeBtnHtml = `
+        <button id="toggleHiddenGalleryBtn" class="px-2.5 py-1 rounded-lg text-xs font-medium border transition ${showHiddenGallery ? 'bg-amber-500/20 border-amber-400 text-amber-200' : 'bg-white/10 border-white/15 text-slate-300 hover:text-white'}">
+          ${showHiddenGallery ? 'Secret Shown' : 'Secret Photos'}
+        </button>
+      `;
+
+      overlay.innerHTML = `
+        ${appHeaderHtml('Photo Gallery', 'bg-[#111324]', '', eyeBtnHtml)}
+        <div class="flex-1 overflow-y-auto no-scrollbar bg-[#0f101d] p-4 space-y-5">
+          <div class="flex items-center justify-between text-[11px] text-slate-400 px-1">
+            <span>${visibleItems.length} Cherished Photos</span>
+            <span>Tap photo to view details</span>
+          </div>
+          ${showHiddenGallery ? `
+            <div class="px-3.5 py-2.5 rounded-xl bg-amber-500/15 border border-amber-400/30 text-[11px] text-amber-200 leading-relaxed">
+              Secret Vault Photo revealed! Clue for Diary Page 4 is <strong>2211</strong>.
+            </div>
+          ` : ''}
+          ${Object.entries(groups).map(([groupTitle, items]) => `
+            <div>
+              <div class="text-xs font-semibold text-amber-200/90 mb-2 tracking-wide font-serif-clean text-sm">${escapeHtml(groupTitle)} (${items.length})</div>
+              <div class="grid grid-cols-3 gap-2">
+                ${items.map(item => `
+                  <button data-photo-id="${item.id}" class="aspect-square rounded-xl overflow-hidden bg-black/40 relative group active:scale-95 transition border border-white/10 shadow-sm">
+                    <img src="${item.img}" alt="${escapeHtml(item.title)}" class="w-full h-full object-cover" loading="lazy" />
+                    ${item.hidden ? '<span class="absolute top-1 right-1 text-[9px] px-1.5 py-0.5 rounded bg-amber-500 text-black font-bold">SECRET</span>' : ''}
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      document.getElementById('toggleHiddenGalleryBtn')?.addEventListener('click', () => {
+        showHiddenGallery = !showHiddenGallery;
+        SoundEngine.click();
+        if (showHiddenGallery) {
+          state.quests.findHiddenPhoto = true;
+          saveState();
+          showToast('Secret photo unlocked!');
+        }
+        renderGalleryApp();
+      });
+
+      overlay.querySelectorAll('[data-photo-id]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const photo = state.gallery.find(g => g.id === btn.dataset.photoId);
+          if (!photo) return;
+          SoundEngine.click();
+          openModal(`
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <h4 class="font-semibold text-sm text-amber-200">${escapeHtml(photo.title)}</h4>
+                <button id="closePhotoModalBtn" class="text-slate-400 hover:text-white text-sm font-bold">Close &times;</button>
+              </div>
+              <img src="${photo.img}" alt="${escapeHtml(photo.title)}" class="w-full rounded-xl object-contain max-h-72 bg-black/50" />
+              <div class="text-[11px] text-amber-300/80 font-medium">${escapeHtml(photo.dateGroup)}</div>
+              <p class="text-xs text-slate-200 leading-relaxed">${escapeHtml(photo.caption)}</p>
+            </div>
+          `);
+          document.getElementById('closePhotoModalBtn').addEventListener('click', closeModal);
+        });
+      });
+    }
+
+    /* =========================================================================
+       8. APP 4: MOMENTS (Renamed from Pixabowl, Real Memories Feed)
+       ========================================================================= */
+    function renderMomentsApp() {
+      const overlay = document.getElementById('appOverlay');
+      overlay.innerHTML = `
+        ${appHeaderHtml('Moments', 'bg-[#210e2f]')}
+        <div class="flex-1 overflow-y-auto no-scrollbar bg-[#110718] p-4 space-y-5">
+          ${state.moments.map(post => `
+            <article class="rounded-2xl bg-white/[0.04] border border-white/10 overflow-hidden shadow-lg">
+              <!-- Post Author -->
+              <div class="px-4 py-3 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center font-bold text-xs text-white">
+                    M
+                  </div>
+                  <div>
+                    <div class="text-xs font-semibold text-white">${escapeHtml(post.handle)}</div>
+                    <div class="text-[10px] text-slate-400">${escapeHtml(post.location)}</div>
+                  </div>
+                </div>
+                <span class="text-[10px] text-amber-300 font-mono">Special</span>
+              </div>
+
+              <!-- Photo Image -->
+              <div class="relative bg-black flex items-center justify-center max-h-80 overflow-hidden">
+                <img src="${post.img}" alt="${escapeHtml(post.caption)}" class="w-full h-auto object-cover max-h-80" />
+              </div>
+
+              <!-- Post Actions -->
+              <div class="p-3.5">
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex items-center gap-3">
+                    <button data-like-post="${post.id}" class="text-xs font-semibold px-2 py-1 rounded bg-white/10 hover:bg-white/20 transition flex items-center gap-1.5 ${post.liked ? 'text-rose-400' : 'text-slate-300'}">
+                      <span>${post.liked ? 'Liked' : 'Like'}</span>
+                    </button>
+                    <button data-comment-post="${post.id}" class="text-xs font-semibold px-2 py-1 rounded bg-white/10 hover:bg-white/20 text-slate-300 transition">
+                      Comment
+                    </button>
+                  </div>
+                  <button data-save-post="${post.id}" class="text-xs px-2 py-1 rounded ${post.saved ? 'text-amber-300 bg-amber-400/20' : 'text-slate-400 bg-white/5'}">
+                    ${post.saved ? 'Saved' : 'Save'}
+                  </button>
+                </div>
+                <div class="text-xs font-semibold text-white mb-1">${post.likes} likes</div>
+                <p class="text-xs text-slate-200 leading-relaxed">
+                  <span class="font-semibold text-purple-300">${escapeHtml(post.handle)}</span>
+                  ${escapeHtml(post.caption)}
+                </p>
+                ${post.comments.length ? `
+                  <div class="mt-2.5 pt-2 border-t border-white/5 space-y-1.5">
+                    ${post.comments.map(c => `
+                      <div class="text-[11px] text-slate-300">
+                        <strong class="text-white">${escapeHtml(c.user)}:</strong> ${escapeHtml(c.text)}
+                      </div>
+                    `).join('')}
+                  </div>
+                ` : ''}
+              </div>
+            </article>
+          `).join('')}
+        </div>
+      `;
+
+      overlay.querySelectorAll('[data-like-post]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const p = state.moments.find(x => x.id === btn.dataset.likePost);
+          if (!p) return;
+          p.liked = !p.liked;
+          p.likes += p.liked ? 1 : -1;
+          SoundEngine.click();
+          saveState();
+          renderMomentsApp();
+        });
+      });
+      overlay.querySelectorAll('[data-save-post]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const p = state.moments.find(x => x.id === btn.dataset.savePost);
+          if (!p) return;
+          p.saved = !p.saved;
+          SoundEngine.click();
+          saveState();
+          renderMomentsApp();
+        });
+      });
+      overlay.querySelectorAll('[data-comment-post]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const p = state.moments.find(x => x.id === btn.dataset.commentPost);
+          if (!p) return;
+          openModal(`
+            <h4 class="font-semibold text-sm mb-3 text-amber-200">Add a Comment</h4>
+            <form id="momentCommentForm" class="space-y-3">
+              <input id="momentCommentInput" type="text" required placeholder="Write your heartfelt note..." class="w-full px-3 py-2 rounded-xl bg-black/50 border border-white/15 text-xs text-white outline-none focus:border-amber-400" />
+              <div class="flex justify-end gap-2">
+                <button type="button" id="cancelCommentBtn" class="px-3 py-1.5 text-xs text-slate-300">Cancel</button>
+                <button type="submit" class="px-4 py-1.5 rounded-lg bg-purple-600 text-xs font-semibold text-white">Post</button>
+              </div>
+            </form>
+          `);
+          document.getElementById('cancelCommentBtn').addEventListener('click', closeModal);
+          document.getElementById('momentCommentForm').addEventListener('submit', e => {
+            e.preventDefault();
+            const val = document.getElementById('momentCommentInput').value.trim();
+            if (!val) return;
+            p.comments.push({ user: 'maheswari', text: val });
+            saveState();
+            closeModal();
+            SoundEngine.chime();
+            renderMomentsApp();
+          });
+        });
+      });
+    }
+
+    /* =========================================================================
+       9. APP 5: GAME (Playable Symmetry / Harmony Timing Game)
+       ========================================================================= */
+    function renderSymmetryApp() {
+      const overlay = document.getElementById('appOverlay');
+      overlay.innerHTML = `
+        <div class="flex-1 bg-[#0b0b0f] flex flex-col relative overflow-hidden select-none">
+          <!-- Top HUD -->
+          <div class="px-5 py-4 flex items-center justify-between z-10 border-b border-white/10">
+            <div class="flex items-center gap-4 text-xs font-medium">
+              <span class="text-rose-400 font-bold">LIVES: <span id="symLives" class="text-white">${state.symmetry.lives}</span></span>
+              <span class="text-sky-400 font-bold">GEMS: <span id="symGems" class="text-white">${state.symmetry.gems}</span></span>
+            </div>
+            <button data-action="close-app" class="px-3 py-1 rounded-lg bg-white/10 text-white text-xs font-semibold hover:bg-white/20 transition">
+              Exit Game
+            </button>
+          </div>
+
+          <!-- Title Menu View -->
+          <div id="symMenu" class="flex-1 flex flex-col items-center justify-center relative z-10 px-6 text-center">
+            <div class="text-xs uppercase tracking-[0.3em] text-amber-300/80 mb-2">Birthday Mini-Game</div>
+            <div class="text-2xl tracking-[0.3em] text-zinc-200 font-light mb-8">HARMONY</div>
+            <button id="symPlayBtn" class="w-24 h-24 rounded-full bg-gradient-to-tr from-rose-600 to-amber-500 flex items-center justify-center sym-glow active:scale-95 transition shadow-2xl">
+              <svg class="w-10 h-10 text-white translate-x-0.5" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+            </button>
+            <div class="mt-8 text-xs text-zinc-300 tracking-widest uppercase">Level <span id="symLevelLabel">${state.symmetry.level}</span></div>
+            <p class="mt-4 text-[11px] text-zinc-400 max-w-xs leading-relaxed">
+              Tap anywhere when the rotating orbs meet the horizontal axis!
+            </p>
+          </div>
+
+          <!-- Playable Canvas View -->
+          <div id="symGameWrap" class="hidden flex-1 flex flex-col items-center justify-center relative z-10">
+            <canvas id="symCanvas" class="w-full h-full cursor-pointer"></canvas>
+            <div class="absolute bottom-6 left-0 right-0 text-center pointer-events-none">
+              <div id="symStatusText" class="text-xs tracking-widest uppercase text-zinc-300 bg-black/60 py-1.5 px-4 rounded-full inline-block border border-white/10">
+                Tap when orbs align!
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('symPlayBtn')?.addEventListener('click', startSymmetryGame);
+    }
+
+    function startSymmetryGame() {
+      SoundEngine.click();
+      state.quests.playSymmetry = true;
+      saveState();
+
+      document.getElementById('symMenu').classList.add('hidden');
+      const wrap = document.getElementById('symGameWrap');
+      wrap.classList.remove('hidden');
+
+      const canvas = document.getElementById('symCanvas');
+      const ctx = canvas.getContext('2d');
+      let angle = -Math.PI / 2;
+      let speed = 0.024 + (state.symmetry.level - 1) * 0.005;
+      let hitsNeeded = 3 + Math.min(state.symmetry.level, 5);
+      let hits = 0;
+      let flash = 0;
+      let flashColor = '#ef6461';
+      let running = true;
+
+      function resize() {
+        const rect = wrap.getBoundingClientRect();
+        canvas.width = rect.width * (window.devicePixelRatio || 1);
+        canvas.height = rect.height * (window.devicePixelRatio || 1);
+        ctx.setTransform(window.devicePixelRatio || 1, 0, 0, window.devicePixelRatio || 1, 0, 0);
+      }
+      resize();
+
+      function handleTap() {
+        if (!running) return;
+        const norm = ((angle % Math.PI) + Math.PI) % Math.PI;
+        const dist = Math.min(norm, Math.PI - norm);
+        if (dist < 0.26) {
+          hits++;
+          state.symmetry.gems += 5;
+          flash = 1;
+          flashColor = '#34d399';
+          SoundEngine.playTone(440 + hits * 70, 0.16, 'sine', 0.08);
+          if (hits >= hitsNeeded) {
+            running = false;
+            confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
+            state.symmetry.level++;
+            state.symmetry.bestLevel = Math.max(state.symmetry.bestLevel, state.symmetry.level);
+            saveState();
+            setTimeout(() => {
+              showToast(`Level Completed! Advanced to Level ${state.symmetry.level}`);
+              renderSymmetryApp();
+            }, 800);
+          }
+        } else {
+          state.symmetry.lives--;
+          flash = 1;
+          flashColor = '#ef4444';
+          SoundEngine.error();
+          if (state.symmetry.lives <= 0) {
+            running = false;
+            state.symmetry.lives = 3;
+            saveState();
+            setTimeout(() => {
+              showToast('Game over! Lives reset to 3.');
+              renderSymmetryApp();
+            }, 800);
+          }
+        }
+        document.getElementById('symLives').textContent = state.symmetry.lives;
+        document.getElementById('symGems').textContent = state.symmetry.gems;
+      }
+
+      canvas.addEventListener('pointerdown', handleTap);
+
+      function loop() {
+        if (!running) return;
+        const w = wrap.clientWidth;
+        const h = wrap.clientHeight;
+        const cx = w / 2;
+        const cy = h / 2;
+        const r = Math.min(w, h) * 0.32;
+
+        ctx.fillStyle = '#0b0b0f';
+        ctx.fillRect(0, 0, w, h);
+
+        // Flash background on tap
+        if (flash > 0) {
+          ctx.fillStyle = flashColor;
+          ctx.globalAlpha = flash * 0.18;
+          ctx.fillRect(0, 0, w, h);
+          ctx.globalAlpha = 1;
+          flash -= 0.05;
+        }
+
+        // Horizontal target alignment axis
+        ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(cx - r - 25, cy);
+        ctx.lineTo(cx + r + 25, cy);
+        ctx.stroke();
+
+        // Orbit ring
+        ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Dual rotating mirrored orbs
+        angle += speed;
+        const x1 = cx + Math.cos(angle) * r;
+        const y1 = cy + Math.sin(angle) * r;
+        const x2 = cx + Math.cos(angle + Math.PI) * r;
+        const y2 = cy + Math.sin(angle + Math.PI) * r;
+
+        ctx.fillStyle = '#ef6461';
+        ctx.beginPath();
+        ctx.arc(x1, y1, 10, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#38bdf8';
+        ctx.beginPath();
+        ctx.arc(x2, y2, 10, 0, Math.PI * 2);
+        ctx.fill();
+
+        activeAnimFrame = requestAnimationFrame(loop);
+      }
+      activeAnimFrame = requestAnimationFrame(loop);
+    }
+
+    /* =========================================================================
+       10. APP 6: SETTINGS (Audio, Passcode, Dedication, Reset)
+       ========================================================================= */
+    function renderSettingsApp() {
+      const overlay = document.getElementById('appOverlay');
+      overlay.innerHTML = `
+        ${appHeaderHtml('Settings', 'bg-[#14141e]')}
+        <div class="flex-1 overflow-y-auto no-scrollbar bg-[#0a0a12] p-4 space-y-4">
+          <!-- Featured Dedication Card -->
+          <div class="p-4 rounded-2xl bg-gradient-to-r from-[#2c1a38] via-[#1a1528] to-[#12111d] border border-amber-400/25">
+            <span class="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-400 text-black mb-1.5">
+              Birthday Dedication
+            </span>
+            <div class="text-base font-bold text-white">To Maheswari, with love</div>
+            <p class="text-xs text-amber-100/80 mt-1 leading-relaxed">
+              Every memory, note, and photo here is crafted to bring a smile to your face today and every day.
+            </p>
+          </div>
+
+          <!-- Toggles & Options -->
+          <div class="divide-y divide-white/10 rounded-2xl bg-white/[0.03] border border-white/10 overflow-hidden text-sm">
+            <button id="toggleMusicSetting" class="w-full px-4 py-3.5 flex items-center justify-between hover:bg-white/5 transition text-left">
+              <span class="text-slate-200">Ambient Music</span>
+              <span class="${state.settings.music ? 'text-emerald-400 font-semibold' : 'text-slate-500'}">${state.settings.music ? 'ON' : 'OFF'}</span>
+            </button>
+            <button id="toggleSoundSetting" class="w-full px-4 py-3.5 flex items-center justify-between hover:bg-white/5 transition text-left">
+              <span class="text-slate-200">Sound Effects</span>
+              <span class="${state.settings.sound ? 'text-emerald-400 font-semibold' : 'text-slate-500'}">${state.settings.sound ? 'ON' : 'OFF'}</span>
+            </button>
+            <button id="passcodeInfoSetting" class="w-full px-4 py-3.5 flex items-center justify-between hover:bg-white/5 transition text-left">
+              <span class="text-slate-200">Phone Security &amp; Passcode</span>
+              <span class="text-amber-300 font-mono font-bold">2211</span>
+            </button>
+            <button id="replayIntroSetting" class="w-full px-4 py-3.5 flex items-center justify-between hover:bg-white/5 transition text-left">
+              <span class="text-slate-200">Replay Intro Celebration</span>
+              <span class="text-slate-400">&rarr;</span>
+            </button>
+            <button id="resetProgressSetting" class="w-full px-4 py-3.5 flex items-center justify-between hover:bg-white/5 transition text-left">
+              <span class="text-rose-400">Reset Saved Progress</span>
+              <span class="text-rose-400">&rarr;</span>
+            </button>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('toggleMusicSetting')?.addEventListener('click', () => {
+        SoundEngine.toggleMusic();
+        renderSettingsApp();
+      });
+      document.getElementById('toggleSoundSetting')?.addEventListener('click', () => {
+        state.settings.sound = !state.settings.sound;
+        saveState();
+        SoundEngine.click();
+        renderSettingsApp();
+      });
+      document.getElementById('passcodeInfoSetting')?.addEventListener('click', () => {
+        openModal(`
+          <div class="text-center space-y-3">
+            <h4 class="font-semibold text-sm text-amber-200">Phone Passcode</h4>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              The primary passcode is <strong class="text-amber-300 text-sm">2211</strong>.<br/>
+              (Alternative unlock code: <strong class="text-amber-300 text-sm">1204</strong>)
+            </p>
+            <button id="closePassModalBtn" class="px-4 py-1.5 rounded-lg bg-white/10 text-xs text-white">OK</button>
+          </div>
+        `);
+        document.getElementById('closePassModalBtn').addEventListener('click', closeModal);
+      });
+      document.getElementById('replayIntroSetting')?.addEventListener('click', () => {
+        closeApp();
+        document.getElementById('introOverlay').classList.remove('hidden');
+        document.getElementById('introStep1').classList.add('hidden');
+        document.getElementById('introStep2').classList.remove('hidden');
+      });
+      document.getElementById('resetProgressSetting')?.addEventListener('click', () => {
+        openModal(`
+          <h4 class="font-semibold text-sm text-rose-300 mb-2">Reset to Defaults?</h4>
+          <p class="text-xs text-slate-300 mb-4">This resets unlocked diary pages and custom notes back to fresh state.</p>
+          <div class="flex justify-end gap-2">
+            <button id="cancelResetBtn" class="px-3 py-1.5 text-xs text-slate-300">Cancel</button>
+            <button id="confirmResetBtn" class="px-4 py-1.5 rounded-lg bg-rose-600 text-xs font-semibold text-white">Reset</button>
+          </div>
+        `);
+        document.getElementById('cancelResetBtn').addEventListener('click', closeModal);
+        document.getElementById('confirmResetBtn').addEventListener('click', () => {
+          state = deepClone(DEFAULT_GIFT_DATA);
+          try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+          saveState();
+          closeModal();
+          showToast('Phone reset to defaults');
+          renderSettingsApp();
+        });
+      });
+    }
+
+    /* =========================================================================
+       11. APP 7: MESSAGES (Chat with Vishnu & Trail Clues)
+       ========================================================================= */
+    function renderMessagesApp() {
+      const overlay = document.getElementById('appOverlay');
+      overlay.innerHTML = `
+        ${appHeaderHtml('Messages', 'bg-[#18233c]')}
+        <div class="flex-1 overflow-y-auto no-scrollbar bg-[#0f172a] divide-y divide-white/10">
+          ${state.messages.map(thread => `
+            <button data-thread-id="${thread.id}" class="w-full p-4 flex items-center gap-3.5 hover:bg-white/5 text-left transition">
+              <div class="w-11 h-11 rounded-full flex items-center justify-center font-bold text-white text-base shrink-0" style="background-color: ${thread.color}">
+                ${thread.avatar}
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between mb-1">
+                  <h4 class="text-sm font-semibold text-white truncate">${escapeHtml(thread.name)}</h4>
+                  <span class="text-[10px] text-slate-400">${thread.history[thread.history.length - 1]?.time || ''}</span>
+                </div>
+                <p class="text-xs text-slate-300 truncate">${escapeHtml(thread.history[thread.history.length - 1]?.text || '')}</p>
+              </div>
+              ${thread.unread ? '<span class="w-2.5 h-2.5 rounded-full bg-blue-500 shrink-0"></span>' : ''}
+            </button>
+          `).join('')}
+        </div>
+      `;
+
+      overlay.querySelectorAll('[data-thread-id]').forEach(btn => {
+        btn.addEventListener('click', () => renderChatThread(btn.dataset.threadId));
+      });
+    }
+
+    function renderChatThread(threadId) {
+      const thread = state.messages.find(m => m.id === threadId);
+      if (!thread) return;
+      thread.unread = false;
+      saveState();
+
+      const overlay = document.getElementById('appOverlay');
+      overlay.innerHTML = `
+        ${appHeaderHtml(thread.name, 'bg-[#18233c]')}
+        <div id="chatMessagesWrap" class="flex-1 overflow-y-auto no-scrollbar bg-[#0b1120] p-4 space-y-3">
+          ${thread.history.map(msg => `
+            <div class="flex flex-col ${msg.from === 'me' ? 'items-end' : 'items-start'}">
+              <div class="max-w-[78%] px-4 py-2.5 rounded-2xl text-xs leading-relaxed ${msg.from === 'me' ? 'bg-blue-600 text-white rounded-br-sm' : 'bg-white/10 text-slate-100 rounded-bl-sm'}">
+                ${escapeHtml(msg.text)}
+              </div>
+              ${msg.time ? `<span class="text-[9px] text-slate-500 mt-1 px-1">${escapeHtml(msg.time)}</span>` : ''}
+            </div>
+          `).join('')}
+        </div>
+        ${thread.choices && thread.choices.length ? `
+          <div class="p-3 bg-[#11192e] border-t border-white/10 flex flex-col gap-2 shrink-0">
+            <div class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Quick Replies</div>
+            <div class="flex flex-wrap gap-2">
+              ${thread.choices.map((c, idx) => `
+                <button data-choice-idx="${idx}" class="px-3 py-1.5 rounded-full bg-blue-600/30 border border-blue-400/40 text-blue-200 text-xs font-medium hover:bg-blue-600/50 transition text-left">
+                  ${escapeHtml(c.label)}
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        ` : ''}
+      `;
+
+      overlay.querySelectorAll('[data-choice-idx]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.dataset.choiceIdx, 10);
+          const choice = thread.choices[idx];
+          if (!choice) return;
+          thread.history.push({ from: 'me', text: choice.label, time: 'Just now' });
+          thread.choices.splice(idx, 1);
+          SoundEngine.click();
+          renderChatThread(threadId);
+
+          setTimeout(() => {
+            thread.history.push({ from: 'them', text: choice.reply, time: 'Just now' });
+            SoundEngine.chime();
+            saveState();
+            renderChatThread(threadId);
+          }, 600);
+        });
+      });
+
+      const wrap = document.getElementById('chatMessagesWrap');
+      if (wrap) wrap.scrollTop = wrap.scrollHeight;
+    }
+
+    /* =========================================================================
+       12. APP 8: DIARY (Riddle Locks leading to Birthday Secrets)
+       ========================================================================= */
+    function renderDiaryApp() {
+      const overlay = document.getElementById('appOverlay');
+      overlay.innerHTML = `
+        ${appHeaderHtml('Secret Diary', 'bg-[#2b1f13]')}
+        <div class="flex-1 parchment-bg flex flex-col p-4 overflow-y-auto no-scrollbar">
+          <p class="font-hand text-center text-lg leading-snug text-[#3d2d1d] mb-4 px-2">
+            A collection of thoughts, memories, and riddles from Chapter M to I.
+          </p>
+          <div class="space-y-4">
+            ${state.diary.map(entry => `
+              <div class="p-4 rounded-2xl bg-[#efe3c8] border border-[#cfbe9e] shadow-sm text-xs space-y-2">
+                <div class="flex items-center justify-between border-b border-[#d8c7a7] pb-1.5">
+                  <span class="font-bold text-sm text-[#4a341e]">${escapeHtml(entry.pageLabel)} &mdash; ${escapeHtml(entry.date)}</span>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold ${entry.unlocked ? 'bg-emerald-600 text-white' : 'bg-amber-700 text-white'}">
+                    ${entry.unlocked ? 'UNLOCKED' : 'LOCKED'}
+                  </span>
+                </div>
+                ${entry.unlocked ? `
+                  <p class="text-sm font-hand leading-relaxed text-[#2c1d10] whitespace-pre-line text-base">
+                    ${escapeHtml(entry.content)}
+                  </p>
+                ` : `
+                  <div class="space-y-2">
+                    <p class="text-[#3c2a1a] font-medium leading-relaxed">${escapeHtml(entry.riddle)}</p>
+                    <div class="text-[10px] text-[#785b3e] italic">Hint: ${escapeHtml(entry.hint)}</div>
+                    <form data-unlock-diary="${entry.id}" class="flex gap-2 pt-1">
+                      <input type="text" required placeholder="Type answer..." class="flex-1 px-3 py-1.5 rounded-lg bg-white/70 border border-[#bfa985] text-xs text-[#2c1d10] outline-none" />
+                      <button type="submit" class="px-3 py-1.5 rounded-lg bg-[#5c4028] text-white text-xs font-semibold hover:bg-[#4a331f] transition">Unlock</button>
+                    </form>
+                  </div>
+                `}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+
+      overlay.querySelectorAll('[data-unlock-diary]').forEach(form => {
+        form.addEventListener('submit', e => {
+          e.preventDefault();
+          const id = form.dataset.unlockDiary;
+          const entry = state.diary.find(d => d.id === id);
+          const inp = form.querySelector('input');
+          const val = inp.value.trim().toLowerCase();
+          if (entry && val === entry.answer.toLowerCase()) {
+            entry.unlocked = true;
+            SoundEngine.chime();
+            confetti({ particleCount: 35, spread: 50, origin: { y: 0.6 } });
+            saveState();
+            showToast('Correct! Page unlocked.');
+            renderDiaryApp();
+          } else {
+            SoundEngine.error();
+            showToast('Incorrect answer. Try again!');
+            inp.classList.add('border-rose-500');
+          }
+        });
+      });
+    }
+
+    /* =========================================================================
+       13. OTHER VAULT APPS: Phone, Mail, Calculator, Browser, Archive, Studio
+       ========================================================================= */
+    function renderPhoneApp() {
+      const overlay = document.getElementById('appOverlay');
+      overlay.innerHTML = `
+        ${appHeaderHtml('Phone Dialer', 'bg-[#12281a]')}
+        <div class="flex-1 flex flex-col bg-[#0b170f] p-6 items-center justify-between">
+          <div class="w-full text-center py-4">
+            <div id="dialDisplay" class="text-3xl font-light text-white tracking-widest min-h-[44px]"></div>
+          </div>
+          <div class="grid grid-cols-3 gap-4 w-full max-w-[260px]">
+            ${['1','2','3','4','5','6','7','8','9','*','0','#'].map(d => `
+              <button data-dial="${d}" class="w-16 h-16 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-white font-medium text-xl flex items-center justify-center transition">
+                ${d}
+              </button>
+            `).join('')}
+          </div>
+          <div class="flex items-center gap-6 mt-4">
+            <button id="dialCallBtn" class="w-16 h-16 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center shadow-lg active:scale-95 transition">
+              <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24 11.72 11.72 0 0 0 3.68.59 1 1 0 0 1 1 1v3.46a1 1 0 0 1-1 1A19.91 19.91 0 0 1 2 4.1a1 1 0 0 1 1-1h3.46a1 1 0 0 1 1 1 11.72 11.72 0 0 0 .59 3.68 1 1 0 0 1-.24 1.02l-2.19 2z"/></svg>
+            </button>
+            <button id="dialClearBtn" class="text-xs text-slate-400 hover:text-white px-3 py-1.5 rounded-lg bg-white/10">Clear</button>
+          </div>
+        </div>
+      `;
+
+      let dialed = '';
+      const disp = document.getElementById('dialDisplay');
+      overlay.querySelectorAll('[data-dial]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const d = btn.dataset.dial;
+          dialed += d;
+          disp.textContent = dialed;
+          SoundEngine.dtmf(d);
+        });
+      });
+      document.getElementById('dialClearBtn')?.addEventListener('click', () => {
+        dialed = '';
+        disp.textContent = '';
+      });
+      document.getElementById('dialCallBtn')?.addEventListener('click', () => {
+        if (!dialed) return;
+        SoundEngine.click();
+        if (dialed === '2211' || dialed === '1204') {
+          SoundEngine.birthdayTune();
+          showToast('Calling Vishnu (Mama)... Happy Birthday Maheswari!');
+        } else {
+          showToast(`Dialing ${dialed}...`);
+        }
+      });
+    }
+
+    function renderMailApp() {
+      const overlay = document.getElementById('appOverlay');
+      overlay.innerHTML = `
+        ${appHeaderHtml('Mailbox', 'bg-[#2d1414]')}
+        <div class="flex-1 overflow-y-auto no-scrollbar bg-[#160a0a] divide-y divide-white/10">
+          ${state.emails.map(e => `
+            <div class="p-4 space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-amber-200">${escapeHtml(e.sender)}</span>
+                <span class="text-[10px] text-slate-400">${escapeHtml(e.time)}</span>
+              </div>
+              <div class="text-sm font-semibold text-white">${escapeHtml(e.subject)}</div>
+              <p class="text-xs text-slate-300 leading-relaxed whitespace-pre-line">${escapeHtml(e.body)}</p>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function renderCalculatorApp() {
+      const overlay = document.getElementById('appOverlay');
+      overlay.innerHTML = `
+        ${appHeaderHtml('Calculator', 'bg-[#1c1c24]')}
+        <div class="flex-1 flex flex-col bg-[#0f0f14] p-5 justify-between">
+          <div class="text-right py-4 text-3xl font-light text-white font-mono" id="calcDisplay">0</div>
+          <div class="grid grid-cols-4 gap-2.5">
+            ${['C','&plusmn;','%','&divide;','7','8','9','&times;','4','5','6','-','1','2','3','+','0','.','='].map(btn => `
+              <button data-calc="${btn}" class="h-14 rounded-2xl bg-white/10 hover:bg-white/20 active:scale-95 text-white text-lg font-medium flex items-center justify-center transition">
+                ${btn}
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `;
+      let expr = '';
+      const disp = document.getElementById('calcDisplay');
+      overlay.querySelectorAll('[data-calc]').forEach(b => {
+        b.addEventListener('click', () => {
+          const v = b.dataset.calc;
+          SoundEngine.click();
+          if (v === 'C') { expr = ''; disp.textContent = '0'; }
+          else if (v === '=') {
+            if (expr === '2211' || expr === '1204') {
+              disp.textContent = 'MAHESWARI';
+              SoundEngine.chime();
+              showToast('Passcode Verified!');
+            } else {
+              try {
+                disp.textContent = eval(expr.replace(/&times;/g, '*').replace(/&divide;/g, '/')) || '0';
+              } catch (e) { disp.textContent = 'Error'; }
+            }
+          } else {
+            expr += v;
+            disp.textContent = expr;
+          }
+        });
+      });
+    }
+
+    function renderBrowserApp() {
+      const overlay = document.getElementById('appOverlay');
+      overlay.innerHTML = `
+        ${appHeaderHtml('Web Browser', 'bg-[#0f2438]')}
+        <div class="flex-1 flex flex-col bg-[#081522] overflow-hidden">
+          <div class="px-4 py-2 bg-black/40 border-b border-white/10 flex items-center gap-2 text-xs">
+            <span class="text-emerald-400 font-bold">&bull;</span>
+            <span class="text-slate-300 font-mono text-[11px] truncate">https://maheswari-birthday.love</span>
+          </div>
+          <div class="flex-1 overflow-y-auto p-5 text-center flex flex-col items-center justify-center space-y-4">
+            <h3 class="font-title text-2xl text-amber-300">Happy Birthday Maheswari</h3>
+            <p class="text-xs text-slate-300 max-w-xs leading-relaxed">
+              Explore the website features: Digital Scrapbook with 22 pages, 33 photo memories, and our 9 chapter story notes.
+            </p>
+            <a href="index.html" class="px-6 py-2.5 rounded-full bg-amber-500 text-black font-semibold text-xs tracking-wide shadow-lg hover:bg-amber-400 transition">
+              Open Main Website &rarr;
+            </a>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderArchiveApp() {
+      const overlay = document.getElementById('appOverlay');
+      overlay.innerHTML = `
+        ${appHeaderHtml('Memory Archive', 'bg-[#181820]')}
+        <div class="flex-1 overflow-y-auto no-scrollbar bg-[#0d0d12] p-5 space-y-4 text-xs text-slate-300">
+          <div class="p-4 rounded-2xl bg-white/[0.04] border border-white/10 space-y-2">
+            <div class="text-amber-200 font-bold text-sm">Birthday Celebration Certificate</div>
+            <p class="leading-relaxed">
+              Awarded to <strong>Maheswari</strong> on November 22 for bringing light, smiles, and unforgettable memories into my life.
+            </p>
+            <div class="text-[11px] text-amber-300/80 pt-1 font-serif-clean italic">&ldquo;You are my favorite chapter and my endless smile.&rdquo;</div>
+          </div>
+          <div class="p-4 rounded-2xl bg-white/[0.04] border border-white/10 space-y-1.5">
+            <div class="text-white font-semibold">Special Highlights</div>
+            <div>&bull; 33 Memory Photos from College &amp; Journeys</div>
+            <div>&bull; 9 Journal Story Chapters (M to I)</div>
+            <div>&bull; 22-Page Corner-Curl Sketchbook</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderGiftStudioApp() {
+      const overlay = document.getElementById('appOverlay');
+      overlay.innerHTML = `
+        ${appHeaderHtml('Gift Studio', 'bg-[#291e12]')}
+        <div class="flex-1 overflow-y-auto no-scrollbar bg-[#140e08] p-5 space-y-4 text-xs">
+          <div class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-400/30 text-amber-200 leading-relaxed">
+            Customize recipient details, secret passcode, and personal messages anytime.
+          </div>
+          <form id="studioForm" class="space-y-3">
+            <div>
+              <label class="block text-slate-300 mb-1">Recipient Name</label>
+              <input id="stuRecip" value="${escapeHtml(state.meta.recipientName)}" class="w-full px-3 py-2 rounded-xl bg-black/50 border border-white/15 text-white" />
+            </div>
+            <div>
+              <label class="block text-slate-300 mb-1">Sender Name</label>
+              <input id="stuSender" value="${escapeHtml(state.meta.senderName)}" class="w-full px-3 py-2 rounded-xl bg-black/50 border border-white/15 text-white" />
+            </div>
+            <div>
+              <label class="block text-slate-300 mb-1">Secret Passcode / PIN</label>
+              <input id="stuPin" value="${escapeHtml(state.meta.secretPin)}" class="w-full px-3 py-2 rounded-xl bg-black/50 border border-white/15 text-white" />
+            </div>
+            <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 text-black font-semibold text-xs mt-2">
+              Save Changes
+            </button>
+          </form>
+        </div>
+      `;
+      document.getElementById('studioForm')?.addEventListener('submit', e => {
+        e.preventDefault();
+        state.meta.recipientName = document.getElementById('stuRecip').value.trim() || 'Maheswari';
+        state.meta.senderName = document.getElementById('stuSender').value.trim() || 'Vishnu';
+        state.meta.secretPin = document.getElementById('stuPin').value.trim() || '2211';
+        saveState();
+        SoundEngine.chime();
+        showToast('Settings Saved!');
+        renderGiftStudioApp();
+      });
+    }
+
+    /* =========================================================================
+       14. INITIALIZATION & EVENT LISTENERS
+       ========================================================================= */
+    function init() {
+      // Intro triggers
+      document.getElementById('startExperienceBtn')?.addEventListener('click', () => {
+        SoundEngine.ensureCtx();
+        SoundEngine.click();
+        document.getElementById('introStep1').classList.add('hidden');
+        document.getElementById('introStep2').classList.remove('hidden');
+      });
+      document.getElementById('skipIntroBtn')?.addEventListener('click', () => {
+        SoundEngine.ensureCtx();
+        document.getElementById('introOverlay').classList.add('hidden');
+      });
+      document.getElementById('enterPhoneBtn')?.addEventListener('click', () => {
+        SoundEngine.chime();
+        document.getElementById('introOverlay').classList.add('hidden');
+        confetti({ particleCount: 45, spread: 60, origin: { y: 0.5 } });
+      });
+
+      // Quick audio toggle
+      document.getElementById('quickAudioBtn')?.addEventListener('click', () => {
+        SoundEngine.toggleMusic();
+      });
+
+      // Phone Switchers
+      document.getElementById('dotPhone1')?.addEventListener('click', () => switchPhone(0));
+      document.getElementById('dotPhone2')?.addEventListener('click', () => switchPhone(1));
+      document.getElementById('swipeToVaultHint')?.addEventListener('click', () => switchPhone(1));
+      document.getElementById('swipeToPhone1Hint')?.addEventListener('click', () => switchPhone(0));
+      document.getElementById('deskSwitchBtn')?.addEventListener('click', () => switchPhone(currentPhone === 0 ? 1 : 0));
+      document.getElementById('deskScrapbookBtn')?.addEventListener('click', () => openApp('scrapbook'));
+      document.getElementById('deskReplayIntroBtn')?.addEventListener('click', () => {
+        document.getElementById('introOverlay').classList.remove('hidden');
+        document.getElementById('introStep1').classList.remove('hidden');
+        document.getElementById('introStep2').classList.add('hidden');
+      });
+
+      // App Icon clicks
+      document.querySelectorAll('.app-icon-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const app = btn.dataset.app;
+          if (app) openApp(app);
+        });
+      });
+
+      // Clock
+      function updateClock() {
+        const now = new Date();
+        let h = now.getHours();
+        let m = now.getMinutes();
+        m = m < 10 ? '0' + m : m;
+        const clockEl = document.getElementById('statusClock');
+        if (clockEl) clockEl.textContent = `${h}:${m}`;
+      }
+      setInterval(updateClock, 1000);
+      updateClock();
+
+      updateHomeBadges();
+    }
+
+    if (document.readyState === 'complete') init();
+    else window.addEventListener('load', init);
+  </script>
+</body>
+</html>
