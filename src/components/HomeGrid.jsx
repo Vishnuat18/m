@@ -1,7 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import MobileBirthdayPhone from './MobileBirthdayPhone';
 import './HomeGrid.css';
 
 const HomeGrid = ({ onSelectSection }) => {
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth <= 768;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // When on mobile view, render the Birthday Trail Phone interface directly
+  if (isMobile) {
+    return <MobileBirthdayPhone onSelectSection={onSelectSection} />;
+  }
+
+  // Desktop View: Keep the 3-card layout
   const handleOpenSketchbook = () => {
     try {
       if (!document.fullscreenElement) {
@@ -26,7 +48,7 @@ const HomeGrid = ({ onSelectSection }) => {
       </header>
 
       <main className="home-grid">
-        {/* Card 1: Scrapbook (div image, below that Scrapbook text only on mobile) */}
+        {/* Card 1: Scrapbook */}
         <div
           className="grid-card card-sketchbook"
           onClick={handleOpenSketchbook}
@@ -49,7 +71,6 @@ const HomeGrid = ({ onSelectSection }) => {
           </div>
           <h2 className="card-title">
             <span className="desktop-card-title">Digital Sketchbook</span>
-            <span className="mobile-card-title">Scrapbook</span>
           </h2>
           <p className="card-label">
             Vintage scrapbooks, polaroids, taped memories &amp; 3D corner flips
@@ -57,7 +78,7 @@ const HomeGrid = ({ onSelectSection }) => {
           <div className="card-action">OPEN SKETCHBOOK &rarr;</div>
         </div>
 
-        {/* Card 2: Notes (right of Scrapbook, div image, below that Notes text only on mobile) */}
+        {/* Card 2: Notes */}
         <div
           className="grid-card card-notes"
           onClick={() => onSelectSection('story')}
@@ -82,7 +103,6 @@ const HomeGrid = ({ onSelectSection }) => {
           </div>
           <h2 className="card-title">
             <span className="desktop-card-title">Our Story Notes</span>
-            <span className="mobile-card-title">Notes</span>
           </h2>
           <p className="card-label">
             Handwritten journal memories through every letter from M to I
@@ -120,7 +140,6 @@ const HomeGrid = ({ onSelectSection }) => {
           <div className="card-text-block">
             <h2 className="card-title">
               <span className="desktop-card-title">Special Gift</span>
-              <span className="mobile-card-title">Special Gift</span>
             </h2>
             <p className="card-label">
               A personal surprise packed with loving thoughts just for you
@@ -130,7 +149,7 @@ const HomeGrid = ({ onSelectSection }) => {
         </div>
       </main>
 
-      {/* Heartfelt Birthday Tribute Section to fill the bottom of mobile neatly */}
+      {/* Birthday Banner */}
       <footer className="home-birthday-banner" aria-label="Birthday Dedication">
         <div className="banner-sparkle-row">
           <span className="sparkle-line" />

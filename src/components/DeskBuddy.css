@@ -173,80 +173,10 @@
   font-weight: 600;
 }
 
-/* Mobile View: Neat, Native-like, Free-standing mascot */
-@media (max-width: 600px) {
-  .desk-buddy-container {
-    position: fixed !important;
-    bottom: calc(8px + env(safe-area-inset-bottom, 0px)) !important;
-    left: 12px !important;
-    z-index: 9999 !important;
-  }
-
-  .buddy-figure-wrap {
-    height: 145px !important; /* Prominent size, full figure visible from head to toe */
-    width: auto !important;
-    display: block !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-  .buddy-image {
-    height: 145px !important;
-    width: auto !important;
-    max-height: 145px !important;
-    object-fit: contain !important;
-    display: block !important;
-    border: none !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    outline: none !important;
-    background: transparent !important;
-    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.7)) !important;
-  }
-
-  .buddy-speech-bubble {
-    max-width: 200px;
-    padding: 6px 11px;
-    margin-bottom: 6px;
-    border-radius: 12px;
-    background: rgba(22, 14, 40, 0.94);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55);
-  }
-
-  .bubble-text {
-    font-size: 11px;
-    line-height: 1.35;
-    font-weight: 500;
-  }
-
-  .bubble-pointer {
-    left: 18px;
-    bottom: -5px;
-    width: 8px;
-    height: 8px;
-  }
-
-  .buddy-close-btn {
-    width: 20px;
-    height: 20px;
-    font-size: 14px;
-    top: -6px;
-    right: -6px;
-  }
-
+/* Mobile View: Hide fixed mascot on mobile phone view to avoid overlapping bottom phone dock */
+@media (max-width: 768px) {
+  .desk-buddy-container,
   .desk-buddy-minimized {
-    bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important;
-    left: 12px !important;
-    padding: 3px 10px 3px 3px;
-  }
-
-  .min-avatar {
-    width: 26px;
-    height: 26px;
-  }
-
-  .min-label {
-    font-size: 10px;
+    display: none !important;
   }
 }
