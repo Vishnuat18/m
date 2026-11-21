@@ -78,12 +78,12 @@
 .parchment-sheet::after {
   content: '';
   position: absolute;
-  bottom: 80px;
+  bottom: 60px;
   right: 18px;
   width: 90px;
   height: 80px;
   border-radius: 50%;
-  background: radial-gradient(circle at 60% 50%, rgba(145, 95, 45, 0.18) 0%, rgba(160, 110, 55, 0.08) 55%, transparent 75%);
+  background: radial-gradient(circle at 60% 50%, rgba(145, 95, 45, 0.15) 0%, rgba(160, 110, 55, 0.06) 55%, transparent 75%);
   pointer-events: none;
   filter: blur(6px);
 }
@@ -157,7 +157,7 @@
   text-shadow: 0 0.5px 0.5px rgba(60, 32, 16, 0.15);
 }
 
-/* Keyword Highlights in Dark Red Cursive (Like 'the pink bicycle' in Reference Image) */
+/* Keyword Highlights in Dark Red Cursive */
 .highlight-red {
   color: #b31b2c;
   font-weight: 700;
@@ -178,22 +178,10 @@
   50% { opacity: 0; }
 }
 
-/* Footer Doodle Pattern matching Reference Image SVG */
-.note-footer {
-  margin-top: 18px;
-  padding: 0 4px 6px 4px;
-}
-
-.ref-doodle-container {
-  display: flex;
-  align-items: center;
-}
-
-.ref-doodle-svg {
-  width: 250px;
-  height: auto;
-  max-width: 90%;
-  display: block;
+/* Clean Footer */
+.note-footer-clean {
+  margin-top: 14px;
+  padding: 0 4px 4px 4px;
 }
 
 /* Subtle tap guidance */
@@ -202,7 +190,6 @@
   font-size: 14px;
   color: #9c6538;
   text-align: center;
-  margin-top: 10px;
 }
 
 /* Mobile responsive exact styling */
@@ -228,9 +215,5 @@
   .note-handwritten-text {
     font-size: 20px;
     line-height: 1.58;
-  }
-
-  .ref-doodle-svg {
-    width: 220px;
   }
 }

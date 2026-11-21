@@ -4,9 +4,37 @@ import './HomeGrid.css';
 const HomeGrid = ({ onSelectSection }) => {
   return (
     <div className="home-grid-container">
+      {/* Ambient background aura */}
+      <div className="ambient-glow top" aria-hidden="true" />
+      <div className="ambient-glow bottom" aria-hidden="true" />
+
       <header className="home-header">
-        <div className="subtitle">M . A . H . E . S . W . A . R . I</div>
-        <h1>Our Story & Scrapbook</h1>
+        <div className="birthday-kicker">
+          <span>A Special Birthday Celebration</span>
+        </div>
+        <h1 className="birthday-main-title">Happy Birthday Maheswari</h1>
+        <div className="name-acronym">
+          <span>M</span>
+          <span className="dot">&bull;</span>
+          <span>A</span>
+          <span className="dot">&bull;</span>
+          <span>H</span>
+          <span className="dot">&bull;</span>
+          <span>E</span>
+          <span className="dot">&bull;</span>
+          <span>S</span>
+          <span className="dot">&bull;</span>
+          <span>W</span>
+          <span className="dot">&bull;</span>
+          <span>A</span>
+          <span className="dot">&bull;</span>
+          <span>R</span>
+          <span className="dot">&bull;</span>
+          <span>I</span>
+        </div>
+        <p className="home-tagline">
+          Handcrafted with love &mdash; our story notes, digital sketchbook &amp; special surprise
+        </p>
       </header>
 
       <main className="home-grid">
@@ -33,12 +61,12 @@ const HomeGrid = ({ onSelectSection }) => {
           </div>
           <h2 className="card-title">Digital Sketchbook</h2>
           <p className="card-label">
-            Vintage scrapbooks, polaroids, taped memories & 3D corner flips
+            Vintage scrapbooks, polaroids, taped memories &amp; 3D corner flips
           </p>
           <div className="card-action">OPEN SKETCHBOOK &rarr;</div>
         </div>
 
-        {/* Card 2: Story Notes (Miniature Parchment Note Preview) */}
+        {/* Card 2: Story Notes (Miniature Parchment Note Preview - Clean, No Dates) */}
         <div
           className="grid-card"
           onClick={() => onSelectSection('story')}
@@ -51,7 +79,7 @@ const HomeGrid = ({ onSelectSection }) => {
           <div className="card-badge">STORY NOTES</div>
           <div className="card-visual-wrapper">
             <div className="story-note-preview">
-              <div className="mini-note-header">Chapter M • 2024</div>
+              <div className="mini-note-header">Chapter M</div>
               <div className="mini-note-lines">
                 <div className="mini-line" />
                 <div className="mini-line accent" />
@@ -63,7 +91,7 @@ const HomeGrid = ({ onSelectSection }) => {
           </div>
           <h2 className="card-title">Our Story Notes</h2>
           <p className="card-label">
-            Handwritten journal pages & memories from Chapter M to I
+            Handwritten journal memories through every letter from M to I
           </p>
           <div className="card-action">READ NOTES &rarr;</div>
         </div>
@@ -97,7 +125,7 @@ const HomeGrid = ({ onSelectSection }) => {
           </div>
           <h2 className="card-title">Special Gift</h2>
           <p className="card-label">
-            A personal surprise packed with loving thoughts for you
+            A personal surprise packed with loving thoughts just for you
           </p>
           <div className="card-action">UNWRAP GIFT &rarr;</div>
         </div>
