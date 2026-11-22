@@ -9,11 +9,11 @@ export const storyChapters = [
     parts: [
       { text: "Yes, Namma First meet indha College RPSIT — " },
       { text: "an unexpected beginning", highlight: true },
-      { text: " nu sollalamaa...? First 2-3 weeks en kannulaye padadha indha ponnu epudraaa enkitaa pesuunaa... ivan ponnunga kitaaye pesamatan.\n\nNamma thodakame oru chinna sandaii kutty sorry oda, lab la nadandha andha incident. But enaku konja bayam, epdi da pesusradhu, hurt panra mari pesiten, how it could be? But You accepted my sorry.\n\nAnd then daily una class la gavanichite, unaiyaa okandhu nalla sight adhichiruken. Apo nee enaku thaniyaa therinja. I didn't know you'd become my " },
+      { text: " nu sollalamaa...? First 2-3 weeks en kannulaye padadha indha ponnu epudraaa enkitaa pesuunaa... naa ponnunga kitaa avlova pesuradhu kedaiyadhu.\n\nNamma thodakame oru chinna sandaii kutty sorry oda, lab la nadandha andha incident. But enaku konja bayam, epdi da pesusradhu, hurt panra mari pesiten, how it could be? But You accepted my sorry.\n\nAnd then daily una class la gavanichite, unaiyaa okandhu nalla sight adhichiruken. Apo nee enaku thaniyaa therinja. I didn't know you'd become my " },
       { text: "favourite chapter", highlight: true },
       { text: ". But something in my chest already knew — this person matters." }
     ]
-  },
+  },  
   {
     letter: "A",
     title: "Always Laughing Like the World Was Ours",
