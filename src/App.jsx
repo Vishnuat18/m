@@ -5,11 +5,12 @@ import SketchbookViewer from './components/SketchbookViewer';
 import Story from './components/Story';
 import Gift from './components/Gift';
 import DeskBuddy from './components/DeskBuddy';
-import { MusicProvider } from './context/MusicContext';
+import { MusicProvider, useMusic } from './context/MusicContext';
 import RotatingCdWidget from './components/RotatingCdWidget';
 import './App.css';
 
 function AppContent() {
+  const { startMusic } = useMusic();
   const [isMobile, setIsMobile] = useState(() => {
     if (typeof window !== 'undefined') return window.innerWidth <= 768;
     return false;
@@ -27,7 +28,12 @@ function AppContent() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const handleIntroComplete = () => setCurrentScreen('home');
+  const handleIntroComplete = () => {
+    setCurrentScreen('home');
+    if (typeof startMusic === 'function') {
+      startMusic();
+    }
+  };
   const handleBackToHome = () => setCurrentScreen('home');
   const handleSelectSection = (sectionId) => setCurrentScreen(sectionId);
 

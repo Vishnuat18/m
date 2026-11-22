@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import MobileBirthdayPhone from './MobileBirthdayPhone';
+import { useMusic } from '../context/MusicContext';
 import './HomeGrid.css';
 
 const HomeGrid = ({ onSelectSection }) => {
+  const { startMusic } = useMusic();
   const [isMobile, setIsMobile] = useState(() => {
     if (typeof window !== 'undefined') {
       return window.innerWidth <= 768;
     }
     return false;
   });
+
+  useEffect(() => {
+    if (typeof startMusic === 'function') {
+      startMusic();
+    }
+  }, [startMusic]);
 
   useEffect(() => {
     const handleResize = () => {

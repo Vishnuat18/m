@@ -1379,112 +1379,242 @@
 }
 
 /* =====================================================================
-   PHONE DIALER MODAL
+   PHONE DIALER MODAL - VIOLET THEME (Reference Image 1: Zoey's -> Maheswari's phone)
    ===================================================================== */
-.phone-dialer-body {
+.native-app-modal.violet-phone-modal {
+  position: fixed;
+  inset: 0;
+  max-width: 440px;
+  margin: 0 auto;
+  background: radial-gradient(circle at 50% 12%, #260d46 0%, #110526 55%, #080214 100%);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: #ffffff;
+}
+
+.phone-ref-top-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px 4px 18px;
+  font-size: 11px;
+  color: rgba(216, 180, 254, 0.7);
+  letter-spacing: 0.5px;
+}
+
+.phone-ref-status-left,
+.phone-ref-status-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.phone-ref-status-icon {
+  width: 14px;
+  height: 14px;
+  opacity: 0.8;
+}
+
+.phone-ref-device-name {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: rgba(243, 232, 255, 0.85);
+  letter-spacing: 0.3px;
+}
+
+.phone-ref-battery-badge {
+  width: 20px;
+  height: 10px;
+  border: 1.5px solid rgba(216, 180, 254, 0.7);
+  border-radius: 2.5px;
+  padding: 1px;
+  display: flex;
+  align-items: center;
+}
+
+.phone-ref-battery-level {
+  width: 90%;
+  height: 100%;
+  background: #a855f7;
+  border-radius: 1px;
+}
+
+.phone-ref-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px 14px 16px;
+  border-bottom: 1px solid rgba(168, 85, 247, 0.12);
+}
+
+.phone-ref-icon-btn {
+  background: none;
+  border: none;
+  color: #e9d5ff;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.phone-ref-icon-btn:hover {
+  background: rgba(168, 85, 247, 0.15);
+}
+
+.phone-ref-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #f5f3ff;
+  letter-spacing: 0.4px;
+  margin: 0;
+}
+
+.phone-ref-body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
+  justify-content: space-between;
+  padding: 16px 20px 24px 20px;
+  overflow-y: auto;
 }
 
-.dialer-display-num {
-  font-size: 24px;
-  font-weight: 600;
-  color: #ffffff;
-  margin-bottom: 20px;
-  letter-spacing: 2px;
-  height: 32px;
-}
-
-.dialer-keypad-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+.phone-ref-dialer-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   gap: 14px;
-  width: 100%;
-  max-width: 260px;
-  margin-bottom: 20px;
 }
 
-.dial-digit-btn {
-  height: 56px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: #ffffff;
-  font-size: 20px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.dialer-actions-row {
+.phone-ref-display-row {
   display: flex;
   align-items: center;
-  gap: 20px;
+  justify-content: center;
+  gap: 12px;
+  min-height: 38px;
 }
 
-.dialer-call-btn {
-  padding: 12px 32px;
-  border-radius: 999px;
-  background: #22c55e;
-  border: none;
-  color: #ffffff;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
+.phone-ref-digits {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: #f5f3ff;
 }
 
-.dialer-backspace-btn {
+.phone-ref-backspace-btn {
   background: none;
   border: none;
-  color: #94a3b8;
-  font-size: 20px;
+  color: #c084fc;
   cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.call-active-stage {
+.phone-ref-warning-box {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
   text-align: center;
 }
 
-.caller-avatar-circle {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: #22c55e;
-  color: #ffffff;
-  font-size: 32px;
-  font-weight: 700;
+.phone-ref-warning-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.phone-ref-warning-text {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #facc15;
+  margin: 0;
+  line-height: 1.4;
+  letter-spacing: 0.2px;
+}
+
+.phone-ref-keypad-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  max-width: 320px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.phone-ref-key-card {
+  height: 64px;
+  border-radius: 16px;
+  background: rgba(88, 28, 135, 0.22);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  color: #f8fafc;
+  font-size: 24px;
+  font-weight: 500;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 12px;
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
-.caller-name {
-  font-family: 'Cinzel', serif;
-  font-size: 18px;
-  color: #ffffff;
-  margin: 0 0 4px 0;
+.phone-ref-key-card:hover {
+  background: rgba(126, 34, 206, 0.35);
+  border-color: rgba(192, 132, 252, 0.5);
 }
 
-.call-duration-text {
-  font-size: 13px;
-  color: #22c55e;
-  margin-bottom: 16px;
+.phone-ref-key-card:active {
+  transform: scale(0.96);
+  background: rgba(147, 51, 234, 0.45);
 }
 
-.call-sweet-whisper {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: 14.5px;
-  font-style: italic;
-  color: #cbd5e1;
-  max-width: 260px;
-  margin-bottom: 24px;
+.phone-ref-call-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.phone-ref-call-btn {
+  width: 96px;
+  height: 60px;
+  border-radius: 18px;
+  background: rgba(88, 28, 135, 0.22);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.phone-ref-call-btn:hover {
+  background: rgba(34, 197, 94, 0.18);
+  border-color: rgba(34, 197, 94, 0.5);
+}
+
+.phone-ref-call-btn:active {
+  transform: scale(0.95);
+}
+
+.violet-call-active {
+  background: rgba(59, 7, 100, 0.3);
+  padding: 30px 20px;
+  border-radius: 24px;
+  border: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.violet-avatar {
+  background: linear-gradient(135deg, #7e22ce 0%, #a855f7 100%) !important;
+  box-shadow: 0 0 25px rgba(168, 85, 247, 0.5);
 }
 
 .end-call-btn {
@@ -1681,58 +1811,175 @@
 }
 
 /* =====================================================================
-   CALCULATOR MODAL
+   CALCULATOR MODAL - EXACT REFERENCE IMAGE 2
    ===================================================================== */
-.calc-view-body {
+.native-app-modal.calc-modal-redesign {
+  position: fixed;
+  inset: 0;
+  max-width: 440px;
+  margin: 0 auto;
+  background: #000000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: #ffffff;
+}
+
+.calc-top-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px 4px 18px;
+}
+
+.calc-header-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.calc-header-icon-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.calc-header-icon-btn:hover {
+  color: #ffffff;
+}
+
+.calc-screen-wrap {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 16px;
+  align-items: flex-end;
+  padding: 16px 24px;
+  min-height: 120px;
+  overflow: hidden;
 }
 
-.calc-screen-display {
-  font-size: 36px;
-  font-weight: 600;
+.calc-formula-line {
+  font-size: 18px;
+  color: #64748b;
+  min-height: 26px;
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+
+.calc-main-display {
+  font-size: clamp(34px, 9vw, 54px);
+  font-weight: 400;
   color: #ffffff;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+  word-break: break-all;
   text-align: right;
-  padding: 16px;
-  min-height: 60px;
 }
 
-.calc-easter-egg-banner {
-  font-size: 12px;
-  color: #22c55e;
-  text-align: center;
-  margin-bottom: 8px;
+.calc-secret-toast {
+  font-size: 13px;
+  font-weight: 500;
+  color: #a855f7;
+  margin-top: 8px;
+  text-align: right;
 }
 
-.calc-buttons-grid {
+.calc-mid-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 8px 24px 12px 24px;
+}
+
+.calc-tool-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease;
+}
+
+.calc-tool-btn:hover {
+  color: #ffffff;
+}
+
+.calc-divider-line {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.calc-circular-keypad-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
+  gap: 12px;
+  padding: 0 18px 28px 18px;
+  max-width: 380px;
+  margin: 0 auto;
+  width: 100%;
 }
 
-.calc-btn {
-  height: 52px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.1);
+.calc-round-btn {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: 72px;
+  max-height: 72px;
+  margin: 0 auto;
+  border-radius: 50%;
   border: none;
-  color: #ffffff;
-  font-size: 18px;
-  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 500;
   cursor: pointer;
+  transition: filter 0.15s ease, transform 0.12s ease;
+  user-select: none;
 }
 
-.btn-op {
-  background: #f59e0b;
-  color: #100b08;
+.calc-round-btn:hover {
+  filter: brightness(1.2);
 }
 
-.btn-equals {
-  background: #22c55e;
-  color: #052e16;
-  grid-column: span 2;
+.calc-round-btn:active {
+  transform: scale(0.93);
+}
+
+.btn-number {
+  background: #242429;
+  color: #ffffff;
+}
+
+.btn-top-func {
+  background: #383842;
+  color: #f1f5f9;
+}
+
+.btn-op-accent {
+  background: #3f3f4c;
+  color: #ffffff;
+  font-size: 26px;
+}
+
+.btn-equal-circle {
+  background: #cbd5e1;
+  color: #0f172a;
+  font-size: 28px;
+  font-weight: 600;
 }
 
 /* =====================================================================

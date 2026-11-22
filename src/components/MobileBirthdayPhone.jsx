@@ -283,7 +283,26 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
     handleSeek,
     handleSelectTrack,
     MUSIC_TRACKS,
+    startMusic,
   } = useMusic();
+
+  // ONLY start music from Home Screen
+  useEffect(() => {
+    if (typeof startMusic === 'function') {
+      startMusic();
+    }
+    const onHomeTouch = () => {
+      if (typeof startMusic === 'function') {
+        startMusic();
+      }
+    };
+    window.addEventListener('touchstart', onHomeTouch, { once: true });
+    window.addEventListener('click', onHomeTouch, { once: true });
+    return () => {
+      window.removeEventListener('touchstart', onHomeTouch);
+      window.removeEventListener('click', onHomeTouch);
+    };
+  }, [startMusic]);
 
   // Clock
   useEffect(() => {
@@ -512,36 +531,85 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
   }, [callActive]);
 
   /* =========================================================================
-     CALCULATOR STATE
+     CALCULATOR STATE (Reference Image 2 Real Calculator)
      ========================================================================= */
   const [calcDisplay, setCalcDisplay] = useState('0');
+  const [calcFormula, setCalcFormula] = useState('');
   const [calcSecret, setCalcSecret] = useState(null);
 
-  const handleCalcBtn = (btn) => {
+  const handleCalcBtn = (action) => {
     playTone('click');
-    if (btn === 'C') {
+    if (action === 'AC') {
       setCalcDisplay('0');
+      setCalcFormula('');
       setCalcSecret(null);
       return;
     }
-    if (btn === '=') {
-      if (calcDisplay === '2211' || calcDisplay === '1204') {
+    if (action === 'backspace') {
+      setCalcDisplay((prev) => {
+        if (prev.length <= 1 || prev === 'Error') return '0';
+        return prev.slice(0, -1);
+      });
+      return;
+    }
+    if (action === '+/-') {
+      setCalcDisplay((prev) => {
+        if (prev === '0' || prev === 'Error') return prev;
+        if (prev.startsWith('-')) return prev.slice(1);
+        return '-' + prev;
+      });
+      return;
+    }
+    if (action === '%') {
+      setCalcDisplay((prev) => {
+        try {
+          const val = parseFloat(prev);
+          if (isNaN(val)) return 'Error';
+          return String(val / 100);
+        } catch (e) {
+          return 'Error';
+        }
+      });
+      return;
+    }
+    if (action === '=') {
+      if (calcDisplay === '2211' || calcDisplay === '1204' || calcDisplay === '22') {
         playTone('success');
-        triggerConfetti();
-        setCalcSecret('Vishnu loves you to infinity and beyond, Ammu!');
+        setCalcFormula(calcDisplay + ' =');
+        setCalcSecret('Vishnu loves you to infinity and beyond, Maheswari!');
         return;
       }
       try {
-        const sanitized = calcDisplay.replace(/[^0-9+\-*/.]/g, '');
+        setCalcFormula(calcDisplay + ' =');
+        const sanitized = calcDisplay
+          .replace(/÷/g, '/')
+          .replace(/×/g, '*')
+          .replace(/−/g, '-')
+          .replace(/[^0-9+\-*/.]/g, '');
         // eslint-disable-next-line no-eval
         const res = Function(`'use strict'; return (${sanitized})`)();
-        setCalcDisplay(String(res));
+        const formattedRes = Number.isInteger(res) ? String(res) : parseFloat(res.toFixed(6)).toString();
+        setCalcDisplay(formattedRes);
       } catch (e) {
         setCalcDisplay('Error');
       }
       return;
     }
-    setCalcDisplay((prev) => (prev === '0' || prev === 'Error' ? String(btn) : prev + String(btn)));
+
+    const isOp = ['+', '−', '×', '÷'].includes(action);
+    setCalcDisplay((prev) => {
+      if (prev === 'Error') return isOp ? '0' + action : String(action);
+      if (prev === '0') {
+        if (isOp) return '0' + action;
+        if (action === '.') return '0.';
+        return String(action);
+      }
+      const lastChar = prev.slice(-1);
+      if (['+', '−', '×', '÷'].includes(lastChar) && isOp) {
+        return prev.slice(0, -1) + action;
+      }
+      return prev + String(action);
+    });
   };
 
   /* =========================================================================
@@ -1144,36 +1212,73 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
       )}
 
       {/* =====================================================================
-          MODAL 4: PHONE DIALER
+          MODAL 4: PHONE DIALER (Reference Image 1: Violet Theme, Zoey's -> Maheswari's phone)
           ===================================================================== */}
       {activeModal === 'phone' && (
-        <div className="native-app-modal phone-modal">
-          <header className="modal-top-bar bg-emerald-950">
-            <div className="modal-title-wrap">
-              <h2>Phone</h2>
-              <span className="modal-sub">Direct Line to Vishnu</span>
+        <div className="native-app-modal violet-phone-modal">
+          {/* Top Status Bar: Diamond, Clock-arrow, Device Name, Wifi, Battery */}
+          <div className="phone-ref-top-status">
+            <div className="phone-ref-status-left">
+              <svg className="phone-ref-status-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2L2 12l10 10 10-10L12 2z" />
+              </svg>
+              <svg className="phone-ref-status-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.85 1.04 6.53 2.73L21 8" />
+                <path d="M21 3v5h-5" />
+              </svg>
             </div>
+            <span className="phone-ref-device-name">Maheswari&apos;s phone</span>
+            <div className="phone-ref-status-right">
+              <svg className="phone-ref-status-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12.55a11 11 0 0 1 14.08 0" />
+                <path d="M1.42 9a16 16 0 0 1 21.16 0" />
+                <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
+                <line x1="12" y1="20" x2="12.01" y2="20" />
+              </svg>
+              <div className="phone-ref-battery-badge">
+                <div className="phone-ref-battery-level" />
+              </div>
+            </div>
+          </div>
+
+          {/* Main Header: History icon on left, "Phone" in center, Close "X" on right */}
+          <header className="phone-ref-header">
             <button
               type="button"
-              className="modal-x-btn"
+              className="phone-ref-icon-btn"
+              onClick={() => playTone('click')}
+              aria-label="Call History"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="9" />
+                <polyline points="12 7 12 12 15 15" />
+                <path d="M3.05 11a9 9 0 0 1 .5-2" />
+              </svg>
+            </button>
+
+            <h2 className="phone-ref-title">Phone</h2>
+
+            <button
+              type="button"
+              className="phone-ref-icon-btn"
               onClick={closeModal}
               aria-label="Close"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
                 <line x1="6" y1="6" x2="18" y2="18"></line>
               </svg>
             </button>
           </header>
 
-          <div className="phone-dialer-body">
+          <div className="phone-ref-body">
             {callActive ? (
-              <div className="call-active-stage">
-                <div className="caller-avatar-circle">V</div>
+              <div className="call-active-stage violet-call-active">
+                <div className="caller-avatar-circle violet-avatar">V</div>
                 <h3 className="caller-name">Vishnu</h3>
                 <span className="call-duration-text">{callTimer}s</span>
                 <p className="call-sweet-whisper">
-                  &ldquo;I am always just one call away, Ammu. Happy Birthday!&rdquo;
+                  &ldquo;I am always just one call away, Ammu. Happy Birthday Maheswari!&rdquo;
                 </p>
                 <button
                   type="button"
@@ -1187,14 +1292,48 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
                 </button>
               </div>
             ) : (
-              <div className="dialer-stage">
-                <div className="dialer-display-num">{dialNumber || 'Enter digits...'}</div>
-                <div className="dialer-keypad-grid">
+              <div className="phone-ref-dialer-wrap">
+                {/* Dialed Digits Display if user typed */}
+                {dialNumber ? (
+                  <div className="phone-ref-display-row">
+                    <span className="phone-ref-digits">{dialNumber}</span>
+                    <button
+                      type="button"
+                      className="phone-ref-backspace-btn"
+                      onClick={() => {
+                        playTone('click');
+                        setDialNumber((prev) => prev.slice(0, -1));
+                      }}
+                      aria-label="Delete"
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" />
+                        <line x1="18" y1="9" x2="12" y2="15" />
+                        <line x1="12" y1="9" x2="18" y2="15" />
+                      </svg>
+                    </button>
+                  </div>
+                ) : null}
+
+                {/* Warning box matching Reference Image 1 */}
+                <div className="phone-ref-warning-box">
+                  <svg className="phone-ref-warning-icon" viewBox="0 0 24 24" fill="none" stroke="#eab308" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  </svg>
+                  <p className="phone-ref-warning-text">
+                    Calling functionality not detected on this device
+                  </p>
+                </div>
+
+                {/* Keypad Grid: 3 x 4 rounded rectangle cards */}
+                <div className="phone-ref-keypad-grid">
                   {[1, 2, 3, 4, 5, 6, 7, 8, 9, '*', 0, '#'].map((d) => (
                     <button
                       key={d}
                       type="button"
-                      className="dial-digit-btn"
+                      className="phone-ref-key-card"
                       onClick={() => {
                         playTone('click');
                         setDialNumber((prev) => prev + String(d));
@@ -1204,26 +1343,21 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
                     </button>
                   ))}
                 </div>
-                <div className="dialer-actions-row">
+
+                {/* Centered Call Button matching Reference Image 1 */}
+                <div className="phone-ref-call-row">
                   <button
                     type="button"
-                    className="dialer-backspace-btn"
-                    onClick={() => {
-                      playTone('click');
-                      setDialNumber((prev) => prev.slice(0, -1));
-                    }}
-                  >
-                    ⌫
-                  </button>
-                  <button
-                    type="button"
-                    className="dialer-call-btn"
+                    className="phone-ref-call-btn"
                     onClick={() => {
                       playTone('success');
                       setCallActive(true);
                     }}
+                    aria-label="Call"
                   >
-                    Call
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                    </svg>
                   </button>
                 </div>
               </div>
@@ -1478,43 +1612,145 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
       )}
 
       {/* =====================================================================
-          MODAL 7: CALCULATOR
+          MODAL 7: CALCULATOR (Reference Image 2 Circular Keypad & Toolbar)
           ===================================================================== */}
       {activeModal === 'calculator' && (
-        <div className="native-app-modal calc-modal">
-          <header className="modal-top-bar bg-rose-950">
-            <div className="modal-title-wrap">
-              <h2>Calculator</h2>
-              <span className="modal-sub">Special Edition</span>
-            </div>
+        <div className="native-app-modal calc-modal-redesign">
+          {/* Top Bar with Expand on left, Settings and Close on right */}
+          <header className="calc-top-header">
             <button
               type="button"
-              className="modal-x-btn"
-              onClick={closeModal}
-              aria-label="Close"
+              className="calc-header-icon-btn"
+              onClick={() => playTone('click')}
+              aria-label="Expand"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
               </svg>
             </button>
+
+            <div className="calc-header-actions-right">
+              <button
+                type="button"
+                className="calc-header-icon-btn"
+                onClick={() => playTone('click')}
+                aria-label="Settings"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="3" />
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                className="calc-header-icon-btn calc-close-btn"
+                onClick={closeModal}
+                aria-label="Close"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
           </header>
 
-          <div className="calc-view-body">
-            <div className="calc-screen-display">{calcDisplay}</div>
-            {calcSecret && <div className="calc-easter-egg-banner">{calcSecret}</div>}
-            <div className="calc-buttons-grid">
-              {['C', '(', ')', '/', 7, 8, 9, '*', 4, 5, 6, '-', 1, 2, 3, '+', 0, '.', '='].map((btn) => (
-                <button
-                  key={btn}
-                  type="button"
-                  className={`calc-btn ${btn === '=' ? 'btn-equals' : typeof btn === 'string' && ['/', '*', '-', '+'].includes(btn) ? 'btn-op' : ''}`}
-                  onClick={() => handleCalcBtn(btn)}
-                >
-                  {btn}
-                </button>
-              ))}
-            </div>
+          {/* Calculator Display */}
+          <div className="calc-screen-wrap">
+            <div className="calc-formula-line">{calcFormula}</div>
+            <div className="calc-main-display">{calcDisplay}</div>
+            {calcSecret && <div className="calc-secret-toast">{calcSecret}</div>}
+          </div>
+
+          {/* Middle Toolbar Row with 3 icons matching Reference Image 2 */}
+          <div className="calc-mid-toolbar">
+            <button
+              type="button"
+              className="calc-tool-btn"
+              onClick={() => playTone('click')}
+              aria-label="History"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="9" />
+                <polyline points="12 7 12 12 15 15" />
+                <path d="M3.05 11a9 9 0 0 1 .5-2" />
+              </svg>
+            </button>
+
+            <button
+              type="button"
+              className="calc-tool-btn"
+              onClick={() => playTone('click')}
+              aria-label="Formulas"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="3" />
+                <path d="M7 8l4 8" />
+                <path d="M11 8l-4 8" />
+                <path d="M15 10h4" />
+                <path d="M16 10v6" />
+                <path d="M18 10v6" />
+              </svg>
+            </button>
+
+            <button
+              type="button"
+              className="calc-tool-btn"
+              onClick={() => playTone('click')}
+              aria-label="Currency Converter"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.19" />
+                <path d="M12 9v6m-2-4.5c0-.83.67-1.5 1.5-1.5h1a1.5 1.5 0 0 1 0 3h-1a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 0 1.5-1.5" />
+              </svg>
+            </button>
+          </div>
+
+          <div className="calc-divider-line" />
+
+          {/* Keypad: 4 Columns x 5 Rows of Circular Buttons */}
+          <div className="calc-circular-keypad-grid">
+            {/* Row 1 */}
+            <button type="button" className="calc-round-btn btn-top-func" onClick={() => handleCalcBtn('AC')}>
+              AC
+            </button>
+            <button type="button" className="calc-round-btn btn-top-func" onClick={() => handleCalcBtn('backspace')} aria-label="Backspace">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" />
+                <line x1="18" y1="9" x2="12" y2="15" />
+                <line x1="12" y1="9" x2="18" y2="15" />
+              </svg>
+            </button>
+            <button type="button" className="calc-round-btn btn-top-func" onClick={() => handleCalcBtn('+/-')}>
+              +/-
+            </button>
+            <button type="button" className="calc-round-btn btn-top-func btn-op-accent" onClick={() => handleCalcBtn('÷')}>
+              ÷
+            </button>
+
+            {/* Row 2 */}
+            <button type="button" className="calc-round-btn btn-number" onClick={() => handleCalcBtn('7')}>7</button>
+            <button type="button" className="calc-round-btn btn-number" onClick={() => handleCalcBtn('8')}>8</button>
+            <button type="button" className="calc-round-btn btn-number" onClick={() => handleCalcBtn('9')}>9</button>
+            <button type="button" className="calc-round-btn btn-top-func btn-op-accent" onClick={() => handleCalcBtn('×')}>×</button>
+
+            {/* Row 3 */}
+            <button type="button" className="calc-round-btn btn-number" onClick={() => handleCalcBtn('4')}>4</button>
+            <button type="button" className="calc-round-btn btn-number" onClick={() => handleCalcBtn('5')}>5</button>
+            <button type="button" className="calc-round-btn btn-number" onClick={() => handleCalcBtn('6')}>6</button>
+            <button type="button" className="calc-round-btn btn-top-func btn-op-accent" onClick={() => handleCalcBtn('−')}>−</button>
+
+            {/* Row 4 */}
+            <button type="button" className="calc-round-btn btn-number" onClick={() => handleCalcBtn('1')}>1</button>
+            <button type="button" className="calc-round-btn btn-number" onClick={() => handleCalcBtn('2')}>2</button>
+            <button type="button" className="calc-round-btn btn-number" onClick={() => handleCalcBtn('3')}>3</button>
+            <button type="button" className="calc-round-btn btn-top-func btn-op-accent" onClick={() => handleCalcBtn('+')}>+</button>
+
+            {/* Row 5 */}
+            <button type="button" className="calc-round-btn btn-top-func" onClick={() => handleCalcBtn('%')}>%</button>
+            <button type="button" className="calc-round-btn btn-number" onClick={() => handleCalcBtn('0')}>0</button>
+            <button type="button" className="calc-round-btn btn-number" onClick={() => handleCalcBtn('.')}>.</button>
+            <button type="button" className="calc-round-btn btn-equal-circle" onClick={() => handleCalcBtn('=')}>=</button>
           </div>
         </div>
       )}

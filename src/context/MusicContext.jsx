@@ -25,24 +25,14 @@ export const MusicProvider = ({ children }) => {
 
   const currentTrack = MUSIC_TRACKS[currentTrackIndex];
 
-  // Try to play audio continuously on first user interaction anywhere
-  useEffect(() => {
-    const startAudioOnTouch = () => {
-      if (audioRef.current && audioRef.current.paused) {
-        audioRef.current
-          .play()
-          .then(() => setIsPlaying(true))
-          .catch(() => {});
-      }
-    };
-
-    window.addEventListener('touchstart', startAudioOnTouch, { once: true });
-    window.addEventListener('click', startAudioOnTouch, { once: true });
-
-    return () => {
-      window.removeEventListener('touchstart', startAudioOnTouch);
-      window.removeEventListener('click', startAudioOnTouch);
-    };
+  // Start music method - ONLY called from the Home Screen
+  const startMusic = useCallback(() => {
+    if (audioRef.current && audioRef.current.paused) {
+      audioRef.current
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch(() => {});
+    }
   }, []);
 
   const handlePlayPause = useCallback(() => {
@@ -136,6 +126,7 @@ export const MusicProvider = ({ children }) => {
         handlePrevTrack,
         handleSeek,
         handleSelectTrack,
+        startMusic,
       }}
     >
       <audio
