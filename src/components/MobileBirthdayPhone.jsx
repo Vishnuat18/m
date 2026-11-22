@@ -57,16 +57,19 @@ const FRIENDS_CHATS = {
     timestamp: '11:16 PM',
     preview: 'Mahes dearrrr! Happiest Birthday to you! May this year bring endless...',
     initialMsgs: [
-      { sender: 'them', text: 'Mahes dearrrr! Happiest Birthday to you! May this year bring endless smiles and laughter!', time: '11:14 PM' },
-      { sender: 'them', text: 'You are truly one in a million and my sweetest friend ever! Treat eppo thara pora?', time: '11:15 PM' },
-      { sender: 'them', text: 'Never stop smiling di, your happiness makes everyone around you happy! Love you always!', time: '11:16 PM' },
+      { sender: 'them', text: 'Mahes dearrrr! Happiest Birthday to you!', time: '11:12 PM' },
+      { sender: 'them', text: 'May this year bring you endless smiles, laughter, and pure happiness!', time: '11:13 PM' },
+      { sender: 'them', text: 'You are truly one in a million and my sweetest bestie ever!', time: '11:14 PM' },
+      { sender: 'them', text: 'Treat eppo thara pora? We have to celebrate big time!', time: '11:15 PM' },
+      { sender: 'them', text: 'Never stop smiling Mahes, love you always!', time: '11:16 PM' },
     ],
     replies: [
       'Thank you so much Sanjuuu! You are the best!',
       'Hahaha treat kandippa undu! Love you too!',
       'Thanks for always being there with me Sanjuuu!',
+      'So lucky to have a bestie like you!',
     ],
-    replyResponse: 'Awww Ammu! Enjoy your day to the maximum! Sending you big virtual hugs!',
+    replyResponse: 'Awww Mahes! Enjoy your day to the maximum! Sending you big virtual hugs!',
   },
   nikkii: {
     key: 'nikkii',
@@ -75,18 +78,16 @@ const FRIENDS_CHATS = {
     avatar: 'N',
     color: '#3b82f6',
     timestamp: '10:59 PM',
-    preview: 'Happy Birthday Maheswari! Wishing you the most magical and...',
+    preview: 'Happy Birthday Mahes! Wishing you the most magical and...',
     initialMsgs: [
-      { sender: 'them', text: 'Happy Birthday Maheswari! Wishing you the most magical and beautiful day!', time: '10:57 PM' },
-      { sender: 'them', text: 'May all your dreams turn into reality this year. Keep rocking like always!', time: '10:58 PM' },
-      { sender: 'them', text: 'Stay as bright and sweet as you always are, Ammu!', time: '10:59 PM' },
+      { sender: 'them', text: 'Happy Birthday Mahes! Wishing you the most magical and beautiful day!', time: '10:58 PM' },
+      { sender: 'them', text: 'May all your dreams turn into reality this year. Keep rocking like always, Mahes!', time: '10:59 PM' },
     ],
     replies: [
       'Thank you so much NIkkii!',
-      'Thanks dear! Means so much to me!',
       'Love you NIkkii! So happy to have you!',
     ],
-    replyResponse: 'Always here for you Maheswari! Have a blasting birthday celebration!',
+    replyResponse: 'Always here for you Mahes! Have a blasting birthday celebration!',
   },
   hemaa: {
     key: 'hemaa',
@@ -95,18 +96,19 @@ const FRIENDS_CHATS = {
     avatar: 'H',
     color: '#10b981',
     timestamp: '09:45 PM',
-    preview: 'Happy Happy Birthday to my dear Maheswari! Always stay blessed...',
+    preview: 'Happy Happy Birthday to my dear Mahes! Always stay blessed...',
     initialMsgs: [
-      { sender: 'them', text: 'Happy Happy Birthday to my dear Maheswari!', time: '09:43 PM' },
-      { sender: 'them', text: 'God bless you with all peace, health, and endless joy! Always stay blessed!', time: '09:44 PM' },
-      { sender: 'them', text: 'Have a super special celebration today, Ammu!', time: '09:45 PM' },
+      { sender: 'them', text: 'Happy Happy Birthday to my dear Mahes!', time: '09:42 PM' },
+      { sender: 'them', text: 'God bless you with all peace, health, and endless joy! Always stay blessed!', time: '09:43 PM' },
+      { sender: 'them', text: 'You bring so much positivity and sunshine into our lives!', time: '09:44 PM' },
+      { sender: 'them', text: 'Have a super special celebration today, Mahes!', time: '09:45 PM' },
     ],
     replies: [
       'Thank you so much Hemaa!',
       'Thank you for your lovely blessings Hemaa!',
-      'So sweet of you Hemaa! Thank you!',
+      'So sweet of you Hemaa! Thanks a lot!',
     ],
-    replyResponse: 'Keep that glowing smile always, dear! Happy Birthday once again!',
+    replyResponse: 'Keep that glowing smile always, Mahes! Happy Birthday once again!',
   },
   ranjuu: {
     key: 'ranjuu',
@@ -119,7 +121,7 @@ const FRIENDS_CHATS = {
     initialMsgs: [
       { sender: 'them', text: 'Dearest Mahes! Wishing you a very Happy Birthday!', time: '09:39 PM' },
       { sender: 'them', text: 'May your journey ahead be filled with sweet surprises, laughter, and success!', time: '09:40 PM' },
-      { sender: 'them', text: 'You bring so much warmth and fun into our lives. Have the best year ahead!', time: '09:41 PM' },
+      { sender: 'them', text: 'You bring so much warmth and fun into our lives. Have the best year ahead, Mahes!', time: '09:41 PM' },
     ],
     replies: [
       'Thank you so much Ranjuu!',
@@ -137,9 +139,10 @@ const FRIENDS_CHATS = {
     timestamp: '08:30 PM',
     preview: 'Looking up at the same sky with you... always.',
     initialMsgs: [
-      { sender: 'them', text: 'Happy Birthday Maheswari! Wishing you the happiest and most magical day ever!', time: '08:28 PM' },
-      { sender: 'them', text: 'I built this special digital universe just for you to celebrate every wonderful memory.', time: '08:29 PM' },
-      { sender: 'them', text: 'Looking up at the same sky with you... always.', time: '08:30 PM' },
+      { sender: 'them', text: 'Happy Birthday Maheswari! Wishing you the happiest and most magical day ever!', time: '08:27 PM' },
+      { sender: 'them', text: 'I built this special digital universe just for you to celebrate every wonderful memory.', time: '08:28 PM' },
+      { sender: 'them', text: 'Looking up at the same sky with you... always.', time: '08:29 PM' },
+      { sender: 'them', text: 'You are my entire world, Ammu. Forever and always.', time: '08:30 PM' },
     ],
     replies: [
       'Thank you so much Vishnu!',
@@ -397,7 +400,7 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
       setIsFriendTyping(false);
       playTone('success');
       const friendObj = FRIENDS_CHATS[friendKey];
-      const replyText = friendObj ? friendObj.replyResponse : 'Happy Birthday Ammu!';
+      const replyText = friendObj ? friendObj.replyResponse : 'Happy Birthday Mahes!';
       setFriendsThreads((prev) => ({
         ...prev,
         [friendKey]: [...(prev[friendKey] || []), { sender: 'them', text: replyText, time: currentTime }],

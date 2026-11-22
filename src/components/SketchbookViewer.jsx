@@ -4,7 +4,9 @@ import './SketchbookViewer.css';
 const SketchbookViewer = ({ onBack }) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showRotateToast, setShowRotateToast] = useState(true);
+  const [downloadToast, setDownloadToast] = useState(false);
   const containerRef = useRef(null);
+  const iframeRef = useRef(null);
 
   // Auto-dismiss rotate toast after 4.5 seconds
   useEffect(() => {
@@ -13,6 +15,51 @@ const SketchbookViewer = ({ onBack }) => {
     }, 4500);
     return () => clearTimeout(timer);
   }, []);
+
+  // Handle Download Scrapbook
+  const handleDownloadScrapbook = () => {
+    try {
+      const iframe = iframeRef.current;
+      const iframeDoc = iframe?.contentDocument || iframe?.contentWindow?.document;
+      const previewModal = iframeDoc?.getElementById('previewModal');
+      const isPreviewOpen = previewModal && window.getComputedStyle(previewModal).display !== 'none';
+      const previewImg = iframeDoc?.getElementById('previewImg');
+
+      let downloadSrc = '/assets/sketchbook-cover.jpg';
+      let filename = 'Maheswari-Scrapbook-Cover.jpg';
+
+      if (isPreviewOpen && previewImg?.src) {
+        downloadSrc = previewImg.src;
+        const counterText = iframeDoc?.getElementById('previewCounter')?.textContent || '1';
+        const pageNum = counterText.split('/')[0]?.trim() || '1';
+        filename = `Maheswari-Scrapbook-Page-${pageNum}.jpg`;
+      } else {
+        const spreadLabel = iframeDoc?.getElementById('spreadLabel')?.textContent;
+        if (spreadLabel && spreadLabel.toLowerCase().includes('page')) {
+          filename = `Maheswari-Scrapbook-${spreadLabel.replace(/[^a-zA-Z0-9]/g, '-')}.jpg`;
+        }
+      }
+
+      const a = document.createElement('a');
+      a.href = downloadSrc;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      setDownloadToast(true);
+      setTimeout(() => setDownloadToast(false), 3200);
+    } catch (e) {
+      const a = document.createElement('a');
+      a.href = '/assets/sketchbook-cover.jpg';
+      a.download = 'Maheswari-Scrapbook.jpg';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setDownloadToast(true);
+      setTimeout(() => setDownloadToast(false), 3200);
+    }
+  };
 
   useEffect(() => {
     // Monitor native fullscreen state changes
@@ -118,50 +165,95 @@ const SketchbookViewer = ({ onBack }) => {
           <span className="btn-label-text">Home</span>
         </button>
 
-        {/* Fullscreen Toggle Button */}
-        <button
-          className={`sketchbook-glass-btn fs-btn ${isFullscreen ? 'active' : ''}`}
-          onClick={toggleFullscreen}
-          aria-label={isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
-          title={isFullscreen ? 'Exit Fullscreen' : 'Open in Fullscreen'}
-        >
-          {isFullscreen ? (
-            <>
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3" />
-              </svg>
-              <span className="btn-label-text desktop-label">Exit Fullscreen</span>
-              <span className="btn-label-text mobile-label">Exit</span>
-            </>
-          ) : (
-            <>
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
-              </svg>
-              <span className="btn-label-text desktop-label">Fullscreen</span>
-              <span className="btn-label-text mobile-label">Full</span>
-            </>
-          )}
-        </button>
+        {/* Right Action Controls: Round Download Button & Fullscreen Button */}
+        <div className="sketchbook-top-actions">
+          {/* Round Scrapbook Download Button */}
+          <button
+            type="button"
+            className="sketchbook-round-download-btn"
+            onClick={handleDownloadScrapbook}
+            aria-label="Download Scrapbook"
+            title="Download Scrapbook Memory"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+          </button>
+
+          {/* Fullscreen Toggle Button */}
+          <button
+            className={`sketchbook-glass-btn fs-btn ${isFullscreen ? 'active' : ''}`}
+            onClick={toggleFullscreen}
+            aria-label={isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
+            title={isFullscreen ? 'Exit Fullscreen' : 'Open in Fullscreen'}
+          >
+            {isFullscreen ? (
+              <>
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3" />
+                </svg>
+                <span className="btn-label-text desktop-label">Exit Fullscreen</span>
+                <span className="btn-label-text mobile-label">Exit</span>
+              </>
+            ) : (
+              <>
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+                </svg>
+                <span className="btn-label-text desktop-label">Fullscreen</span>
+                <span className="btn-label-text mobile-label">Full</span>
+              </>
+            )}
+          </button>
+        </div>
       </header>
+
+      {/* Download Toast */}
+      {downloadToast && (
+        <aside className="sketchbook-download-toast" role="status" aria-live="polite">
+          <svg
+            className="toast-download-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+          <span>Downloading Scrapbook Memory...</span>
+        </aside>
+      )}
 
       {/* Auto Rotate Toast when scrapbook opens */}
       {showRotateToast && (
@@ -191,6 +283,7 @@ const SketchbookViewer = ({ onBack }) => {
 
       {/* Embed Sketchbook.html directly in Full Screen Viewport */}
       <iframe
+        ref={iframeRef}
         src="/Sketchbook.html"
         title="Digital Scrapbook Sketchbook"
         className="sketchbook-frame"
