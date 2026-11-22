@@ -1457,14 +1457,47 @@
     const SCRAPBOOK_PDF_URL = "/music/Sketchbook_22_Pages_Newspaper_Aesthetic.pdf";
     const SCRAPBOOK_PDF_NAME = "Sketchbook_22_Pages_Newspaper_Aesthetic.pdf";
 
-    function triggerPdfDownload() {
-      const a = document.createElement("a");
-      a.href = SCRAPBOOK_PDF_URL;
-      a.download = SCRAPBOOK_PDF_NAME;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+    async function triggerPdfDownload() {
+      // 1. Dispatch message to parent window (so outer browser handles download outside sandbox)
+      try {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'DOWNLOAD_SCRAPBOOK_PDF' }, '*');
+        }
+      } catch (e) {}
+
       showToast("Downloading 22-Page Scrapbook PDF...");
+
+      // 2. Direct Blob download
+      try {
+        const response = await fetch(SCRAPBOOK_PDF_URL);
+        if (response.ok) {
+          const blob = await response.blob();
+          const blobUrl = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = blobUrl;
+          a.download = SCRAPBOOK_PDF_NAME;
+          a.target = "_blank";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
+          return;
+        }
+      } catch (err) {
+        console.warn("Direct blob download failed inside iframe:", err);
+      }
+
+      // 3. Fallback direct link
+      try {
+        const a = document.createElement("a");
+        a.href = SCRAPBOOK_PDF_URL;
+        a.download = SCRAPBOOK_PDF_NAME;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      } catch (err) {}
     }
 
     const previewDownloadBtn = document.getElementById("previewDownloadBtn");

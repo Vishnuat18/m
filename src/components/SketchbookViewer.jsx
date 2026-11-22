@@ -16,18 +16,50 @@ const SketchbookViewer = ({ onBack }) => {
     return () => clearTimeout(timer);
   }, []);
 
+  // Listen for download requests dispatched from inside the embedded Sketchbook.html iframe
+  useEffect(() => {
+    const handleFrameMessage = (event) => {
+      if (event.data && (event.data.type === 'DOWNLOAD_SCRAPBOOK_PDF' || event.data.type === 'DOWNLOAD_SCRAPBOOK')) {
+        handleDownloadScrapbook();
+      }
+    };
+    window.addEventListener('message', handleFrameMessage);
+    return () => window.removeEventListener('message', handleFrameMessage);
+  }, []);
+
   // Handle Download Scrapbook PDF (Downloads the 22-page Newspaper Aesthetic PDF)
-  const handleDownloadScrapbook = () => {
+  const handleDownloadScrapbook = async () => {
+    setDownloadToast(true);
+    setTimeout(() => setDownloadToast(false), 3500);
+
+    try {
+      const response = await fetch('/music/Sketchbook_22_Pages_Newspaper_Aesthetic.pdf');
+      if (response.ok) {
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = 'Sketchbook_22_Pages_Newspaper_Aesthetic.pdf';
+        a.target = '_blank';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
+        return;
+      }
+    } catch (e) {
+      console.warn('Blob fetch download failed, using direct fallback:', e);
+    }
+
     try {
       const a = document.createElement('a');
       a.href = '/music/Sketchbook_22_Pages_Newspaper_Aesthetic.pdf';
       a.download = 'Sketchbook_22_Pages_Newspaper_Aesthetic.pdf';
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-
-      setDownloadToast(true);
-      setTimeout(() => setDownloadToast(false), 3500);
     } catch (e) {
       console.error('Download error:', e);
     }
@@ -161,6 +193,7 @@ const SketchbookViewer = ({ onBack }) => {
               <polyline points="7 10 12 15 17 10" />
               <line x1="12" y1="15" x2="12" y2="3" />
             </svg>
+            <span className="sketchbook-btn-badge">PDF</span>
           </button>
 
           {/* Fullscreen Toggle Button */}
@@ -259,6 +292,7 @@ const SketchbookViewer = ({ onBack }) => {
         src="/Sketchbook.html"
         title="Digital Scrapbook Sketchbook"
         className="sketchbook-frame"
+        sandbox="allow-scripts allow-same-origin allow-downloads allow-forms allow-modals allow-popups"
         allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
         allowFullScreen={true}
       />

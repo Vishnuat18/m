@@ -517,11 +517,52 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
   const [activeMailItem, setActiveMailItem] = useState(null);
 
   /* =========================================================================
-     PHONE DIALER STATE
+     PHONE DIALER STATE (Calling is NOT workable on this device)
      ========================================================================= */
   const [dialNumber, setDialNumber] = useState('');
   const [callActive, setCallActive] = useState(false);
   const [callTimer, setCallTimer] = useState(0);
+  const [callingWarningAlert, setCallingWarningAlert] = useState(false);
+  const [scrapbookDownloadToast, setScrapbookDownloadToast] = useState(false);
+
+  // Reliable Scrapbook PDF Download for mobile devices
+  const handleDownloadScrapbookPdf = async (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    playTone('click');
+    setScrapbookDownloadToast(true);
+    setTimeout(() => setScrapbookDownloadToast(false), 3500);
+
+    try {
+      const res = await fetch('/music/Sketchbook_22_Pages_Newspaper_Aesthetic.pdf');
+      if (res.ok) {
+        const blob = await res.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = 'Sketchbook_22_Pages_Newspaper_Aesthetic.pdf';
+        a.target = '_blank';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
+        return;
+      }
+    } catch (err) {
+      console.warn('Blob fetch failed, falling back to direct anchor:', err);
+    }
+
+    const fallbackA = document.createElement('a');
+    fallbackA.href = '/music/Sketchbook_22_Pages_Newspaper_Aesthetic.pdf';
+    fallbackA.download = 'Sketchbook_22_Pages_Newspaper_Aesthetic.pdf';
+    fallbackA.target = '_blank';
+    fallbackA.rel = 'noopener noreferrer';
+    document.body.appendChild(fallbackA);
+    fallbackA.click();
+    document.body.removeChild(fallbackA);
+  };
 
   useEffect(() => {
     let iv = null;
@@ -723,6 +764,22 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
             }}
             aria-label="Open Scrapbook"
           >
+            {/* Dedicated Visible Round Download Button for Scrapbook PDF */}
+            <button
+              type="button"
+              className="duo-scrapbook-download-btn"
+              onClick={handleDownloadScrapbookPdf}
+              aria-label="Download Scrapbook PDF"
+              title="Download 22-Page Scrapbook PDF"
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              <span className="pdf-tag">PDF</span>
+            </button>
+
             <div className="duo-card-visual">
               <img
                 src="/assets/sketchbook-cover.jpg"
@@ -784,6 +841,16 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
           ))}
         </main>
       </div>
+
+      {/* Toast feedback for Home Scrapbook PDF download */}
+      {scrapbookDownloadToast && (
+        <aside className="home-download-toast" role="status" aria-live="polite">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+          <span>Downloading 22-Page Scrapbook PDF...</span>
+        </aside>
+      )}
 
       {/* =====================================================================
           MODAL 1: MESSAGES APP (Reference Image 3 Style - "Mahi" -> "Mahes")
@@ -1272,96 +1339,83 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
           </header>
 
           <div className="phone-ref-body">
-            {callActive ? (
-              <div className="call-active-stage violet-call-active">
-                <div className="caller-avatar-circle violet-avatar">V</div>
-                <h3 className="caller-name">Vishnu</h3>
-                <span className="call-duration-text">{callTimer}s</span>
-                <p className="call-sweet-whisper">
-                  &ldquo;I am always just one call away, Ammu. Happy Birthday Maheswari!&rdquo;
-                </p>
-                <button
-                  type="button"
-                  className="end-call-btn"
-                  onClick={() => {
-                    playTone('bump');
-                    setCallActive(false);
-                  }}
-                >
-                  End Call
-                </button>
-              </div>
-            ) : (
-              <div className="phone-ref-dialer-wrap">
-                {/* Dialed Digits Display if user typed */}
-                {dialNumber ? (
-                  <div className="phone-ref-display-row">
-                    <span className="phone-ref-digits">{dialNumber}</span>
-                    <button
-                      type="button"
-                      className="phone-ref-backspace-btn"
-                      onClick={() => {
-                        playTone('click');
-                        setDialNumber((prev) => prev.slice(0, -1));
-                      }}
-                      aria-label="Delete"
-                    >
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" />
-                        <line x1="18" y1="9" x2="12" y2="15" />
-                        <line x1="12" y1="9" x2="18" y2="15" />
-                      </svg>
-                    </button>
-                  </div>
-                ) : null}
-
-                {/* Warning box matching Reference Image 1 */}
-                <div className="phone-ref-warning-box">
-                  <svg className="phone-ref-warning-icon" viewBox="0 0 24 24" fill="none" stroke="#eab308" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="12" y1="8" x2="12" y2="12" />
-                    <line x1="12" y1="16" x2="12.01" y2="16" />
-                  </svg>
-                  <p className="phone-ref-warning-text">
-                    Calling functionality not detected on this device
-                  </p>
-                </div>
-
-                {/* Keypad Grid: 3 x 4 rounded rectangle cards */}
-                <div className="phone-ref-keypad-grid">
-                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, '*', 0, '#'].map((d) => (
-                    <button
-                      key={d}
-                      type="button"
-                      className="phone-ref-key-card"
-                      onClick={() => {
-                        playTone('click');
-                        setDialNumber((prev) => prev + String(d));
-                      }}
-                    >
-                      {d}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Centered Call Button matching Reference Image 1 */}
-                <div className="phone-ref-call-row">
+            <div className="phone-ref-dialer-wrap">
+              {/* Dialed Digits Display if user typed */}
+              {dialNumber ? (
+                <div className="phone-ref-display-row">
+                  <span className="phone-ref-digits">{dialNumber}</span>
                   <button
                     type="button"
-                    className="phone-ref-call-btn"
+                    className="phone-ref-backspace-btn"
                     onClick={() => {
-                      playTone('success');
-                      setCallActive(true);
+                      playTone('click');
+                      setDialNumber((prev) => prev.slice(0, -1));
                     }}
-                    aria-label="Call"
+                    aria-label="Delete"
                   >
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" />
+                      <line x1="18" y1="9" x2="12" y2="15" />
+                      <line x1="12" y1="9" x2="18" y2="15" />
                     </svg>
                   </button>
                 </div>
+              ) : null}
+
+              {/* Warning box matching Reference Image 1 */}
+              <div className={`phone-ref-warning-box ${callingWarningAlert ? 'warning-highlight-shake' : ''}`}>
+                <svg className="phone-ref-warning-icon" viewBox="0 0 24 24" fill="none" stroke="#eab308" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                <p className="phone-ref-warning-text">
+                  Calling functionality not detected on this device
+                </p>
               </div>
-            )}
+
+              {/* Keypad Grid: 3 x 4 rounded rectangle cards */}
+              <div className="phone-ref-keypad-grid">
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, '*', 0, '#'].map((d) => (
+                  <button
+                    key={d}
+                    type="button"
+                    className="phone-ref-key-card"
+                    onClick={() => {
+                      playTone('click');
+                      setDialNumber((prev) => prev + String(d));
+                    }}
+                  >
+                    {d}
+                  </button>
+                ))}
+              </div>
+
+              {/* Centered Call Button matching Reference Image 1 (Calling strictly not workable) */}
+              <div className="phone-ref-call-row">
+                <button
+                  type="button"
+                  className={`phone-ref-call-btn ${callingWarningAlert ? 'call-btn-disabled-buzz' : ''}`}
+                  onClick={() => {
+                    playTone('bump');
+                    setCallingWarningAlert(true);
+                    setTimeout(() => setCallingWarningAlert(false), 3000);
+                  }}
+                  aria-label="Calling Not Supported"
+                  title="Calling functionality not detected on this device"
+                >
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                  </svg>
+                </button>
+              </div>
+
+              {callingWarningAlert && (
+                <div className="phone-ref-disabled-call-banner" role="alert">
+                  Calling is not supported on this device
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
