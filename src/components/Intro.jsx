@@ -5,14 +5,31 @@ const VALID_PASSCODES = ['2211', '1204'];
 
 const Intro = ({ onComplete, isMobile = false }) => {
   // App Workflow Stages:
-  // 1. 'notice': For your eyes only - Watch Privately -> Use Headphones for Better Experience
-  // 2. 'pin': Lock page (Passcode verification 2211 / 1204)
-  // 3. (Mobile) -> Directly onComplete() to Home Screen (MobileBirthdayPhone)
+  // 1. 'view1': Separate page (view1.png) hold for 3 seconds ->
+  // 2. 'view2': Separate page (view2.png) hold for 3 seconds ->
+  // 3. 'pin': Lock page (Passcode verification 2211 / 1204) ->
+  // 4. (Mobile) -> Directly onComplete() to Home Screen (MobileBirthdayPhone)
   //    (Desktop) -> 'doors' -> 'opening' -> onComplete()
-  const [stage, setStage] = useState('notice');
+  const [stage, setStage] = useState('view1');
   const [pin, setPin] = useState('');
   const [status, setStatus] = useState('idle'); // 'idle', 'success', 'error'
   const [errMsg, setErrMsg] = useState('');
+
+  // 3-second hold timer for view1 and view2
+  useEffect(() => {
+    if (stage === 'view1') {
+      const timer = setTimeout(() => {
+        setStage('view2');
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+    if (stage === 'view2') {
+      const timer = setTimeout(() => {
+        setStage('pin');
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [stage]);
 
   const handleVerify = useCallback(
     (codeToVerify) => {
@@ -42,10 +59,6 @@ const Intro = ({ onComplete, isMobile = false }) => {
     },
     [isMobile, onComplete]
   );
-
-  const handleProceedToLock = () => {
-    setStage('pin');
-  };
 
   const handleKeyClick = (val) => {
     if (stage !== 'pin' || status === 'success') return;
@@ -114,78 +127,61 @@ const Intro = ({ onComplete, isMobile = false }) => {
 
   return (
     <div className="intro-wrapper">
-      {/* Ambient background glow */}
-      <div className="intro-ambient-glow" aria-hidden="true" />
+      {/* Ambient background glow for pin / doors stage */}
+      {stage !== 'view1' && stage !== 'view2' && (
+        <div className="intro-ambient-glow" aria-hidden="true" />
+      )}
 
       {/* =========================================================================
-          STAGE 1: FOR YOUR EYES ONLY - WATCH PRIVATELY & USE HEADPHONES PROMPT
+          STAGE 1: FOR YOUR EYES ONLY - WATCH PRIVATELY (view1.png) - HOLD 3s
           ========================================================================= */}
-      {stage === 'notice' && (
-        <div className="intro-notice-stage anim-fade-in">
-          <div className="notice-card">
-            {/* Top Pill Badge */}
-            <div className="notice-badge">
-              <span className="notice-badge-dot"></span>
-              <span className="notice-badge-text">FOR YOUR EYES ONLY</span>
-            </div>
-
-            {/* Glowing Main Title */}
-            <h1 className="notice-title anim-glow-text">
-              Watch Privately
-            </h1>
-
-            {/* Animated Headphone Visual with Radiating Soundwaves */}
-            <div className="headphone-visual-wrap">
-              <div className="soundwave-ring ring-1"></div>
-              <div className="soundwave-ring ring-2"></div>
-              <div className="headphone-icon-circle">
-                <svg
-                  className="headphone-svg"
-                  viewBox="0 0 64 64"
-                  fill="none"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M12 36V30C12 18.954 20.954 10 32 10C43.046 10 52 18.954 52 30V36"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                  />
-                  <rect x="8" y="34" width="11" height="19" rx="5.5" fill="currentColor" />
-                  <rect x="45" y="34" width="11" height="19" rx="5.5" fill="currentColor" />
-                  <rect x="19" y="37" width="3" height="13" rx="1.5" fill="rgba(255,255,255,0.4)" />
-                  <rect x="42" y="37" width="3" height="13" rx="1.5" fill="rgba(255,255,255,0.4)" />
-                </svg>
-              </div>
-            </div>
-
-            {/* Subtext */}
-            <p className="notice-subtext">
-              Use headphones for a<br />better experience
-            </p>
-
-            {/* Tap to Begin CTA */}
-            <button
-              type="button"
-              className="notice-begin-btn"
-              onClick={handleProceedToLock}
-            >
-              <span>Tap to Begin</span>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
-            </button>
-          </div>
+      {stage === 'view1' && (
+        <div
+          className="workflow-view-stage"
+          onClick={() => setStage('view2')}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') setStage('view2');
+          }}
+          aria-label="Screen 1: For your eyes only - Watch Privately"
+        >
+          <img
+            src="/view1.png"
+            alt="For your eyes only - Watch Privately"
+            className="workflow-view-img"
+          />
         </div>
       )}
 
       {/* =========================================================================
-          STAGE 2: PIN LOCK PAGE (Passcode Verification Screen 2211 / 1204)
+          STAGE 2: USE HEADPHONES FOR BETTER EXPERIENCE (view2.png) - HOLD 3s
+          ========================================================================= */}
+      {stage === 'view2' && (
+        <div
+          className="workflow-view-stage"
+          onClick={() => setStage('pin')}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') setStage('pin');
+          }}
+          aria-label="Screen 2: Use headphones for a better experience"
+        >
+          <img
+            src="/view2.png"
+            alt="Use headphones for a better experience"
+            className="workflow-view-img"
+          />
+        </div>
+      )}
+
+      {/* =========================================================================
+          STAGE 3: PIN LOCK PAGE (Passcode Verification Screen 2211 / 1204)
           ========================================================================= */}
       {stage === 'pin' && (
         <div
-          className={`lock-stage anim-fade-in ${status === 'error' ? 'shake' : ''}`}
+          className={`lock-stage ${status === 'error' ? 'shake' : ''}`}
         >
           <div className="lock-security-badge">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -248,7 +244,7 @@ const Intro = ({ onComplete, isMobile = false }) => {
       )}
 
       {/* =========================================================================
-          STAGE 3: DOORS APPEAR AFTER PIN (Clean doors with NO text, Desktop only)
+          STAGE 4 (DESKTOP ONLY): DOORS APPEAR AFTER PIN
           ========================================================================= */}
       {!isMobile && (stage === 'doors' || stage === 'opening') && (
         <div

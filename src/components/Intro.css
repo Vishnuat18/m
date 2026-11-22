@@ -27,206 +27,32 @@
 }
 
 /* =========================================================================
-   STAGE 1: FOR YOUR EYES ONLY - WATCH PRIVATELY & USE HEADPHONES
+   STAGE 1 & 2: FULLSCREEN WORKFLOW IMAGES (view1.png & view2.png)
+   Fits perfectly on any mobile device ratio without distortion - NO ANIMATION
    ========================================================================= */
-.intro-notice-stage {
-  position: relative;
-  z-index: 20;
-  width: 100%;
-  max-width: 380px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.anim-fade-in {
-  animation: introFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes introFadeIn {
-  from { opacity: 0; transform: translateY(14px) scale(0.96); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-.notice-card {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Top Pill Badge */
-.notice-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 16px;
-  border-radius: 999px;
-  background: rgba(229, 169, 60, 0.12);
-  border: 1px solid rgba(229, 169, 60, 0.4);
-  margin-bottom: 20px;
-  box-shadow: 0 0 20px rgba(229, 169, 60, 0.2);
-}
-
-.notice-badge-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #e5a93c;
-  box-shadow: 0 0 8px #e5a93c;
-  animation: dotPulse 1.8s ease-in-out infinite;
-}
-
-@keyframes dotPulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.4); opacity: 0.6; }
-}
-
-.notice-badge-text {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  color: #fef08a;
-  text-transform: uppercase;
-}
-
-/* Glowing Title: Watch Privately */
-.notice-title {
-  font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
-  font-size: 2.2rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #ffffff;
-  margin: 0 0 28px 0;
-  text-shadow: 0 0 24px rgba(255, 159, 252, 0.5), 0 2px 10px rgba(0, 0, 0, 0.8);
-}
-
-.anim-glow-text {
-  animation: titleGlowShimmer 3s ease-in-out infinite alternate;
-}
-
-@keyframes titleGlowShimmer {
-  0% {
-    text-shadow: 0 0 16px rgba(229, 169, 60, 0.4), 0 0 30px rgba(212, 168, 255, 0.3);
-  }
-  100% {
-    text-shadow: 0 0 28px rgba(229, 169, 60, 0.8), 0 0 45px rgba(255, 159, 252, 0.6);
-  }
-}
-
-/* Headphone Visual with Radiating Waves */
-.headphone-visual-wrap {
-  position: relative;
-  width: 140px;
-  height: 140px;
+.workflow-view-stage {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background-color: #000000;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 24px;
-}
-
-.soundwave-ring {
-  position: absolute;
-  border-radius: 50%;
-  border: 1.5px solid rgba(229, 169, 60, 0.35);
-  pointer-events: none;
-}
-
-.soundwave-ring.ring-1 {
-  width: 110px;
-  height: 110px;
-  animation: soundwavePulse 2.4s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
-}
-
-.soundwave-ring.ring-2 {
-  width: 140px;
-  height: 140px;
-  animation: soundwavePulse 2.4s cubic-bezier(0.2, 0.8, 0.4, 1) infinite 0.7s;
-}
-
-@keyframes soundwavePulse {
-  0% {
-    transform: scale(0.7);
-    opacity: 0.8;
-    border-color: rgba(229, 169, 60, 0.6);
-  }
-  100% {
-    transform: scale(1.3);
-    opacity: 0;
-    border-color: rgba(212, 168, 255, 0);
-  }
-}
-
-.headphone-icon-circle {
-  width: 84px;
-  height: 84px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 40% 40%, rgba(55, 30, 95, 0.95), rgba(18, 10, 36, 0.98));
-  border: 1.5px solid rgba(229, 169, 60, 0.5);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), 0 0 28px rgba(229, 169, 60, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-  animation: floatHeadphones 3s ease-in-out infinite alternate;
-}
-
-@keyframes floatHeadphones {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-6px); }
-}
-
-.headphone-svg {
-  width: 44px;
-  height: 44px;
-  color: #fef08a;
-  filter: drop-shadow(0 2px 8px rgba(229, 169, 60, 0.5));
-}
-
-/* Subtext */
-.notice-subtext {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 1.05rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #e2e8f0;
-  margin: 0 0 32px 0;
-  letter-spacing: 0.02em;
-}
-
-/* Tap to Begin CTA */
-.notice-begin-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 14px 34px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, rgba(229, 169, 60, 0.3) 0%, rgba(212, 168, 255, 0.25) 100%);
-  border: 1.5px solid rgba(229, 169, 60, 0.65);
-  color: #fffbeb;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  overflow: hidden;
+  z-index: 100;
   cursor: pointer;
-  box-shadow: 0 6px 24px rgba(229, 169, 60, 0.25);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
 }
 
-.notice-begin-btn:hover {
-  background: linear-gradient(135deg, rgba(229, 169, 60, 0.45) 0%, rgba(212, 168, 255, 0.4) 100%);
-  border-color: #fef08a;
-  transform: translateY(-2px) scale(1.03);
-  box-shadow: 0 10px 32px rgba(229, 169, 60, 0.4);
-}
-
-.notice-begin-btn:active {
-  transform: scale(0.97);
+.workflow-view-img {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
 /* =========================================================================
@@ -505,24 +331,11 @@
   }
   .door-panel.left .door-handle { right: -30px; }
   .door-panel.right .door-handle { left: -30px; }
-
-  .notice-title {
-    font-size: 1.85rem;
-  }
-  .headphone-visual-wrap {
-    width: 120px;
-    height: 120px;
-  }
-  .headphone-icon-circle {
-    width: 76px;
-    height: 76px;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .door-panel,
-  .lock-stage,
-  .intro-notice-stage {
+  .lock-stage {
     transition-duration: 0.05s !important;
   }
 }
