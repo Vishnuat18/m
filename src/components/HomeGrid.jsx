@@ -73,7 +73,7 @@ const HomeGrid = ({ onSelectSection }) => {
               alt="Scrapbook Cover"
               className="sketchbook-cover-preview"
               onError={(e) => {
-                e.target.src = 'assets/sketchbook-cover.jpg';
+                e.target.src = '/assets/sketchbook-cover.jpg';
               }}
             />
           </div>

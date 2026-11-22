@@ -148,79 +148,8 @@
   overflow: visible;
 }
 
-/* Dedicated Scrapbook PDF Download Button on Home Screen */
 .card-scrapbook-duo {
   position: relative;
-}
-
-.duo-scrapbook-download-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 10;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 5px 9px;
-  border-radius: 999px;
-  background: rgba(26, 17, 36, 0.92);
-  border: 1.5px solid #d4b075;
-  color: #fde68a;
-  text-decoration: none;
-  font-family: inherit;
-  font-size: 11px;
-  font-weight: 700;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6), 0 0 12px rgba(212, 176, 117, 0.35);
-  transition: all 0.2s cubic-bezier(0.2, 0.9, 0.3, 1);
-  cursor: pointer;
-}
-
-.duo-scrapbook-download-btn:hover {
-  background: rgba(50, 28, 70, 0.98);
-  border-color: #f59e0b;
-  color: #ffffff;
-  transform: scale(1.08) translateY(-1px);
-  box-shadow: 0 6px 20px rgba(212, 176, 117, 0.55);
-}
-
-.duo-scrapbook-download-btn:active {
-  transform: scale(0.94);
-}
-
-.duo-scrapbook-download-btn .pdf-tag {
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-}
-
-/* Home Screen Download PDF Toast */
-.home-download-toast {
-  position: fixed;
-  bottom: 84px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 99999;
-  background: rgba(18, 12, 8, 0.96);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1.5px solid rgba(229, 169, 60, 0.85);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.85), 0 0 20px rgba(229, 169, 60, 0.35);
-  padding: 10px 22px;
-  border-radius: 999px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #fef3c7;
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  pointer-events: none;
-  animation: toast-drop 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
-  white-space: nowrap;
-}
-
-.home-download-toast svg {
-  color: #10b981;
 }
 
 .big-featured-card:hover {

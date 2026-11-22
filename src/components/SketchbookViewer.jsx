@@ -1,19 +1,60 @@
 import React, { useEffect, useState, useRef } from 'react';
+import RotatePrompt from './RotatePrompt';
 import './SketchbookViewer.css';
 
 const SketchbookViewer = ({ onBack }) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [showRotateToast, setShowRotateToast] = useState(true);
   const [downloadToast, setDownloadToast] = useState(false);
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
+  const [confirmPoseImg, setConfirmPoseImg] = useState('/assets/pose-03.png');
+
+  // Rotate Prompt: triggers on portrait/mobile viewports
+  const [showRotatePrompt, setShowRotatePrompt] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const isMobile = window.innerWidth <= 820 || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const isPortrait = window.innerHeight >= window.innerWidth;
+    return isMobile && isPortrait;
+  });
+
   const containerRef = useRef(null);
   const iframeRef = useRef(null);
 
-  // Auto-dismiss rotate toast after 4.5 seconds
+  // Auto-dismiss rotate prompt when device rotates to landscape
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowRotateToast(false);
-    }, 4500);
-    return () => clearTimeout(timer);
+    const handleOrientationCheck = () => {
+      if (window.innerWidth > window.innerHeight) {
+        setShowRotatePrompt(false);
+      }
+    };
+    window.addEventListener('resize', handleOrientationCheck);
+    window.addEventListener('orientationchange', handleOrientationCheck);
+    return () => {
+      window.removeEventListener('resize', handleOrientationCheck);
+      window.removeEventListener('orientationchange', handleOrientationCheck);
+    };
+  }, []);
+
+  // Helper to trigger Exit Confirmation with a pose image
+  const promptExitConfirm = () => {
+    const randomIdx = Math.floor(Math.random() * 10) + 1;
+    const numStr = String(randomIdx).padStart(2, '0');
+    setConfirmPoseImg(`/assets/pose-${numStr}.png`);
+    setShowExitConfirm(true);
+  };
+
+  // Intercept back navigation (browser back, Android gesture, popstate)
+  useEffect(() => {
+    window.history.pushState({ inSketchbook: true }, '');
+
+    const handlePopState = () => {
+      promptExitConfirm();
+      window.history.pushState({ inSketchbook: true }, '');
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
   }, []);
 
   // Listen for download requests dispatched from inside the embedded Sketchbook.html iframe
@@ -130,7 +171,11 @@ const SketchbookViewer = ({ onBack }) => {
     }
   };
 
-  const handleBack = () => {
+  const handleCancelExit = () => {
+    setShowExitConfirm(false);
+  };
+
+  const handleConfirmExit = () => {
     try {
       if (document.fullscreenElement || document.webkitFullscreenElement) {
         if (document.exitFullscreen) {
@@ -140,17 +185,24 @@ const SketchbookViewer = ({ onBack }) => {
         }
       }
     } catch (e) {}
+    setShowExitConfirm(false);
     onBack();
   };
 
   return (
     <div className="sketchbook-viewer-container" ref={containerRef}>
+      {/* Rotate Phone Prompt on Portrait/Mobile */}
+      {showRotatePrompt && (
+        <RotatePrompt onBypass={() => setShowRotatePrompt(false)} />
+      )}
+
       {/* Top Floating Glass Navigation Bar */}
       <header className="sketchbook-top-bar">
-        {/* Back to Home Button */}
+        {/* Back to Home Button - prompts confirmation popup */}
         <button
+          type="button"
           className="sketchbook-glass-btn back-btn"
-          onClick={handleBack}
+          onClick={promptExitConfirm}
           aria-label="Back to home"
           title="Return to Home"
         >
@@ -169,7 +221,7 @@ const SketchbookViewer = ({ onBack }) => {
           <span className="btn-label-text">Home</span>
         </button>
 
-        {/* Right Action Controls: Round Download Button & Fullscreen Button */}
+        {/* Right Action Controls: EXACTLY ONE Round Download Button & Fullscreen Button */}
         <div className="sketchbook-top-actions">
           {/* Round Scrapbook Download Button */}
           <button
@@ -198,6 +250,7 @@ const SketchbookViewer = ({ onBack }) => {
 
           {/* Fullscreen Toggle Button */}
           <button
+            type="button"
             className={`sketchbook-glass-btn fs-btn ${isFullscreen ? 'active' : ''}`}
             onClick={toggleFullscreen}
             aria-label={isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
@@ -260,30 +313,54 @@ const SketchbookViewer = ({ onBack }) => {
         </aside>
       )}
 
-      {/* Auto Rotate Toast when scrapbook opens */}
-      {showRotateToast && (
-        <aside className="sketchbook-rotate-toast" role="status" aria-live="polite">
-          <svg
-            className="toast-rotate-icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
-          </svg>
-          <span className="toast-rotate-text">Auto Rotate your phone for the best view</span>
-          <button
-            type="button"
-            className="toast-dismiss-x"
-            onClick={() => setShowRotateToast(false)}
-            aria-label="Dismiss notice"
-          >
-            &times;
-          </button>
-        </aside>
+      {/* Exit Confirmation Modal with Pose Image */}
+      {showExitConfirm && (
+        <div
+          className="sketchbook-exit-modal-backdrop"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Confirm exit"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) handleCancelExit();
+          }}
+        >
+          <div className="sketchbook-exit-modal-card">
+            <div className="exit-pose-stage">
+              <div className="exit-pose-aura" aria-hidden="true" />
+              <img
+                src={confirmPoseImg}
+                alt="Maheswari"
+                className="exit-pose-photo"
+                onError={(e) => {
+                  const fallbackNum = confirmPoseImg.replace('.png', '.jpg');
+                  e.currentTarget.src = fallbackNum;
+                }}
+              />
+            </div>
+
+            <h3 className="exit-modal-title">Close Scrapbook?</h3>
+            <p className="exit-modal-desc">
+              Are you sure you want to exit? You can continue reading or return to Home.
+            </p>
+
+            <div className="exit-modal-actions">
+              <button
+                type="button"
+                className="exit-btn-cancel"
+                onClick={handleCancelExit}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="exit-btn-close"
+                onClick={handleConfirmExit}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Embed Sketchbook.html directly in Full Screen Viewport */}

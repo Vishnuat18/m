@@ -483,30 +483,7 @@
 
     /* Round Scrapbook Download Button */
     .round-download-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 50% !important;
-      background: rgba(22, 16, 12, 0.92) !important;
-      border: 1.5px solid rgba(229, 169, 60, 0.75) !important;
-      color: #fde68a !important;
-      display: inline-flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      cursor: pointer !important;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.65), 0 0 10px rgba(229, 169, 60, 0.25) !important;
-      transition: all 0.2s cubic-bezier(0.2, 0.9, 0.3, 1) !important;
-      flex-shrink: 0 !important;
-      padding: 0 !important;
-    }
-    .round-download-btn:hover {
-      background: rgba(45, 30, 20, 0.98) !important;
-      border-color: #f59e0b !important;
-      color: #ffffff !important;
-      transform: scale(1.1) translateY(-1px) !important;
-      box-shadow: 0 6px 20px rgba(229, 169, 60, 0.45) !important;
-    }
-    .round-download-btn:active {
-      transform: scale(0.92) !important;
+      display: none !important;
     }
 
     /* Photo Manager Modal */
@@ -738,15 +715,6 @@
         <span class="btn-text" id="autoPlayText">Play</span>
       </button>
 
-      <div class="dock-sep"></div>
-
-      <button class="round-download-btn" id="dockDownloadBtn" title="Download 22-Page Scrapbook PDF" aria-label="Download 22-Page Scrapbook PDF">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="7 10 12 15 17 10"/>
-          <line x1="12" y1="15" x2="12" y2="3"/>
-        </svg>
-      </button>
     </nav>
 
     <!-- Full-Page Preview Lightbox Modal (opens when clicking any book page) -->
@@ -754,13 +722,6 @@
       <div class="preview-header">
         <div style="display:flex; align-items:center; gap:12px;">
           <span class="preview-title" id="previewTitle">Page 1 Preview</span>
-          <button class="round-download-btn" id="previewHeaderDownloadBtn" title="Download 22-Page Scrapbook PDF" aria-label="Download 22-Page Scrapbook PDF">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-              <polyline points="7 10 12 15 17 10"/>
-              <line x1="12" y1="15" x2="12" y2="3"/>
-            </svg>
-          </button>
         </div>
         <button class="btn-ghost" id="closePreviewBtn">Close &times;</button>
       </div>
@@ -773,13 +734,6 @@
           <span>Prev</span>
         </button>
         <span class="spread-label" id="previewCounter" style="min-width:64px; text-align:center;">1 / 22</span>
-        <button class="round-download-btn" id="previewDownloadBtn" title="Download 22-Page Scrapbook PDF" aria-label="Download 22-Page Scrapbook PDF">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="7 10 12 15 17 10"/>
-            <line x1="12" y1="15" x2="12" y2="3"/>
-          </svg>
-        </button>
         <button class="icon-btn nav-arrow-btn" id="previewNextBtn" title="Next Page">
           <span>Next</span>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="9 18 15 12 9 6"/></svg>
@@ -1540,13 +1494,6 @@
       } catch (err) {}
     }
 
-    const previewDownloadBtn = document.getElementById("previewDownloadBtn");
-    const previewHeaderDownloadBtn = document.getElementById("previewHeaderDownloadBtn");
-    const dockDownloadBtn = document.getElementById("dockDownloadBtn");
-
-    previewDownloadBtn?.addEventListener("click", triggerPdfDownload);
-    previewHeaderDownloadBtn?.addEventListener("click", triggerPdfDownload);
-    dockDownloadBtn?.addEventListener("click", triggerPdfDownload);
 
     // If loaded inside SketchbookViewer iframe, apply in-viewer styling to avoid button conflicts
     if (window.self !== window.top) {

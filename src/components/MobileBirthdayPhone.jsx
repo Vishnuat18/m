@@ -523,46 +523,6 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
   const [callActive, setCallActive] = useState(false);
   const [callTimer, setCallTimer] = useState(0);
   const [callingWarningAlert, setCallingWarningAlert] = useState(false);
-  const [scrapbookDownloadToast, setScrapbookDownloadToast] = useState(false);
-
-  // Reliable Scrapbook PDF Download for mobile devices
-  const handleDownloadScrapbookPdf = async (e) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    playTone('click');
-    setScrapbookDownloadToast(true);
-    setTimeout(() => setScrapbookDownloadToast(false), 3500);
-
-    try {
-      const res = await fetch('/music/Sketchbook_22_Pages_Newspaper_Aesthetic.pdf');
-      if (res.ok) {
-        const blob = await res.blob();
-        const blobUrl = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = blobUrl;
-        a.download = 'Sketchbook_22_Pages_Newspaper_Aesthetic.pdf';
-        a.target = '_blank';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
-        return;
-      }
-    } catch (err) {
-      console.warn('Blob fetch failed, falling back to direct anchor:', err);
-    }
-
-    const fallbackA = document.createElement('a');
-    fallbackA.href = '/music/Sketchbook_22_Pages_Newspaper_Aesthetic.pdf';
-    fallbackA.download = 'Sketchbook_22_Pages_Newspaper_Aesthetic.pdf';
-    fallbackA.target = '_blank';
-    fallbackA.rel = 'noopener noreferrer';
-    document.body.appendChild(fallbackA);
-    fallbackA.click();
-    document.body.removeChild(fallbackA);
-  };
 
   useEffect(() => {
     let iv = null;
@@ -764,29 +724,13 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
             }}
             aria-label="Open Scrapbook"
           >
-            {/* Dedicated Visible Round Download Button for Scrapbook PDF */}
-            <button
-              type="button"
-              className="duo-scrapbook-download-btn"
-              onClick={handleDownloadScrapbookPdf}
-              aria-label="Download Scrapbook PDF"
-              title="Download 22-Page Scrapbook PDF"
-            >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-              <span className="pdf-tag">PDF</span>
-            </button>
-
             <div className="duo-card-visual">
               <img
                 src="/assets/sketchbook-cover.jpg"
                 alt="Scrapbook Cover"
                 className="duo-scrapbook-cover-img"
                 onError={(e) => {
-                  e.target.src = 'assets/sketchbook-cover.jpg';
+                  e.target.src = '/assets/sketchbook-cover.jpg';
                 }}
               />
             </div>
@@ -842,15 +786,6 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
         </main>
       </div>
 
-      {/* Toast feedback for Home Scrapbook PDF download */}
-      {scrapbookDownloadToast && (
-        <aside className="home-download-toast" role="status" aria-live="polite">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
-          <span>Downloading 22-Page Scrapbook PDF...</span>
-        </aside>
-      )}
 
       {/* =====================================================================
           MODAL 1: MESSAGES APP (Reference Image 3 Style - "Mahi" -> "Mahes")
