@@ -28,7 +28,7 @@
 
 /* =========================================================================
    STAGE 1 & 2: FULLSCREEN WORKFLOW IMAGES (view1.png & view2.png)
-   Fits perfectly on any mobile device ratio without distortion - NO ANIMATION
+   Fits 100% full screen on every mobile device ratio without black bars
    ========================================================================= */
 .workflow-view-stage {
   position: fixed;
@@ -41,18 +41,30 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  z-index: 100;
+  z-index: 10000;
   cursor: pointer;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .workflow-view-img {
   width: 100%;
   height: 100%;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  object-fit: cover;
+  object-position: center center;
   display: block;
+}
+
+@media (min-aspect-ratio: 1/1) {
+  .workflow-view-img {
+    max-width: 440px;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+  }
 }
 
 /* =========================================================================
