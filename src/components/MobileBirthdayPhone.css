@@ -1507,8 +1507,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 20px;
   text-align: center;
+  overflow-y: auto;
 }
 
 .gift-gold-box {
@@ -1541,15 +1542,118 @@
   margin: 0 0 24px 0;
 }
 
+/* Gift Celebration Card & Pose Popup */
+.gift-celebration-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.anim-pop-in {
+  animation: giftPopIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes giftPopIn {
+  from { opacity: 0; transform: scale(0.85) translateY(12px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.gift-pose-stage {
+  position: relative;
+  width: 160px;
+  height: 200px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.gift-pose-aura {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(229, 169, 60, 0.35) 0%, rgba(239, 83, 80, 0.2) 50%, transparent 70%);
+  filter: blur(18px);
+  bottom: 10px;
+  pointer-events: none;
+  animation: auraBreathe 3s ease-in-out infinite alternate;
+}
+
+@keyframes auraBreathe {
+  0% { transform: scale(0.9); opacity: 0.6; }
+  100% { transform: scale(1.15); opacity: 0.95; }
+}
+
+.gift-pose-photo {
+  position: relative;
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  z-index: 2;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.65)) drop-shadow(0 0 15px rgba(229, 169, 60, 0.35));
+  animation: floatPoseImg 3.5s ease-in-out infinite alternate;
+}
+
+@keyframes floatPoseImg {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-8px); }
+}
+
+.gift-vishnu-banner {
+  background: linear-gradient(135deg, rgba(35, 18, 55, 0.9) 0%, rgba(20, 10, 32, 0.95) 100%);
+  border: 1.5px solid rgba(229, 169, 60, 0.5);
+  border-radius: 18px;
+  padding: 12px 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 24px rgba(229, 169, 60, 0.25);
+  max-width: 320px;
+  text-align: center;
+}
+
+.gift-vishnu-tag {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #fbbf24;
+  margin-bottom: 4px;
+}
+
+.gift-vishnu-msg {
+  font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.4;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+}
+
 .shower-confetti-btn {
-  padding: 10px 24px;
+  padding: 12px 28px;
   border-radius: 999px;
   background: linear-gradient(135deg, #ef5350 0%, #38bdf8 100%);
   border: none;
   color: #ffffff;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
+  letter-spacing: 0.04em;
   cursor: pointer;
+  box-shadow: 0 4px 18px rgba(239, 83, 80, 0.4);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.shower-confetti-btn:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 6px 24px rgba(56, 189, 248, 0.5);
+}
+
+.shower-confetti-btn:active {
+  transform: scale(0.96);
 }
 
 /* =====================================================================

@@ -15,11 +15,11 @@ function AppContent() {
     return false;
   });
 
-  // On mobile: skip intro door animation, go straight to home
-  const [currentScreen, setCurrentScreen] = useState(() => {
-    if (typeof window !== 'undefined' && window.innerWidth <= 768) return 'home';
-    return 'intro';
-  });
+  // Start at intro workflow:
+  // Step 1: For your eyes only - Watch Privately -> Use Headphones
+  // Step 2: Lock page (PIN 2211 / 1204)
+  // Step 3: Home Screen (MobileBirthdayPhone on mobile)
+  const [currentScreen, setCurrentScreen] = useState('intro');
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -33,8 +33,8 @@ function AppContent() {
 
   return (
     <div className="app-main-wrapper">
-      {currentScreen === 'intro' && !isMobile && (
-        <Intro onComplete={handleIntroComplete} />
+      {currentScreen === 'intro' && (
+        <Intro onComplete={handleIntroComplete} isMobile={isMobile} />
       )}
 
       {currentScreen === 'home' && (

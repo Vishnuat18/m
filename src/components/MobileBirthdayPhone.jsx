@@ -311,6 +311,34 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
     return () => clearInterval(timer);
   }, []);
 
+  // Special Gift State (Pose reveal + Confetti + Wish from Vishnu)
+  const [giftPose, setGiftPose] = useState(null);
+  const [showGiftCelebration, setShowGiftCelebration] = useState(false);
+
+  const handleShowerConfetti = () => {
+    playTone('success');
+    triggerConfetti();
+
+    // Pick one of the 10 poses randomly (or cycle to a different one)
+    let nextNum = Math.floor(Math.random() * 10) + 1;
+    if (giftPose) {
+      const match = giftPose.image.match(/pose-(\d+)\.png/);
+      if (match) {
+        const cur = parseInt(match[1], 10);
+        if (nextNum === cur) {
+          nextNum = (nextNum % 10) + 1;
+        }
+      }
+    }
+    const numStr = String(nextNum).padStart(2, '0');
+    setGiftPose({
+      image: `/assets/pose-${numStr}.png`,
+      fallback: `/assets/pose-${numStr}.jpg`,
+      num: numStr,
+    });
+    setShowGiftCelebration(true);
+  };
+
   const openApp = (appId) => {
     playTone('click');
     if (appId === 'diary') {
@@ -320,6 +348,10 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
     if (appId === 'scrapbook') {
       onSelectSection('sketchbook');
       return;
+    }
+    if (appId === 'gift') {
+      setShowGiftCelebration(false);
+      setGiftPose(null);
     }
     setActiveModal(appId);
   };
@@ -1335,27 +1367,53 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
           </header>
 
           <div className="gift-view-body">
-            <div className="gift-gold-box">
-              <svg width="68" height="68" viewBox="0 0 24 24" fill="none" stroke="#e5a93c" strokeWidth="1.5">
-                <rect x="3" y="8" width="18" height="4" rx="1" />
-                <path d="M12 8v13" />
-                <path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7" />
-                <path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5" />
-              </svg>
-            </div>
-            <h3 className="gift-heading">A Heartfelt Birthday Gift</h3>
-            <p className="gift-quote">
-              &ldquo;May your day be filled with warm sunshine, endless laughter, and all the love in the universe. Happy Birthday Ammu!&rdquo;
-            </p>
+            {!showGiftCelebration ? (
+              <>
+                <div className="gift-gold-box">
+                  <svg width="68" height="68" viewBox="0 0 24 24" fill="none" stroke="#e5a93c" strokeWidth="1.5">
+                    <rect x="3" y="8" width="18" height="4" rx="1" />
+                    <path d="M12 8v13" />
+                    <path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7" />
+                    <path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5" />
+                  </svg>
+                </div>
+                <h3 className="gift-heading">A Heartfelt Birthday Gift</h3>
+                <p className="gift-quote">
+                  &ldquo;May your day be filled with warm sunshine, endless laughter, and all the love in the universe. Happy Birthday Ammu!&rdquo;
+                </p>
+              </>
+            ) : (
+              <div className="gift-celebration-container anim-pop-in">
+                {giftPose && (
+                  <div className="gift-pose-stage">
+                    <div className="gift-pose-aura" aria-hidden="true"></div>
+                    <img
+                      src={giftPose.image}
+                      alt="Birthday Pose"
+                      className="gift-pose-photo"
+                      onError={(e) => {
+                        if (e.target.src !== giftPose.fallback) {
+                          e.target.src = giftPose.fallback;
+                        }
+                      }}
+                    />
+                  </div>
+                )}
+                <div className="gift-vishnu-banner">
+                  <span className="gift-vishnu-tag">A Special Celebration</span>
+                  <h3 className="gift-vishnu-msg">
+                    Happy Birthday Maheswari from Vishnu
+                  </h3>
+                </div>
+              </div>
+            )}
+
             <button
               type="button"
               className="shower-confetti-btn"
-              onClick={() => {
-                playTone('success');
-                triggerConfetti();
-              }}
+              onClick={handleShowerConfetti}
             >
-              Shower Birthday Confetti
+              {showGiftCelebration ? 'Shower More Confetti' : 'Shower Birthday Confetti'}
             </button>
           </div>
         </div>
