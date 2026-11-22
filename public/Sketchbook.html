@@ -375,30 +375,64 @@
       .icon-btn span.btn-text { display: none; }
     }
 
+    /* Embedded in SketchbookViewer adjustments to prevent ANY button overlaps */
+    body.in-viewer .top-bar {
+      top: 14px;
+      left: 110px;
+      right: 175px;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    body.in-viewer #fsBtn {
+      display: none !important;
+    }
+
+    body.in-viewer .preview-backdrop {
+      padding-top: 72px;
+    }
+
+    body.in-viewer .modal-backdrop {
+      padding-top: 72px;
+    }
+
+    @media (max-width: 640px) {
+      body.in-viewer .top-bar {
+        left: 95px;
+        right: 145px;
+        top: 10px;
+      }
+      body.in-viewer .brand-pill {
+        display: none !important;
+      }
+    }
+
     /* Page Preview Lightbox Modal (opens when clicking a book page) */
     .preview-backdrop {
       position: absolute;
       inset: 0;
-      background: rgba(6, 4, 3, 0.9);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: rgba(6, 4, 3, 0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       z-index: 75;
       display: none;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 16px;
-      gap: 12px;
+      justify-content: space-between;
+      padding: 72px 16px 20px 16px;
+      box-sizing: border-box;
+      gap: 10px;
     }
 
     .preview-backdrop.open { display: flex; }
 
     .preview-header {
-      width: min(680px, 94%);
+      width: min(720px, 94%);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: 12px;
+      flex-shrink: 0;
     }
 
     .preview-title {
@@ -407,6 +441,7 @@
       font-weight: 600;
       font-style: italic;
       color: var(--parchment);
+      white-space: nowrap;
     }
 
     .preview-stage {
@@ -430,12 +465,14 @@
     .preview-controls {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       background: var(--glass);
       border: 1px solid var(--glass-border);
       padding: 6px 14px;
       border-radius: 999px;
       white-space: nowrap;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+      flex-shrink: 0;
     }
 
     .preview-controls button {
@@ -702,7 +739,7 @@
 
       <div class="dock-sep"></div>
 
-      <button class="round-download-btn" id="dockDownloadBtn" title="Download Scrapbook Page" aria-label="Download Scrapbook Page">
+      <button class="round-download-btn" id="dockDownloadBtn" title="Download 22-Page Scrapbook PDF" aria-label="Download 22-Page Scrapbook PDF">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
           <polyline points="7 10 12 15 17 10"/>
@@ -716,7 +753,7 @@
       <div class="preview-header">
         <div style="display:flex; align-items:center; gap:12px;">
           <span class="preview-title" id="previewTitle">Page 1 Preview</span>
-          <button class="round-download-btn" id="previewHeaderDownloadBtn" title="Download Page" aria-label="Download Page">
+          <button class="round-download-btn" id="previewHeaderDownloadBtn" title="Download 22-Page Scrapbook PDF" aria-label="Download 22-Page Scrapbook PDF">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
               <polyline points="7 10 12 15 17 10"/>
@@ -735,7 +772,7 @@
           <span>Prev</span>
         </button>
         <span class="spread-label" id="previewCounter" style="min-width:64px; text-align:center;">1 / 22</span>
-        <button class="round-download-btn" id="previewDownloadBtn" title="Download This Scrapbook Page" aria-label="Download This Scrapbook Page">
+        <button class="round-download-btn" id="previewDownloadBtn" title="Download 22-Page Scrapbook PDF" aria-label="Download 22-Page Scrapbook PDF">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
             <polyline points="7 10 12 15 17 10"/>
@@ -745,6 +782,10 @@
         <button class="icon-btn nav-arrow-btn" id="previewNextBtn" title="Next Page">
           <span>Next</span>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <button class="icon-btn" id="previewCloseDockBtn" title="Close Preview">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <span>Close</span>
         </button>
       </div>
     </div>
@@ -1399,6 +1440,9 @@
     }
 
     closePreviewBtn.addEventListener("click", () => previewModal.classList.remove("open"));
+    const previewCloseDockBtn = document.getElementById("previewCloseDockBtn");
+    previewCloseDockBtn?.addEventListener("click", () => previewModal.classList.remove("open"));
+
     previewModal.addEventListener("click", (e) => {
       if (e.target === previewModal) previewModal.classList.remove("open");
     });
@@ -1409,47 +1453,32 @@
       if (previewPageNum < TOTAL_PAGES) { previewPageNum++; updatePreviewModal(); }
     });
 
-    // Scrapbook Download Handlers
-    function triggerFileDownload(src, filename) {
-      if (!src) return;
+    // Scrapbook PDF Download Handlers (Downloads the complete 22-page Newspaper Aesthetic PDF)
+    const SCRAPBOOK_PDF_URL = "/music/Sketchbook_22_Pages_Newspaper_Aesthetic.pdf";
+    const SCRAPBOOK_PDF_NAME = "Sketchbook_22_Pages_Newspaper_Aesthetic.pdf";
+
+    function triggerPdfDownload() {
       const a = document.createElement("a");
-      a.href = src;
-      a.download = filename;
+      a.href = SCRAPBOOK_PDF_URL;
+      a.download = SCRAPBOOK_PDF_NAME;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      showToast("Downloading Scrapbook Memory...");
+      showToast("Downloading 22-Page Scrapbook PDF...");
     }
 
     const previewDownloadBtn = document.getElementById("previewDownloadBtn");
     const previewHeaderDownloadBtn = document.getElementById("previewHeaderDownloadBtn");
     const dockDownloadBtn = document.getElementById("dockDownloadBtn");
 
-    const handlePreviewDownload = () => {
-      if (previewImg && previewImg.src) {
-        triggerFileDownload(previewImg.src, `Maheswari-Scrapbook-Page-${previewPageNum}.jpg`);
-      }
-    };
+    previewDownloadBtn?.addEventListener("click", triggerPdfDownload);
+    previewHeaderDownloadBtn?.addEventListener("click", triggerPdfDownload);
+    dockDownloadBtn?.addEventListener("click", triggerPdfDownload);
 
-    previewDownloadBtn?.addEventListener("click", handlePreviewDownload);
-    previewHeaderDownloadBtn?.addEventListener("click", handlePreviewDownload);
-
-    dockDownloadBtn?.addEventListener("click", () => {
-      const cur = getSpreadPages(spread);
-      let targetImg = COVER_IMG;
-      let filename = "Maheswari-Scrapbook-Cover.jpg";
-      if (cur.left !== null || cur.right !== null) {
-        const pageKey = cur.right !== null ? cur.right : cur.left;
-        if (typeof pageKey === "number" && PAGE_IMAGES[pageKey]) {
-          targetImg = PAGE_IMAGES[pageKey];
-          filename = `Maheswari-Scrapbook-Page-${pageKey}.jpg`;
-        } else if (pageCanvases[pageKey]) {
-          targetImg = pageCanvases[pageKey].toDataURL("image/jpeg", 0.92);
-          filename = `Maheswari-Scrapbook-Page-${pageKey}.jpg`;
-        }
-      }
-      triggerFileDownload(targetImg, filename);
-    });
+    // If loaded inside SketchbookViewer iframe, apply in-viewer styling to avoid button conflicts
+    if (window.self !== window.top) {
+      document.body.classList.add("in-viewer");
+    }
 
     // =========================================================================
     // 5. SMOOTH ARC ANIMATION & ROTATION-AWARE SWIPE / CLICK HANDLERS

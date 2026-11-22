@@ -16,48 +16,20 @@ const SketchbookViewer = ({ onBack }) => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Handle Download Scrapbook
+  // Handle Download Scrapbook PDF (Downloads the 22-page Newspaper Aesthetic PDF)
   const handleDownloadScrapbook = () => {
     try {
-      const iframe = iframeRef.current;
-      const iframeDoc = iframe?.contentDocument || iframe?.contentWindow?.document;
-      const previewModal = iframeDoc?.getElementById('previewModal');
-      const isPreviewOpen = previewModal && window.getComputedStyle(previewModal).display !== 'none';
-      const previewImg = iframeDoc?.getElementById('previewImg');
-
-      let downloadSrc = '/assets/sketchbook-cover.jpg';
-      let filename = 'Maheswari-Scrapbook-Cover.jpg';
-
-      if (isPreviewOpen && previewImg?.src) {
-        downloadSrc = previewImg.src;
-        const counterText = iframeDoc?.getElementById('previewCounter')?.textContent || '1';
-        const pageNum = counterText.split('/')[0]?.trim() || '1';
-        filename = `Maheswari-Scrapbook-Page-${pageNum}.jpg`;
-      } else {
-        const spreadLabel = iframeDoc?.getElementById('spreadLabel')?.textContent;
-        if (spreadLabel && spreadLabel.toLowerCase().includes('page')) {
-          filename = `Maheswari-Scrapbook-${spreadLabel.replace(/[^a-zA-Z0-9]/g, '-')}.jpg`;
-        }
-      }
-
       const a = document.createElement('a');
-      a.href = downloadSrc;
-      a.download = filename;
+      a.href = '/music/Sketchbook_22_Pages_Newspaper_Aesthetic.pdf';
+      a.download = 'Sketchbook_22_Pages_Newspaper_Aesthetic.pdf';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
 
       setDownloadToast(true);
-      setTimeout(() => setDownloadToast(false), 3200);
+      setTimeout(() => setDownloadToast(false), 3500);
     } catch (e) {
-      const a = document.createElement('a');
-      a.href = '/assets/sketchbook-cover.jpg';
-      a.download = 'Maheswari-Scrapbook.jpg';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      setDownloadToast(true);
-      setTimeout(() => setDownloadToast(false), 3200);
+      console.error('Download error:', e);
     }
   };
 
@@ -172,8 +144,8 @@ const SketchbookViewer = ({ onBack }) => {
             type="button"
             className="sketchbook-round-download-btn"
             onClick={handleDownloadScrapbook}
-            aria-label="Download Scrapbook"
-            title="Download Scrapbook Memory"
+            aria-label="Download 22-Page Scrapbook PDF"
+            title="Download 22-Page Scrapbook PDF"
           >
             <svg
               width="18"
@@ -251,7 +223,7 @@ const SketchbookViewer = ({ onBack }) => {
           >
             <polyline points="20 6 9 17 4 12" />
           </svg>
-          <span>Downloading Scrapbook Memory...</span>
+          <span>Downloading 22-Page Scrapbook PDF...</span>
         </aside>
       )}
 
