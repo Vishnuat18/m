@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     :root {
       --bg-deep: #0b0806;
@@ -1453,7 +1454,7 @@
       if (previewPageNum < TOTAL_PAGES) { previewPageNum++; updatePreviewModal(); }
     });
 
-    // Scrapbook PDF Download Handlers (Downloads the complete 22-page Newspaper Aesthetic PDF)
+    // Scrapbook PDF Download Handlers (Downloads the filled 22-page Newspaper Aesthetic PDF with all photos)
     const SCRAPBOOK_PDF_URL = "/music/Sketchbook_22_Pages_Newspaper_Aesthetic.pdf";
     const SCRAPBOOK_PDF_NAME = "Sketchbook_22_Pages_Newspaper_Aesthetic.pdf";
 
@@ -1465,9 +1466,48 @@
         }
       } catch (e) {}
 
-      showToast("Downloading 22-Page Scrapbook PDF...");
+      showToast("Downloading Filled Scrapbook PDF...");
 
-      // 2. Direct Blob download
+      // 2. If jsPDF is available, export current live composited canvases (including any customized user photos)
+      if (window.jspdf && window.jspdf.jsPDF) {
+        try {
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF({
+            orientation: "portrait",
+            unit: "pt",
+            format: [720, 900]
+          });
+
+          // Cover
+          if (pageCanvases["cover"]) {
+            pdf.addImage(pageCanvases["cover"].toDataURL("image/jpeg", 0.92), "JPEG", 0, 0, 720, 900);
+          }
+
+          // Pages 1 to 22 with all photos
+          for (let p = 1; p <= TOTAL_PAGES; p++) {
+            compositePageCanvas(p);
+            const pCanvas = pageCanvases[p];
+            if (pCanvas) {
+              pdf.addPage([720, 900], "portrait");
+              pdf.addImage(pCanvas.toDataURL("image/jpeg", 0.92), "JPEG", 0, 0, 720, 900);
+            }
+          }
+
+          // Back Cover
+          if (pageCanvases["back"]) {
+            pdf.addPage([720, 900], "portrait");
+            pdf.addImage(pageCanvases["back"].toDataURL("image/jpeg", 0.92), "JPEG", 0, 0, 720, 900);
+          }
+
+          pdf.save(SCRAPBOOK_PDF_NAME);
+          showToast("Scrapbook PDF downloaded with all photos!");
+          return;
+        } catch (jspdfErr) {
+          console.warn("Live jsPDF export failed, falling back to pre-rendered filled PDF:", jspdfErr);
+        }
+      }
+
+      // 3. Direct Blob download of the pre-rendered filled PDF with all 22 pages + photos
       try {
         const response = await fetch(SCRAPBOOK_PDF_URL);
         if (response.ok) {
@@ -1487,7 +1527,7 @@
         console.warn("Direct blob download failed inside iframe:", err);
       }
 
-      // 3. Fallback direct link
+      // 4. Fallback direct link
       try {
         const a = document.createElement("a");
         a.href = SCRAPBOOK_PDF_URL;
