@@ -3,7 +3,16 @@ import './SketchbookViewer.css';
 
 const SketchbookViewer = ({ onBack }) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showRotateToast, setShowRotateToast] = useState(true);
   const containerRef = useRef(null);
+
+  // Auto-dismiss rotate toast after 4.5 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowRotateToast(false);
+    }, 4500);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     // Monitor native fullscreen state changes
@@ -106,7 +115,7 @@ const SketchbookViewer = ({ onBack }) => {
           >
             <polyline points="15 18 9 12 15 6" />
           </svg>
-          <span>Home</span>
+          <span className="btn-label-text">Home</span>
         </button>
 
         {/* Fullscreen Toggle Button */}
@@ -130,7 +139,8 @@ const SketchbookViewer = ({ onBack }) => {
               >
                 <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3" />
               </svg>
-              <span>Exit Fullscreen</span>
+              <span className="btn-label-text desktop-label">Exit Fullscreen</span>
+              <span className="btn-label-text mobile-label">Exit</span>
             </>
           ) : (
             <>
@@ -146,11 +156,38 @@ const SketchbookViewer = ({ onBack }) => {
               >
                 <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
               </svg>
-              <span>Fullscreen</span>
+              <span className="btn-label-text desktop-label">Fullscreen</span>
+              <span className="btn-label-text mobile-label">Full</span>
             </>
           )}
         </button>
       </header>
+
+      {/* Auto Rotate Toast when scrapbook opens */}
+      {showRotateToast && (
+        <aside className="sketchbook-rotate-toast" role="status" aria-live="polite">
+          <svg
+            className="toast-rotate-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
+          </svg>
+          <span className="toast-rotate-text">Auto Rotate your phone for the best view</span>
+          <button
+            type="button"
+            className="toast-dismiss-x"
+            onClick={() => setShowRotateToast(false)}
+            aria-label="Dismiss notice"
+          >
+            &times;
+          </button>
+        </aside>
+      )}
 
       {/* Embed Sketchbook.html directly in Full Screen Viewport */}
       <iframe

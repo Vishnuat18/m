@@ -53,6 +53,8 @@
   align-items: center;
   gap: 8px;
   user-select: none;
+  white-space: nowrap; /* Strictly prevents two-line text wrapping */
+  flex-shrink: 0;
 }
 
 .sketchbook-glass-btn:hover {
@@ -73,9 +75,78 @@
   color: #d4b075;
 }
 
+.desktop-label {
+  display: inline;
+}
+
+.mobile-label {
+  display: none;
+}
+
+/* Auto Rotate Notification Toast */
+.sketchbook-rotate-toast {
+  position: absolute;
+  top: 64px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10002;
+  background: rgba(20, 14, 10, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(229, 169, 60, 0.65);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), 0 0 20px rgba(229, 169, 60, 0.3);
+  padding: 8px 16px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ffeed0;
+  font-family: 'Cinzel', serif, Georgia;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  animation: toast-drop 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
+  pointer-events: auto;
+  white-space: nowrap;
+}
+
+@keyframes toast-drop {
+  from { opacity: 0; transform: translate(-50%, -12px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.toast-rotate-icon {
+  width: 16px;
+  height: 16px;
+  color: #e5a93c;
+  animation: rotate-pulse 2s ease infinite;
+}
+
+@keyframes rotate-pulse {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(45deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.toast-dismiss-x {
+  background: none;
+  border: none;
+  color: rgba(255, 238, 208, 0.6);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 2px 4px;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s ease;
+}
+
+.toast-dismiss-x:hover {
+  color: #ffffff;
+}
+
 @media (max-width: 640px) {
   .sketchbook-top-bar {
-    top: 10px;
+    top: 8px;
     left: 10px;
     right: 10px;
   }
@@ -83,6 +154,22 @@
   .sketchbook-glass-btn {
     padding: 6px 12px;
     font-size: 11px;
-    gap: 6px;
+    letter-spacing: 0.8px;
+    gap: 5px;
+  }
+
+  .desktop-label {
+    display: none;
+  }
+
+  .mobile-label {
+    display: inline;
+  }
+
+  .sketchbook-rotate-toast {
+    top: 52px;
+    font-size: 11px;
+    padding: 6px 14px;
+    max-width: 90vw;
   }
 }

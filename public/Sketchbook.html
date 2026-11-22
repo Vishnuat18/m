@@ -435,6 +435,12 @@
       border: 1px solid var(--glass-border);
       padding: 6px 14px;
       border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .preview-controls button {
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     /* Photo Manager Modal */
@@ -679,11 +685,11 @@
       <div class="preview-controls">
         <button class="icon-btn nav-arrow-btn" id="previewPrevBtn" title="Previous Page">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="15 18 9 12 15 6"/></svg>
-          <span>Prev Page</span>
+          <span>Prev</span>
         </button>
-        <span class="spread-label" id="previewCounter" style="min-width:76px;">1 / 22</span>
+        <span class="spread-label" id="previewCounter" style="min-width:64px; text-align:center;">1 / 22</span>
         <button class="icon-btn nav-arrow-btn" id="previewNextBtn" title="Next Page">
-          <span>Next Page</span>
+          <span>Next</span>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="9 18 15 12 9 6"/></svg>
         </button>
       </div>
