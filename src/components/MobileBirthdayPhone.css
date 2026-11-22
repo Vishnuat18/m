@@ -1501,7 +1501,27 @@
 /* =====================================================================
    SPECIAL GIFT MODAL
    ===================================================================== */
+.native-app-modal.gift-modal {
+  position: fixed;
+  inset: 0;
+  max-width: 440px;
+  margin: 0 auto;
+  overflow: hidden;
+  background: #08080c;
+}
+
+.gift-modal-confetti-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+  overflow: hidden;
+}
+
 .gift-view-body {
+  position: relative;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -1510,6 +1530,8 @@
   padding: 20px;
   text-align: center;
   overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 5;
 }
 
 .gift-gold-box {
@@ -1634,6 +1656,8 @@
 }
 
 .shower-confetti-btn {
+  position: relative;
+  z-index: 15;
   padding: 12px 28px;
   border-radius: 999px;
   background: linear-gradient(135deg, #ef5350 0%, #38bdf8 100%);

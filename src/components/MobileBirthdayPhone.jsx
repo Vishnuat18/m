@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import GALLERY_CATEGORIES from './gallery_categories.json';
 import { useMusic } from '../context/MusicContext';
 import './MobileBirthdayPhone.css';
@@ -262,19 +262,6 @@ const playTone = (type = 'click') => {
   } catch (e) {}
 };
 
-const triggerConfetti = () => {
-  if (typeof window !== 'undefined' && window.confetti) {
-    try {
-      window.confetti({
-        particleCount: 85,
-        spread: 65,
-        origin: { y: 0.6 },
-        colors: ['#ff9ffc', '#e5a93c', '#38bdf8', '#c084fc', '#ffffff'],
-      });
-    } catch (e) {}
-  }
-};
-
 /* =====================================================================
    MAIN COMPONENT: MobileBirthdayPhone
    ===================================================================== */
@@ -311,13 +298,67 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
     return () => clearInterval(timer);
   }, []);
 
-  // Special Gift State (Pose reveal + Confetti + Wish from Vishnu)
+  // Special Gift State (Pose reveal + Scoped Confetti inside Gift Modal only)
   const [giftPose, setGiftPose] = useState(null);
   const [showGiftCelebration, setShowGiftCelebration] = useState(false);
+  const giftCanvasRef = useRef(null);
+  const giftConfettiRef = useRef(null);
+
+  // Confetti instance strictly scoped to the Gift Modal canvas (never on Home Screen)
+  useEffect(() => {
+    if (activeModal === 'gift' && giftCanvasRef.current) {
+      if (typeof window !== 'undefined' && window.confetti && typeof window.confetti.create === 'function') {
+        try {
+          giftConfettiRef.current = window.confetti.create(giftCanvasRef.current, {
+            resize: true,
+            useWorker: true,
+          });
+        } catch (e) {}
+      }
+    } else {
+      if (giftConfettiRef.current) {
+        try {
+          giftConfettiRef.current.reset();
+        } catch (e) {}
+        giftConfettiRef.current = null;
+      }
+      if (typeof window !== 'undefined' && window.confetti && typeof window.confetti.reset === 'function') {
+        try {
+          window.confetti.reset();
+        } catch (e) {}
+      }
+    }
+    return () => {
+      if (giftConfettiRef.current) {
+        try {
+          giftConfettiRef.current.reset();
+        } catch (e) {}
+        giftConfettiRef.current = null;
+      }
+    };
+  }, [activeModal]);
 
   const handleShowerConfetti = () => {
     playTone('success');
-    triggerConfetti();
+
+    // Confetti runs ONLY inside this modal canvas - strictly NOT on home screen
+    try {
+      if (!giftConfettiRef.current && giftCanvasRef.current && typeof window !== 'undefined' && window.confetti && typeof window.confetti.create === 'function') {
+        giftConfettiRef.current = window.confetti.create(giftCanvasRef.current, {
+          resize: true,
+          useWorker: true,
+        });
+      }
+      if (giftConfettiRef.current) {
+        giftConfettiRef.current({
+          particleCount: 75,
+          spread: 68,
+          origin: { x: 0.5, y: 0.62 },
+          colors: ['#ff9ffc', '#e5a93c', '#38bdf8', '#c084fc', '#ffffff', '#fb7185', '#fbbf24'],
+          disableForReducedMotion: true,
+        });
+      }
+    } catch (e) {}
 
     // Pick one of the 10 poses randomly (or cycle to a different one)
     let nextNum = Math.floor(Math.random() * 10) + 1;
@@ -358,6 +399,17 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
 
   const closeModal = () => {
     playTone('click');
+    if (giftConfettiRef.current) {
+      try {
+        giftConfettiRef.current.reset();
+      } catch (e) {}
+      giftConfettiRef.current = null;
+    }
+    if (typeof window !== 'undefined' && window.confetti && typeof window.confetti.reset === 'function') {
+      try {
+        window.confetti.reset();
+      } catch (e) {}
+    }
     setActiveModal(null);
   };
 
@@ -1348,6 +1400,12 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
           ===================================================================== */}
       {activeModal === 'gift' && (
         <div className="native-app-modal gift-modal">
+          {/* Scoped confetti canvas - Confetti is rendered HERE ONLY and never escapes to home screen */}
+          <canvas
+            ref={giftCanvasRef}
+            className="gift-modal-confetti-canvas"
+            aria-hidden="true"
+          />
           <header className="modal-top-bar bg-amber-950">
             <div className="modal-title-wrap">
               <h2>Special Gift</h2>
