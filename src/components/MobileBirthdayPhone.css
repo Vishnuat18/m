@@ -271,7 +271,7 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45), 0 1px 1px rgba(255, 255, 255, 0.15) inset;
 }
 
-/* App Tile Color Themes matching Reference Image 1 */
+/* App Tile Color Themes */
 .tile-messages { background: #2e86de; }
 .tile-phone { background: #27ae60; }
 .tile-mail { background: #c44545; }
@@ -381,7 +381,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
   cursor: pointer;
   transition: background 0.2s;
 }
@@ -391,7 +390,7 @@
 }
 
 /* =====================================================================
-   MESSAGES APP MODAL REDESIGN (MATCHING REFERENCE IMAGE 3)
+   MESSAGES APP MODAL (REFERENCE IMAGE 3: INBOX LIST + CHAT)
    ===================================================================== */
 .messages-modal-redesign {
   background: #0c121e;
@@ -427,7 +426,6 @@
   -webkit-overflow-scrolling: touch;
 }
 
-/* Thread Row (Exact match to Reference Image 3) */
 .thread-row-item {
   display: flex;
   align-items: center;
@@ -491,7 +489,7 @@
 
 .thread-preview-text {
   font-size: 13px;
-  color: #f3ba2f; /* Golden/amber preview text matching Reference Image 3 */
+  color: #f3ba2f; /* Golden/amber preview text matching Reference Image */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -502,7 +500,7 @@
   width: 8.5px;
   height: 8.5px;
   border-radius: 50%;
-  background: #38bdf8; /* Glowing cyan unread dot matching Reference Image 3 */
+  background: #38bdf8; /* Glowing cyan unread dot */
   box-shadow: 0 0 8px rgba(56, 189, 248, 0.7);
   flex-shrink: 0;
 }
@@ -533,6 +531,9 @@
   font-weight: 600;
   cursor: pointer;
   padding: 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .conversation-header-meta {
@@ -648,126 +649,497 @@
 }
 
 /* =====================================================================
-   GALLERY: 2 x N NEAT GRID (ZERO HIDDEN VAULT / NO PASSWORD)
+   GALLERY: REFERENCE IMAGE 3 & 4 (SAME SIZE IMAGES + VIEWER)
    ===================================================================== */
 .gallery-modal {
-  background: #0a0b12;
+  background: #0f121d;
 }
 
-.gallery-view-body {
+.gallery-grid-stage {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.gallery-top-nav {
+  height: 56px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #0b0e17;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.gallery-nav-left {
+  width: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.gallery-eye-svg {
+  width: 22px;
+  height: 22px;
+  color: #e5a93c;
+}
+
+.gallery-nav-title {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.gallery-scroll-container {
   flex: 1;
   overflow-y: auto;
   padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 22px;
   -webkit-overflow-scrolling: touch;
 }
 
-.gallery-category-block {
+/* Hidden Vault Revealed Pill Banner (Reference Image 3) */
+.vault-revealed-pill-banner {
+  background: rgba(30, 24, 18, 0.85);
+  border: 1px solid rgba(229, 169, 60, 0.35);
+  border-radius: 999px;
+  padding: 10px 18px;
+  text-align: center;
+  color: #facc15;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+.gallery-category-group {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.gallery-section-title {
-  font-family: 'Cinzel', Georgia, serif;
+.gallery-category-heading {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
   color: #93c5fd;
   margin: 0;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
   padding-left: 2px;
 }
 
-/* Strict 2 x N Grid for neat placements matching Reference Image */
-.gallery-2xn-grid {
+/* ALL IMAGES EXACT SAME SIZE (Square 1:1 Aspect Ratio) */
+.gallery-uniform-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  gap: 12px;
   width: 100%;
 }
 
-.gallery-photo-card {
-  aspect-ratio: 1;
-  border-radius: 12px;
+.gallery-uniform-card {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
   overflow: hidden;
-  background: #141624;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  background: #181b29;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.08);
   cursor: pointer;
-  transition: transform 0.18s ease;
+  transition: transform 0.16s ease;
 }
 
-.gallery-photo-card:active {
+.gallery-uniform-card:active {
   transform: scale(0.96);
 }
 
-.gallery-thumb-img {
+.uniform-photo-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-/* Lightbox Modal */
-.gallery-lightbox-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 10005;
-  background: rgba(0, 0, 0, 0.96);
+/* Gallery Detail Viewer (Reference Image 4) */
+.gallery-image-detail-stage {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  height: 100%;
+  background: #090a12;
 }
 
-.lightbox-top-bar {
-  height: 52px;
+.gallery-detail-header {
+  height: 56px;
   padding: 0 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: #ffffff;
-  font-size: 13px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  background: #090a12;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.lightbox-close-btn {
+.gallery-back-arrow-btn {
   background: none;
   border: none;
   color: #ffffff;
-  font-size: 20px;
   cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
 }
 
-.lightbox-image-stage {
+.detail-caption-box {
+  padding: 16px 20px 8px 20px;
+  text-align: center;
+}
+
+.detail-italic-caption {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 15.5px;
+  color: #f1f5f9;
+  letter-spacing: 0.3px;
+}
+
+.detail-photo-stage {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px;
+  padding: 10px 14px;
   position: relative;
+  overflow: hidden;
 }
 
-.lightbox-full-img {
-  max-width: 88vw;
-  max-height: 80vh;
+.detail-img-wrapper {
+  flex: 1;
+  height: 100%;
+  max-height: 56vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.detail-large-photo {
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
-  border-radius: 6px;
+  border-radius: 12px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
-.lightbox-arrow-btn {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+.detail-arrow-nav {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   color: #ffffff;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  font-size: 24px;
+  font-size: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  z-index: 10;
+}
+
+.detail-arrow-nav:active {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Bottom Toolbar matching Reference Image 4 */
+.gallery-detail-bottom-tools {
+  height: 64px;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: #0b0c16;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.detail-tool-btn {
+  background: none;
+  border: none;
+  color: #cbd5e1;
+  cursor: pointer;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.detail-tool-btn:hover {
+  color: #38bdf8;
+}
+
+.detail-tool-btn:active {
+  transform: scale(0.9);
+}
+
+/* =====================================================================
+   MAIL MODAL: REFERENCE IMAGE 1 & 2 REDESIGN (ATIDETO PROFILE)
+   ===================================================================== */
+.mail-modal-redesign {
+  background: #120908;
+}
+
+.mail-inbox-stage {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.mail-inbox-header {
+  height: 56px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #140a08;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mail-inbox-tag {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #f87171;
+  text-transform: uppercase;
+}
+
+.mail-threads-scroll {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mail-row-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.mail-row-item:active {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.mail-avatar-wrapper {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.atideto-logo-avatar {
+  background: #020617;
+  border: 1.5px solid rgba(56, 189, 248, 0.5);
+  overflow: hidden;
+  padding: 3px;
+}
+
+.atideto-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.letter-avatar {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.mail-row-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mail-row-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mail-sender-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.mail-date-label {
+  font-size: 11.5px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.mail-row-bottom {
+  display: flex;
+  align-items: center;
+}
+
+.mail-subject-snippet {
+  font-size: 13px;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Mail Detail View (Reference Image 2) */
+.mail-detail-stage {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #120908;
+}
+
+.mail-detail-top-nav {
+  height: 56px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #140a08;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mail-back-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+}
+
+.mail-nav-title {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.mail-detail-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 18px 40px 18px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mail-subject-star-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.mail-opened-subject {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.gold-star-svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.mail-sender-profile-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.mail-detail-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mail-sender-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mail-sender-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.mail-sender-email {
+  font-size: 11.5px;
+  color: #94a3b8;
+}
+
+.mail-meta-date {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.mail-divider-line {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 20px;
+}
+
+.mail-letter-content {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: #cbd5e1;
+}
+
+.letter-greeting {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 14px;
+}
+
+.letter-paragraph {
+  margin-bottom: 14px;
+}
+
+.letter-sign-off {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  color: #f1f5f9;
+  font-weight: 600;
+}
+
+.sign-line {
+  display: block;
 }
 
 /* =====================================================================
@@ -1127,46 +1499,6 @@
 }
 
 /* =====================================================================
-   MAIL MODAL
-   ===================================================================== */
-.mail-view-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.mail-card-item {
-  padding: 14px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.mail-sender {
-  font-size: 10.5px;
-  color: #ef4444;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.mail-subject {
-  font-size: 13.5px;
-  font-weight: 600;
-  color: #f1f5f9;
-  margin: 4px 0 6px 0;
-}
-
-.mail-preview {
-  font-size: 11.5px;
-  color: #94a3b8;
-  line-height: 1.4;
-  margin: 0;
-}
-
-/* =====================================================================
    SPECIAL GIFT MODAL
    ===================================================================== */
 .gift-view-body {
@@ -1276,7 +1608,7 @@
 }
 
 /* =====================================================================
-   SETTINGS MODAL (OWNER: MAHESWARI, DEVICE: M PHONE - NO PASSWORD LOCK)
+   SETTINGS MODAL
    ===================================================================== */
 .settings-view-body {
   flex: 1;

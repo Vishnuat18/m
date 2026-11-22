@@ -5,9 +5,11 @@ import SketchbookViewer from './components/SketchbookViewer';
 import Story from './components/Story';
 import Gift from './components/Gift';
 import DeskBuddy from './components/DeskBuddy';
+import { MusicProvider } from './context/MusicContext';
+import RotatingCdWidget from './components/RotatingCdWidget';
 import './App.css';
 
-function App() {
+function AppContent() {
   const [isMobile, setIsMobile] = useState(() => {
     if (typeof window !== 'undefined') return window.innerWidth <= 768;
     return false;
@@ -54,7 +56,20 @@ function App() {
       {currentScreen !== 'intro' && currentScreen !== 'sketchbook' && (
         <DeskBuddy />
       )}
+
+      {/* Rotating CD Widget on the bottom right for mobile across all screens */}
+      {isMobile && currentScreen !== 'intro' && (
+        <RotatingCdWidget />
+      )}
     </div>
+  );
+}
+
+function App() {
+  return (
+    <MusicProvider>
+      <AppContent />
+    </MusicProvider>
   );
 }
 

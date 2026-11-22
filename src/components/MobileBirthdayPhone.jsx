@@ -1,25 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import GALLERY_CATEGORIES from './gallery_categories.json';
+import { useMusic } from '../context/MusicContext';
 import './MobileBirthdayPhone.css';
 
 /* =====================================================================
-   DATA: MUSIC TRACKS (Real audio files from Music folder)
-   ===================================================================== */
-const MUSIC_TRACKS = [
-  { id: 1, title: 'Kiss the Rain x River Flows in You', artist: 'Yiruma', src: '/music/kiss_d_rain_x_river_--1.mp3', duration: '2:40' },
-  { id: 2, title: 'Nuvole Bianche (Wedding)', artist: 'Ludovico Einaudi', src: '/music/nuvole_bianche_wedding_--2.mp3', duration: '3:15' },
-  { id: 3, title: 'A Thousand Years', artist: 'Christina Perri', src: '/music/A_Thousand_years_--3.mp3', duration: '4:45' },
-  { id: 4, title: "Comptine d'un autre été (Amélie)", artist: 'Yann Tiersen', src: "/music/Yann_Tiersen_-_Comptine_d'un_autre_été_Amélie_--4.mp3", duration: '2:20' },
-  { id: 5, title: 'Experience (Slowed)', artist: 'Ludovico Einaudi', src: '/music/Ludovico_Einaudi_-_Experience_Slowed__--5.mp3', duration: '6:30' },
-  { id: 6, title: 'The Night We Met', artist: 'Lord Huron', src: '/music/The_night_we_met_--6.m4a', duration: '3:28' },
-  { id: 7, title: 'Your Hand in Mine', artist: 'Explosions in the Sky', src: '/music/your_hand_in_mine_--7.m4a', duration: '4:08' },
-  { id: 8, title: 'Dandelions (Violin Version)', artist: 'Ruth B.', src: '/music/dandelions_violin__--8.mp3', duration: '2:50' },
-  { id: 9, title: 'Kamin', artist: 'Romantic Instrumental', src: '/music/kamin_--9.m4a', duration: '3:40' },
-  { id: 10, title: 'End of Beginning', artist: 'Djo', src: '/music/end_of_beginning.mp3', duration: '2:39' },
-];
-
-/* =====================================================================
-   DATA: GALLERY HIGHLIGHT PHOTOS (2xN neat grid with zero hidden vault)
+   DATA: GALLERY HIGHLIGHT PHOTOS (Same square size 2xN grid)
    ===================================================================== */
 const HIGHLIGHT_PHOTOS = [
   '/assets/gallery/splmem.jpg',
@@ -30,18 +15,37 @@ const HIGHLIGHT_PHOTOS = [
   '/assets/gallery/IMG_20260403_155001.JPG',
 ];
 
-/* Combined Categories list with Highlights upfront in 2xN grid */
+/* Combined Categories with uniform square images */
 const ALL_GALLERY_COLLECTIONS = [
   {
-    title: 'Dearest Highlights',
-    layout: 'two-col',
+    title: 'Tonight \u2014 Birthday Eve',
+    caption: 'This lighting is perfect',
+    images: [
+      '/assets/gallery/IMG_20260403_125101_529.jpg',
+      '/assets/gallery/IMG_20260403_125129_058.jpg',
+    ],
+  },
+  {
+    title: 'Favorite Evenings',
+    caption: 'Looking up at the same sky with you',
+    images: [
+      '/assets/gallery/IMG_20260403_125203_175.jpg',
+      '/assets/gallery/IMG_20260403_125205_141.jpg',
+    ],
+  },
+  {
+    title: 'Hidden Vault Memories',
+    caption: 'Special moments kept close to the heart',
     images: HIGHLIGHT_PHOTOS,
   },
-  ...GALLERY_CATEGORIES,
+  ...GALLERY_CATEGORIES.slice(2).map((cat) => ({
+    ...cat,
+    caption: 'Every smile captured in time',
+  })),
 ];
 
 /* =====================================================================
-   DATA: BIRTHDAY MESSAGES FROM HER FRIENDS (Reference Image 3 Style)
+   DATA: BIRTHDAY MESSAGES (Updated: "Mahi" changed to "Mahes")
    ===================================================================== */
 const FRIENDS_CHATS = {
   sanjuuu: {
@@ -51,9 +55,9 @@ const FRIENDS_CHATS = {
     avatar: 'S',
     color: '#f59e0b',
     timestamp: '11:16 PM',
-    preview: 'Mahi dearrrr! Happiest Birthday to you! May this year bring endless...',
+    preview: 'Mahes dearrrr! Happiest Birthday to you! May this year bring endless...',
     initialMsgs: [
-      { sender: 'them', text: 'Mahi dearrrr! Happiest Birthday to you! May this year bring endless smiles and laughter!', time: '11:14 PM' },
+      { sender: 'them', text: 'Mahes dearrrr! Happiest Birthday to you! May this year bring endless smiles and laughter!', time: '11:14 PM' },
       { sender: 'them', text: 'You are truly one in a million and my sweetest friend ever! Treat eppo thara pora?', time: '11:15 PM' },
       { sender: 'them', text: 'Never stop smiling di, your happiness makes everyone around you happy! Love you always!', time: '11:16 PM' },
     ],
@@ -111,9 +115,9 @@ const FRIENDS_CHATS = {
     avatar: 'R',
     color: '#8b5cf6',
     timestamp: '09:41 PM',
-    preview: 'Dearest Mahi! Wishing you a very Happy Birthday! You bring so much...',
+    preview: 'Dearest Mahes! Wishing you a very Happy Birthday! You bring so much...',
     initialMsgs: [
-      { sender: 'them', text: 'Dearest Mahi! Wishing you a very Happy Birthday!', time: '09:39 PM' },
+      { sender: 'them', text: 'Dearest Mahes! Wishing you a very Happy Birthday!', time: '09:39 PM' },
       { sender: 'them', text: 'May your journey ahead be filled with sweet surprises, laughter, and success!', time: '09:40 PM' },
       { sender: 'them', text: 'You bring so much warmth and fun into our lives. Have the best year ahead!', time: '09:41 PM' },
     ],
@@ -122,7 +126,7 @@ const FRIENDS_CHATS = {
       'Thanks for such warm wishes Ranjuu!',
       'So grateful for our friendship Ranjuu!',
     ],
-    replyResponse: 'Cheers to many more wonderful years together! Enjoy your special day, Mahi!',
+    replyResponse: 'Cheers to many more wonderful years together! Enjoy your special day, Mahes!',
   },
   vishnu: {
     key: 'vishnu',
@@ -146,7 +150,84 @@ const FRIENDS_CHATS = {
   },
 };
 
-/* Audio tone helper */
+/* =====================================================================
+   DATA: MAIL INBOX (Reference Image 1 & 2 Style with Atideto Logo)
+   ===================================================================== */
+const MAIL_INBOX_ITEMS = [
+  {
+    id: 'vishnu',
+    sender: 'Vishnu R',
+    email: 'vishnu@atideto.in',
+    isAtidetoLogo: true,
+    avatarImg: '/assets/atideto-logo.png',
+    avatarLetter: 'V',
+    avatarColor: '#2563eb',
+    subject: 'Your annual memory archive is live',
+    dateLabel: 'Today, 11:00 PM',
+    bodyGreeting: 'Happy Birthday!',
+    bodyLines: [
+      'This phone was crafted as a living keepsake for you. Inside you will find hidden notes, illustrated memories, our handcrafted scrapbooks, and our sweetest moments together.',
+      'Clue for Diary Page 3: What lights up the night sky above the hillside in our favorite memory?',
+      'Looking up at the same sky with you... always.',
+    ],
+    signOff: [
+      'Warmest birthday wishes,',
+      'Vishnu R',
+      'CEO, Atideto Technologies',
+    ],
+  },
+  {
+    id: 'stargazer',
+    sender: 'Stargazer Society',
+    email: 'skywatch@stargazer.org',
+    isAtidetoLogo: false,
+    avatarLetter: 'S',
+    avatarColor: '#2563eb',
+    subject: 'Hilltop observation log #1121',
+    dateLabel: 'Today, 8:15 PM',
+    bodyGreeting: 'Observation Notice #1121',
+    bodyLines: [
+      'Sky conditions tonight are crystal clear with maximum stellar visibility.',
+      'A special celestial alignment shines over the hills tonight in celebration of a very special birthday.',
+      'Keep your eyes on the evening horizon.',
+    ],
+    signOff: ['Stargazer Society Observatory Team'],
+  },
+  {
+    id: 'cafe',
+    sender: 'Midnight Cafe',
+    email: 'reserve@midnightcafe.com',
+    isAtidetoLogo: false,
+    avatarLetter: 'M',
+    avatarColor: '#9333ea',
+    subject: 'Table for two by the rainy window',
+    dateLabel: 'Yesterday',
+    bodyGreeting: 'Reservation Confirmed',
+    bodyLines: [
+      'Your favorite corner table by the rainy window has been reserved.',
+      'Warm drinks, soft acoustic melodies, and sweet conversations are waiting for you.',
+    ],
+    signOff: ['The Midnight Cafe Baristas'],
+  },
+  {
+    id: 'gift',
+    sender: 'Gift Vault Delivery',
+    email: 'surprise@giftvault.delivery',
+    isAtidetoLogo: false,
+    avatarLetter: 'G',
+    avatarColor: '#059669',
+    subject: 'Redeemable Birthday Surprise Inside',
+    dateLabel: '2 days ago',
+    bodyGreeting: 'Special Package Notification',
+    bodyLines: [
+      'A personal surprise package packed with loving thoughts has been delivered to your digital phone.',
+      'Tap Special Gift anytime to unwrap your celebration.',
+    ],
+    signOff: ['Gift Vault Concierge'],
+  },
+];
+
+/* Tone audio helper */
 const playTone = (type = 'click') => {
   try {
     const AC = window.AudioContext || window.webkitAudioContext;
@@ -198,6 +279,22 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
   const [activeModal, setActiveModal] = useState(null);
   const [currentTime, setCurrentTime] = useState('23:06');
 
+  // Music Context (Plays Always across any page visits)
+  const {
+    currentTrackIndex,
+    currentTrack,
+    isPlaying,
+    audioProgress,
+    audioDuration,
+    audioCurrentTime,
+    handlePlayPause,
+    handleNextTrack,
+    handlePrevTrack,
+    handleSeek,
+    handleSelectTrack,
+    MUSIC_TRACKS,
+  } = useMusic();
+
   // Clock
   useEffect(() => {
     const updateTime = () => {
@@ -210,118 +307,6 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
     const timer = setInterval(updateTime, 10000);
     return () => clearInterval(timer);
   }, []);
-
-  /* =========================================================================
-     MUSIC PLAYER STATE (PLAYS ALWAYS & CONTINUOUSLY)
-     ========================================================================= */
-  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [audioProgress, setAudioProgress] = useState(0);
-  const [audioDuration, setAudioDuration] = useState('0:00');
-  const [audioCurrentTime, setAudioCurrentTime] = useState('0:00');
-  const audioRef = useRef(null);
-
-  const currentTrack = MUSIC_TRACKS[currentTrackIndex];
-
-  // Try to play audio continuously on first user interaction anywhere
-  useEffect(() => {
-    const startAudioOnTouch = () => {
-      if (audioRef.current && audioRef.current.paused) {
-        audioRef.current
-          .play()
-          .then(() => setIsPlaying(true))
-          .catch(() => {});
-      }
-    };
-
-    window.addEventListener('touchstart', startAudioOnTouch, { once: true });
-    window.addEventListener('click', startAudioOnTouch, { once: true });
-
-    return () => {
-      window.removeEventListener('touchstart', startAudioOnTouch);
-      window.removeEventListener('click', startAudioOnTouch);
-    };
-  }, []);
-
-  const handlePlayPause = () => {
-    playTone('click');
-    if (!audioRef.current) return;
-    if (isPlaying) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-    } else {
-      audioRef.current
-        .play()
-        .then(() => setIsPlaying(true))
-        .catch(() => {});
-    }
-  };
-
-  const handleNextTrack = useCallback(() => {
-    playTone('click');
-    const nextIdx = (currentTrackIndex + 1) % MUSIC_TRACKS.length;
-    setCurrentTrackIndex(nextIdx);
-    setAudioProgress(0);
-  }, [currentTrackIndex]);
-
-  const handlePrevTrack = () => {
-    playTone('click');
-    const prevIdx = (currentTrackIndex - 1 + MUSIC_TRACKS.length) % MUSIC_TRACKS.length;
-    setCurrentTrackIndex(prevIdx);
-    setAudioProgress(0);
-  };
-
-  const handleSelectTrack = (idx) => {
-    playTone('click');
-    setCurrentTrackIndex(idx);
-    setAudioProgress(0);
-    if (audioRef.current) {
-      audioRef.current
-        .play()
-        .then(() => setIsPlaying(true))
-        .catch(() => {});
-    }
-  };
-
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.src = currentTrack.src;
-      if (isPlaying) {
-        audioRef.current
-          .play()
-          .then(() => setIsPlaying(true))
-          .catch(() => {});
-      }
-    }
-  }, [currentTrackIndex, currentTrack.src, isPlaying]);
-
-  const formatTime = (secs) => {
-    if (isNaN(secs)) return '0:00';
-    const m = Math.floor(secs / 60);
-    const s = Math.floor(secs % 60);
-    return `${m}:${String(s).padStart(2, '0')}`;
-  };
-
-  const handleTimeUpdate = () => {
-    if (!audioRef.current) return;
-    const cur = audioRef.current.currentTime;
-    const dur = audioRef.current.duration;
-    if (dur && !isNaN(dur)) {
-      setAudioProgress((cur / dur) * 100);
-      setAudioDuration(formatTime(dur));
-    }
-    setAudioCurrentTime(formatTime(cur));
-  };
-
-  const handleSeek = (e) => {
-    if (!audioRef.current) return;
-    const val = Number(e.target.value);
-    setAudioProgress(val);
-    const dur = audioRef.current.duration;
-    if (dur && !isNaN(dur)) {
-      audioRef.current.currentTime = (val / 100) * dur;
-    }
-  };
 
   const openApp = (appId) => {
     playTone('click');
@@ -342,40 +327,52 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
   };
 
   /* =========================================================================
-     GALLERY STATE (2xN NEAT GRID - NO HIDDEN VAULT / NO PASSWORD)
+     GALLERY STATE (Reference Image 3 & 4)
      ========================================================================= */
-  const [galleryLightboxImg, setGalleryLightboxImg] = useState(null);
-  const [galleryLightboxIdx, setGalleryLightboxIdx] = useState(0);
+  const [galleryViewerImg, setGalleryViewerImg] = useState(null);
+  const [galleryViewerIdx, setGalleryViewerIdx] = useState(0);
   const [galleryActiveCategoryImgs, setGalleryActiveCategoryImgs] = useState([]);
+  const [galleryActiveCaption, setGalleryActiveCaption] = useState('This lighting is perfect');
+  const [photoRotation, setPhotoRotation] = useState(0);
 
-  const openGalleryPhoto = (imgSrc, imgList, idx) => {
+  const openGalleryPhoto = (imgSrc, imgList, idx, caption) => {
     playTone('click');
     setGalleryActiveCategoryImgs(imgList || [imgSrc]);
-    setGalleryLightboxIdx(idx || 0);
-    setGalleryLightboxImg(imgSrc);
+    setGalleryViewerIdx(idx || 0);
+    setGalleryViewerImg(imgSrc);
+    setGalleryActiveCaption(caption || 'This lighting is perfect');
+    setPhotoRotation(0);
   };
 
-  const closeGalleryLightbox = () => {
+  const closeGalleryViewer = () => {
     playTone('click');
-    setGalleryLightboxImg(null);
+    setGalleryViewerImg(null);
+    setPhotoRotation(0);
   };
 
   const handleNextGalleryPhoto = () => {
     if (!galleryActiveCategoryImgs.length) return;
-    const next = (galleryLightboxIdx + 1) % galleryActiveCategoryImgs.length;
-    setGalleryLightboxIdx(next);
-    setGalleryLightboxImg(galleryActiveCategoryImgs[next]);
+    const next = (galleryViewerIdx + 1) % galleryActiveCategoryImgs.length;
+    setGalleryViewerIdx(next);
+    setGalleryViewerImg(galleryActiveCategoryImgs[next]);
+    setPhotoRotation(0);
   };
 
   const handlePrevGalleryPhoto = () => {
     if (!galleryActiveCategoryImgs.length) return;
-    const prev = (galleryLightboxIdx - 1 + galleryActiveCategoryImgs.length) % galleryActiveCategoryImgs.length;
-    setGalleryLightboxIdx(prev);
-    setGalleryLightboxImg(galleryActiveCategoryImgs[prev]);
+    const prev = (galleryViewerIdx - 1 + galleryActiveCategoryImgs.length) % galleryActiveCategoryImgs.length;
+    setGalleryViewerIdx(prev);
+    setGalleryViewerImg(galleryActiveCategoryImgs[prev]);
+    setPhotoRotation(0);
+  };
+
+  const handleRotatePhoto = () => {
+    playTone('click');
+    setPhotoRotation((prev) => (prev + 90) % 360);
   };
 
   /* =========================================================================
-     MESSAGES APP STATE (REFERENCE IMAGE 3: THREAD LIST + CHAT)
+     MESSAGES APP STATE (Reference Image 3 Inbox)
      ========================================================================= */
   const [activeMessageFriendKey, setActiveMessageFriendKey] = useState(null);
   const [friendsThreads, setFriendsThreads] = useState(() => {
@@ -407,6 +404,11 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
       }));
     }, 1000);
   };
+
+  /* =========================================================================
+     MAIL STATE (Reference Image 1 & 2)
+     ========================================================================= */
+  const [activeMailItem, setActiveMailItem] = useState(null);
 
   /* =========================================================================
      PHONE DIALER STATE
@@ -461,7 +463,7 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
   const apps = [
     { id: 'messages', label: 'Messages', bg: 'tile-messages', icon: 'messages', badge: '5' },
     { id: 'phone', label: 'Phone', bg: 'tile-phone', icon: 'phone' },
-    { id: 'mail', label: 'Mail', bg: 'tile-mail', icon: 'mail', badge: '3' },
+    { id: 'mail', label: 'Mail', bg: 'tile-mail', icon: 'mail', badge: '4' },
     { id: 'gallery', label: 'Gallery', bg: 'tile-gallery', icon: 'gallery' },
     { id: 'music', label: 'Music', bg: 'tile-music', icon: 'music', badge: '10', badgeColor: 'badge-blue' },
     { id: 'calculator', label: 'Calculator', bg: 'tile-calc', icon: 'calc' },
@@ -533,15 +535,6 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
 
   return (
     <div className="native-phone-stage">
-      {/* Hidden Audio element for background continuous music */}
-      <audio
-        ref={audioRef}
-        onTimeUpdate={handleTimeUpdate}
-        onEnded={handleNextTrack}
-        preload="auto"
-        loop={false}
-      />
-
       <div className="native-phone-screen">
         {/* Status Bar */}
         <header className="native-status-bar">
@@ -562,7 +555,7 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
           <h1 className="hero-title">Happy Birthday Maheswari</h1>
         </div>
 
-        {/* TWO BIG FEATURE CARDS: SCRAPBOOK & NOTES (Matching Reference Image 1) */}
+        {/* TWO BIG FEATURE CARDS: SCRAPBOOK & NOTES (Reference Image 1) */}
         <section className="featured-duo-cards-row">
           {/* Featured Card 1: Scrapbook */}
           <div
@@ -638,12 +631,12 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
       </div>
 
       {/* =====================================================================
-          MODAL 1: MESSAGES APP (Reference Image 3 Style)
+          MODAL 1: MESSAGES APP (Reference Image 3 Style - "Mahi" -> "Mahes")
           ===================================================================== */}
       {activeModal === 'messages' && (
         <div className="native-app-modal messages-modal-redesign">
           {activeMessageFriendKey === null ? (
-            /* MESSAGES INBOX THREAD LIST VIEW (Matches Reference Image 3) */
+            /* MESSAGES INBOX THREAD LIST VIEW */
             <div className="messages-inbox-stage">
               <header className="messages-list-header">
                 <h2 className="messages-list-title">Messages</h2>
@@ -653,7 +646,10 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
                   onClick={closeModal}
                   aria-label="Close"
                 >
-                  &times;
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
                 </button>
               </header>
 
@@ -698,7 +694,10 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
                     setActiveMessageFriendKey(null);
                   }}
                 >
-                  ‹ Back
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
+                  <span>Back</span>
                 </button>
                 <div className="conversation-header-meta">
                   <span
@@ -718,7 +717,10 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
                   onClick={closeModal}
                   aria-label="Close"
                 >
-                  &times;
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
                 </button>
               </header>
 
@@ -758,84 +760,176 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
       )}
 
       {/* =====================================================================
-          MODAL 2: GALLERY (2 x N NEAT GRID - NO HIDDEN VAULT, NO PASSCODE)
+          MODAL 2: GALLERY (Reference Image 3 & 4: Exact Same Size Images + Lightbox)
           ===================================================================== */}
       {activeModal === 'gallery' && (
         <div className="native-app-modal gallery-modal">
-          <header className="modal-top-bar bg-slate-900">
-            <div className="modal-title-wrap">
-              <h2>Moments &amp; Memories</h2>
-              <span className="modal-sub">28 Collections • 114 Photographs</span>
-            </div>
-            <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
-              &times;
-            </button>
-          </header>
-
-          <div className="gallery-view-body">
-            {ALL_GALLERY_COLLECTIONS.map((cat, cIdx) => (
-              <section key={cIdx} className="gallery-category-block">
-                <h3 className="gallery-section-title">{cat.title}</h3>
-                <div className="gallery-2xn-grid">
-                  {cat.images.map((imgSrc, pIdx) => (
-                    <div
-                      key={pIdx}
-                      className="gallery-photo-card"
-                      onClick={() => openGalleryPhoto(imgSrc, cat.images, pIdx)}
-                      role="button"
-                      tabIndex={0}
-                    >
-                      <img
-                        src={imgSrc}
-                        alt={`${cat.title} ${pIdx + 1}`}
-                        className="gallery-thumb-img"
-                        loading="lazy"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                        }}
-                      />
-                    </div>
-                  ))}
+          {galleryViewerImg === null ? (
+            /* GALLERY GRID VIEW (Matches Reference Image 3) */
+            <div className="gallery-grid-stage">
+              <header className="gallery-top-nav">
+                <div className="gallery-nav-left">
+                  <svg className="gallery-eye-svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                  </svg>
                 </div>
-              </section>
-            ))}
-          </div>
-
-          {/* FULLSCREEN PHOTO LIGHTBOX */}
-          {galleryLightboxImg && (
-            <div className="gallery-lightbox-modal">
-              <header className="lightbox-top-bar">
-                <span>
-                  Photo {galleryLightboxIdx + 1} of {galleryActiveCategoryImgs.length}
-                </span>
-                <button type="button" className="lightbox-close-btn" onClick={closeGalleryLightbox}>
-                  &times;
+                <h2 className="gallery-nav-title">Gallery</h2>
+                <button
+                  type="button"
+                  className="modal-x-btn"
+                  onClick={closeModal}
+                  aria-label="Close"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
                 </button>
               </header>
 
-              <div className="lightbox-image-stage">
+              <div className="gallery-scroll-container">
+                {/* Vault Photos Revealed Banner (Reference Image 3) */}
+                <div className="vault-revealed-pill-banner">
+                  <span>Hidden Vault photos revealed!</span>
+                </div>
+
+                {ALL_GALLERY_COLLECTIONS.map((cat, cIdx) => (
+                  <section key={cIdx} className="gallery-category-group">
+                    <h3 className="gallery-category-heading">{cat.title}</h3>
+                    {/* All Images Exact Same Size */}
+                    <div className="gallery-uniform-grid">
+                      {cat.images.map((imgSrc, pIdx) => (
+                        <div
+                          key={pIdx}
+                          className="gallery-uniform-card"
+                          onClick={() => openGalleryPhoto(imgSrc, cat.images, pIdx, cat.caption)}
+                          role="button"
+                          tabIndex={0}
+                        >
+                          <img
+                            src={imgSrc}
+                            alt={`${cat.title} ${pIdx + 1}`}
+                            className="uniform-photo-img"
+                            loading="lazy"
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                            }}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                ))}
+              </div>
+            </div>
+          ) : (
+            /* FULL IMAGE DETAIL VIEWER (Matches Reference Image 4) */
+            <div className="gallery-image-detail-stage">
+              {/* Top Bar matching Reference Image 4 */}
+              <header className="gallery-detail-header">
                 <button
                   type="button"
-                  className="lightbox-arrow-btn left"
+                  className="gallery-back-arrow-btn"
+                  onClick={closeGalleryViewer}
+                  aria-label="Back to Gallery"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
+                </button>
+                <h2 className="gallery-nav-title">Gallery</h2>
+                <button
+                  type="button"
+                  className="modal-x-btn"
+                  onClick={closeModal}
+                  aria-label="Close"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </header>
+
+              {/* Italic Quote on Top of Image matching Reference Image 4 */}
+              <div className="detail-caption-box">
+                <span className="detail-italic-caption">&ldquo;{galleryActiveCaption}&rdquo;</span>
+              </div>
+
+              {/* Center Main Photo Stage */}
+              <div className="detail-photo-stage">
+                <button
+                  type="button"
+                  className="detail-arrow-nav left"
                   onClick={handlePrevGalleryPhoto}
                   aria-label="Previous"
                 >
                   ‹
                 </button>
-                <img
-                  src={galleryLightboxImg}
-                  alt="Full preview"
-                  className="lightbox-full-img"
-                />
+                <div
+                  className="detail-img-wrapper"
+                  style={{ transform: `rotate(${photoRotation}deg)` }}
+                >
+                  <img
+                    src={galleryViewerImg}
+                    alt="Memory detail"
+                    className="detail-large-photo"
+                  />
+                </div>
                 <button
                   type="button"
-                  className="lightbox-arrow-btn right"
+                  className="detail-arrow-nav right"
                   onClick={handleNextGalleryPhoto}
                   aria-label="Next"
                 >
                   ›
                 </button>
               </div>
+
+              {/* Bottom 3 Action Tools matching Reference Image 4 */}
+              <footer className="gallery-detail-bottom-tools">
+                {/* 1. Frame / Crop Icon */}
+                <button
+                  type="button"
+                  className="detail-tool-btn"
+                  onClick={() => playTone('click')}
+                  title="Frame Fit"
+                  aria-label="Frame Fit"
+                >
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M4 8V4h4M20 8V4h-4M4 16v4h4M20 16v4h-4" />
+                  </svg>
+                </button>
+
+                {/* 2. Rotate Icon (Rotates 90 degrees) */}
+                <button
+                  type="button"
+                  className="detail-tool-btn rotate-btn"
+                  onClick={handleRotatePhoto}
+                  title="Rotate Photo"
+                  aria-label="Rotate Photo"
+                >
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
+                  </svg>
+                </button>
+
+                {/* 3. Info / Note Icon */}
+                <button
+                  type="button"
+                  className="detail-tool-btn"
+                  onClick={() => {
+                    playTone('success');
+                    triggerConfetti();
+                  }}
+                  title="Special Memory"
+                  aria-label="Special Memory"
+                >
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                  </svg>
+                </button>
+              </footer>
             </div>
           )}
         </div>
@@ -851,8 +945,16 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
               <h2>Music Player</h2>
               <span className="modal-sub">10 Romantic Melodies • Always Playing</span>
             </div>
-            <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
-              &times;
+            <button
+              type="button"
+              className="modal-x-btn"
+              onClick={closeModal}
+              aria-label="Close"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
             </button>
           </header>
 
@@ -964,8 +1066,16 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
               <h2>Phone</h2>
               <span className="modal-sub">Direct Line to Vishnu</span>
             </div>
-            <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
-              &times;
+            <button
+              type="button"
+              className="modal-x-btn"
+              onClick={closeModal}
+              aria-label="Close"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
             </button>
           </header>
 
@@ -974,7 +1084,7 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
               <div className="call-active-stage">
                 <div className="caller-avatar-circle">V</div>
                 <h3 className="caller-name">Vishnu</h3>
-                <span className="call-duration-text">{formatTime(callTimer)}</span>
+                <span className="call-duration-text">{callTimer}s</span>
                 <p className="call-sweet-whisper">
                   &ldquo;I am always just one call away, Ammu. Happy Birthday!&rdquo;
                 </p>
@@ -982,7 +1092,7 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
                   type="button"
                   className="end-call-btn"
                   onClick={() => {
-                    playTone('click');
+                    playTone('bump');
                     setCallActive(false);
                   }}
                 >
@@ -1036,43 +1146,165 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
       )}
 
       {/* =====================================================================
-          MODAL 5: MAIL
+          MODAL 5: MAIL APP (Reference Image 1 Inbox & Reference Image 2 Detail)
           ===================================================================== */}
       {activeModal === 'mail' && (
-        <div className="native-app-modal mail-modal">
-          <header className="modal-top-bar bg-red-950">
-            <div className="modal-title-wrap">
-              <h2>Letters &amp; Mail</h2>
-              <span className="modal-sub">Inbox (3 Messages)</span>
-            </div>
-            <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
-              &times;
-            </button>
-          </header>
+        <div className="native-app-modal mail-modal-redesign">
+          {activeMailItem === null ? (
+            /* MAIL INBOX LIST VIEW (Matches Reference Image 1) */
+            <div className="mail-inbox-stage">
+              <header className="mail-inbox-header">
+                <span className="mail-inbox-tag">INBOX</span>
+                <button
+                  type="button"
+                  className="modal-x-btn"
+                  onClick={closeModal}
+                  aria-label="Close"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </header>
 
-          <div className="mail-view-body">
-            <div className="mail-card-item">
-              <span className="mail-sender">From: Vishnu</span>
-              <h4 className="mail-subject">Happy Birthday Ammu!</h4>
-              <p className="mail-preview">
-                Wishing you endless laughter, peace, and dreams that come true today and always...
-              </p>
+              <div className="mail-threads-scroll">
+                {MAIL_INBOX_ITEMS.map((item) => (
+                  <div
+                    key={item.id}
+                    className="mail-row-item"
+                    onClick={() => {
+                      playTone('click');
+                      setActiveMailItem(item);
+                    }}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    {item.isAtidetoLogo ? (
+                      <div className="mail-avatar-wrapper atideto-logo-avatar">
+                        <img
+                          src={item.avatarImg}
+                          alt="Atideto Logo"
+                          className="atideto-avatar-img"
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        className="mail-avatar-wrapper letter-avatar"
+                        style={{ backgroundColor: item.avatarColor }}
+                      >
+                        {item.avatarLetter}
+                      </div>
+                    )}
+
+                    <div className="mail-row-content">
+                      <div className="mail-row-top">
+                        <span className="mail-sender-name">{item.sender}</span>
+                        <span className="mail-date-label">{item.dateLabel}</span>
+                      </div>
+                      <div className="mail-row-bottom">
+                        <span className="mail-subject-snippet">{item.subject}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="mail-card-item">
-              <span className="mail-sender">From: Memories</span>
-              <h4 className="mail-subject">Moments Together</h4>
-              <p className="mail-preview">
-                Your special memories gallery is ready with 114 photos across 28 collections.
-              </p>
+          ) : (
+            /* MAIL DETAIL VIEW (Matches Reference Image 2) */
+            <div className="mail-detail-stage">
+              <header className="mail-detail-top-nav">
+                <button
+                  type="button"
+                  className="mail-back-btn"
+                  onClick={() => {
+                    playTone('click');
+                    setActiveMailItem(null);
+                  }}
+                  aria-label="Back to Inbox"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
+                </button>
+                <h2 className="mail-nav-title">Mail</h2>
+                <button
+                  type="button"
+                  className="modal-x-btn"
+                  onClick={closeModal}
+                  aria-label="Close"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </header>
+
+              <div className="mail-detail-body">
+                {/* Subject with Gold Star matching Reference Image 2 */}
+                <div className="mail-subject-star-row">
+                  <h3 className="mail-opened-subject">{activeMailItem.subject}</h3>
+                  <svg
+                    className="gold-star-svg"
+                    viewBox="0 0 24 24"
+                    fill="#facc15"
+                    stroke="#facc15"
+                    strokeWidth="1"
+                  >
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                  </svg>
+                </div>
+
+                {/* Sender Info Row */}
+                <div className="mail-sender-profile-row">
+                  {activeMailItem.isAtidetoLogo ? (
+                    <div className="mail-detail-avatar atideto-logo-avatar">
+                      <img
+                        src={activeMailItem.avatarImg}
+                        alt="Atideto Logo"
+                        className="atideto-avatar-img"
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      className="mail-detail-avatar letter-avatar"
+                      style={{ backgroundColor: activeMailItem.avatarColor }}
+                    >
+                      {activeMailItem.avatarLetter}
+                    </div>
+                  )}
+
+                  <div className="mail-sender-meta">
+                    <span className="mail-sender-title">{activeMailItem.sender}</span>
+                    <span className="mail-sender-email">&lt;{activeMailItem.email}&gt;</span>
+                    <span className="mail-meta-date">{activeMailItem.dateLabel}</span>
+                  </div>
+                </div>
+
+                <div className="mail-divider-line" />
+
+                {/* Email Body Content */}
+                <div className="mail-letter-content">
+                  <p className="letter-greeting">{activeMailItem.bodyGreeting}</p>
+                  {activeMailItem.bodyLines.map((line, lIdx) => (
+                    <p key={lIdx} className="letter-paragraph">
+                      {line}
+                    </p>
+                  ))}
+                  {activeMailItem.signOff && (
+                    <div className="letter-sign-off">
+                      {activeMailItem.signOff.map((sLine, sIdx) => (
+                        <span key={sIdx} className="sign-line">
+                          {sLine}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
-            <div className="mail-card-item">
-              <span className="mail-sender">From: The Universe</span>
-              <h4 className="mail-subject">Looking Up At The Same Sky</h4>
-              <p className="mail-preview">
-                No matter where we are, we share the exact same sky and the exact same starry night.
-              </p>
-            </div>
-          </div>
+          )}
         </div>
       )}
 
@@ -1086,8 +1318,16 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
               <h2>Special Gift</h2>
               <span className="modal-sub">For Maheswari</span>
             </div>
-            <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
-              &times;
+            <button
+              type="button"
+              className="modal-x-btn"
+              onClick={closeModal}
+              aria-label="Close"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
             </button>
           </header>
 
@@ -1128,8 +1368,16 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
               <h2>Calculator</h2>
               <span className="modal-sub">Special Edition</span>
             </div>
-            <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
-              &times;
+            <button
+              type="button"
+              className="modal-x-btn"
+              onClick={closeModal}
+              aria-label="Close"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
             </button>
           </header>
 
@@ -1153,7 +1401,7 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
       )}
 
       {/* =====================================================================
-          MODAL 8: SETTINGS (UPDATED: NO PASSWORD LOCK, OWNER: MAHESWARI, DEVICE: M PHONE)
+          MODAL 8: SETTINGS
           ===================================================================== */}
       {activeModal === 'settings' && (
         <div className="native-app-modal settings-modal">
@@ -1162,8 +1410,16 @@ const MobileBirthdayPhone = ({ onSelectSection }) => {
               <h2>Settings</h2>
               <span className="modal-sub">Maheswari Special Edition</span>
             </div>
-            <button type="button" className="modal-x-btn" onClick={closeModal} aria-label="Close">
-              &times;
+            <button
+              type="button"
+              className="modal-x-btn"
+              onClick={closeModal}
+              aria-label="Close"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
             </button>
           </header>
 
